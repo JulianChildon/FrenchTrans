@@ -34,287 +34,37 @@
     // --- 题库资料 ---
     const questionsData = {
       fr2zh: [
-        {
-          id: 1,
-          question: "Il me faut un kilo de pommes et un poisson.",
-          answer: "我需要一公斤苹果和一条鱼。",
-          options: [
-            "我需要一公斤苹果和一条鱼。",
-            "我想要一公斤草莓和一只鸡。",
-            "他需要一公斤苹果和一条鱼。",
-            "我买了一公斤苹果和一条鱼。"
-          ]
-        },
-        {
-          id: 2,
-          question: "J'ai demandé à Lucie de sortir avec moi après les cours.",
-          answer: "我邀请露西课后和我一起出去。",
-          options: [
-            "我邀请露西课后和我一起出去。",
-            "露西要求我下课后和她一起出去。",
-            "我问露西明天是否要一起出门。",
-            "课后我必须和露西一起去图书馆。"
-          ]
-        },
-        {
-          id: 3,
-          question: "Ils viennent de faire des courses dans le grand magasin.",
-          answer: "他们刚在大型商场购物。",
-          options: [
-            "他们刚在大型商场购物。",
-            "他们正准备去大型商场购物。",
-            "他们经常在大型商场里买东西。",
-            "她们刚刚从超级市场买完东西回来。"
-          ]
-        },
-        {
-          id: 4,
-          question: "Aie de la patience ! Ce travail n'est pas difficile.",
-          answer: "耐心一点！这份工作并不难。",
-          options: [
-            "耐心一点！这份工作并不难。",
-            "快一点！这份工作很容易。",
-            "不要着急！这份工作非常困难。",
-            "请保持安静！这项任务很简单。"
-          ]
-        },
-        {
-          id: 5,
-          question: "Il y a pas mal de petits magasins dans notre village.",
-          answer: "我们村子里有不少小店铺。",
-          options: [
-            "我们村子里有不少小店铺。",
-            "我们城市里有很多大型商场。",
-            "我们村子里没有什么小店铺。",
-            "那个小镇上有一些不错的商店。"
-          ]
-        },
-        {
-          id: 6,
-          question: "Elle n'a pas le temps de lire le journal le matin.",
-          answer: "她早上没有时间看报纸。",
-          options: [
-            "她早上没有时间看报纸。",
-            "她每天早上都会花时间看报纸。",
-            "他晚上通常没有时间看书。",
-            "她早上不想看任何新闻。"
-          ]
-        },
-        {
-          id: 7,
-          question: "Nous partons pour le centre-ville dans une heure.",
-          answer: "一小时后我们出发前往市中心。",
-          options: [
-            "一小时后我们出发前往市中心。",
-            "我们已经在市中心待了一小时。",
-            "半小时后我们将抵达市中心。",
-            "我们打算花一小时前往市中心。"
-          ]
-        },
-        {
-          id: 8,
-          question: "Mon ami sait bien faire la cuisine chez lui.",
-          answer: "我的朋友在家很会做饭。",
-          options: [
-            "我的朋友在家很会做饭。",
-            "我的朋友喜欢去餐厅吃饭。",
-            "他的朋友在家做饭做得不好。",
-            "我的朋友正在家里学习做饭。"
-          ]
-        },
-        {
-          id: 9,
-          question: "On se dirige vers l'arrêt de bus ensemble.",
-          answer: "我们一起朝着公交站走去。",
-          options: [
-            "我们一起朝着公交站走去。",
-            "他们正一起走向火车站。",
-            "我们在公交站等了很久。",
-            "我们打算一起搭乘公交车。"
-          ]
-        },
-        {
-          id: 10,
-          question: "Il reste encore beaucoup de gens dans le supermarché.",
-          answer: "超市里还有很多人。",
-          options: [
-            "超市里还有很多人。",
-            "超市里已经没有多少人了。",
-            "今天去超市的人非常多。",
-            "超市外面排了很长的队伍。"
-          ]
-        },
-        {
-          id: 11,
-          question: "Il demande à son père de le réveiller à sept heures.",
-          answer: "他让父亲七点叫醒他。",
-          options: [
-            "他让父亲七点叫醒他。",
-            "他的父亲要求他七点起床。",
-            "他每天早上七点叫醒父亲。",
-            "他问父亲明天是否七点起床。"
-          ]
-        },
-        {
-          id: 12,
-          question: "Nous ne perdons pas de temps pendant nos courses.",
-          answer: "我们购物时从不浪费时间。",
-          options: [
-            "我们购物时从不浪费时间。",
-            "我们花了很多时间在购物上。",
-            "他们买东西时总是动作很快。",
-            "我们没有时间去买东西。"
-          ]
-        }
+        { id: 1, question: "Il me faut un kilo de pommes et un poisson.", answer: "我需要一公斤苹果和一条鱼。", options: ["我需要一公斤苹果和一条鱼。", "我想要一公斤草莓和一只鸡。", "他需要一公斤苹果和一条鱼。", "我买了一公斤苹果和一条鱼。"] },
+        { id: 2, question: "J'ai demandé à Lucie de sortir avec moi après les cours.", answer: "我邀请露西课后和我一起出去。", options: ["我邀请露西课后和我一起出去。", "露西要求我下课后和她一起出去。", "我问露西明天是否要一起出门。", "课后我必须和露西一起去图书馆。"] },
+        { id: 3, question: "Ils viennent de faire des courses dans le grand magasin.", answer: "他们刚在大型商场购物。", options: ["他们刚在大型商场购物。", "他们正准备去大型商场购物。", "他们经常在大型商场里买东西。", "她们刚刚从超级市场买完东西回来。"] },
+        { id: 4, question: "Aie de la patience ! Ce travail n'est pas difficile.", answer: "耐心一点！这份工作并不难。", options: ["耐心一点！这份工作并不难。", "快一点！这份工作很容易。", "不要着急！这份工作非常困难。", "请保持安静！这项任务很简单。"] },
+        { id: 5, question: "Il y a pas mal de petits magasins dans notre village.", answer: "我们村子里有不少小店铺。", options: ["我们村子里有不少小店铺。", "我们城市里有很多大型商场。", "我们村子里没有什么小店铺。", "那个小镇上有一些不错的商店。"] },
+        { id: 6, question: "Elle n'a pas le temps de lire le journal le matin.", answer: "她早上没有时间看报纸。", options: ["她早上没有时间看报纸。", "她每天早上都会花时间看报纸。", "他晚上通常没有时间看书。", "她早上不想看任何新闻。"] },
+        { id: 7, question: "Nous partons pour le centre-ville dans une heure.", answer: "一小时后我们出发前往市中心。", options: ["一小时后我们出发前往市中心。", "我们已经在市中心待了一小时。", "半小时后我们将抵达市中心。", "我们打算花一小时前往市中心。"] },
+        { id: 8, question: "Mon ami sait bien faire la cuisine chez lui.", answer: "我的朋友在家很会做饭。", options: ["我的朋友在家很会做饭。", "我的朋友喜欢去餐厅吃饭。", "他的朋友在家做饭做得不好。", "我的朋友正在家里学习做饭。"] },
+        { id: 9, question: "On se dirige vers l'arrêt de bus ensemble.", answer: "我们一起朝着公交站走去。", options: ["我们一起朝着公交站走去。", "他们正一起走向火车站。", "我们在公交站等了很久。", "我们打算一起搭乘公交车。"] },
+        { id: 10, question: "Il reste encore beaucoup de gens dans le supermarché.", answer: "超市里还有很多人。", options: ["超市里还有很多人。", "超市里已经没有多少人了。", "今天去超市的人非常多。", "超市外面排了很长的队伍。"] },
+        { id: 11, question: "Il demande à son père de le réveiller à sept heures.", answer: "他让父亲七点叫醒他。", options: ["他让父亲七点叫醒他。", "他的父亲要求他七点起床。", "他每天早上七点叫醒父亲。", "他问父亲明天是否七点起床。"] },
+        { id: 12, question: "Nous ne perdons pas de temps pendant nos courses.", answer: "我们购物时从不浪费时间。", options: ["我们购物时从不浪费时间。", "我们花了很多时间在购物上。", "他们买东西时总是动作很快。", "我们没有时间去买东西。"] }
       ],
       zh2fr: [
-        {
-          id: 1,
-          question: "今天的风景真美啊！",
-          answer: "Quel beau paysage aujourd'hui !",
-          options: [
-            "Quel beau paysage aujourd'hui !",
-            "Quel mauvais temps aujourd'hui !",
-            "Quelle belle journée aujourd'hui !",
-            "Le paysage est très beau demain."
-          ]
-        },
-        {
-          id: 2,
-          question: "保罗十分想念他的家人。",
-          answer: "Paul pense beaucoup à sa famille.",
-          options: [
-            "Paul pense beaucoup à sa famille.",
-            "Paul oublie souvent sa famille.",
-            "Paul téléphone souvent à sa famille.",
-            "Paul habite avec sa famille."
-          ]
-        },
-        {
-          id: 3,
-          question: "在这座大城市里只有几家小商铺。",
-          answer: "Il n'y a que quelques petites boutiques dans cette grande ville.",
-          options: [
-            "Il n'y a que quelques petites boutiques dans cette grande ville.",
-            "Il y a beaucoup de grands magasins dans cette ville.",
-            "Il n'y a pas de petites boutiques dans cette grande ville.",
-            "Il y a seulement un supermarché dans ce village."
-          ]
-        },
-        {
-          id: 4,
-          question: "你明天可以给我打电话。",
-          answer: "Tu peux me téléphoner demain.",
-          options: [
-            "Tu peux me téléphoner demain.",
-            "Je vais te téléphoner demain.",
-            "Tu dois m'appeler aujourd'hui.",
-            "Tu peux venir me voir demain."
-          ]
-        },
-        {
-          id: 5,
-          question: "她走得很慢，因为她不想太累。",
-          answer: "Elle marche lentement parce qu'elle ne veut pas être trop fatiguée.",
-          options: [
-            "Elle marche lentement parce qu'elle ne veut pas être trop fatiguée.",
-            "Elle marche vite parce qu'elle est en retard.",
-            "Elle ne marche pas parce qu'elle est déjà fatiguée.",
-            "Il marche lentement parce qu'il ne veut pas être fatigué."
-          ]
-        },
-        {
-          id: 6,
-          question: "我们每天都在食堂吃饭。",
-          answer: "Nous mangeons au resto-U tous les jours.",
-          options: [
-            "Nous mangeons au resto-U tous les jours.",
-            "Nous allons souvent au restaurant.",
-            "Ils mangent à la cantine aujourd'hui.",
-            "Nous préparons les repas tous les jours."
-          ]
-        },
-        {
-          id: 7,
-          question: "我刚刚在商场买了一些水果。",
-          answer: "Je viens d'acheter des fruits dans le grand magasin.",
-          options: [
-            "Je viens d'acheter des fruits dans le grand magasin.",
-            "Je vais acheter des légumes au marché.",
-            "Il vient d'acheter des pommes au supermarché.",
-            "Je viens de manger des fruits dans le magasin."
-          ]
-        },
-        {
-          id: 8,
-          question: "请鼓起勇气，不要害怕。",
-          answer: "Aie du courage et n'aie pas peur.",
-          options: [
-            "Aie du courage et n'aie pas peur.",
-            "Ayez de la patience et ne pleurez pas.",
-            "Il faut avoir du courage et peur.",
-            "Sois courageux et fais attention."
-          ]
-        },
-        {
-          id: 9,
-          question: "这座房子面朝一条小河。",
-          answer: "Cette maison donne sur une petite rivière.",
-          options: [
-            "Cette maison donne sur une petite rivière.",
-            "Cette maison se trouve près de la montagne.",
-            "Cet appartement donne sur la rue.",
-            "Cette maison est loin de la rivière."
-          ]
-        },
-        {
-          id: 10,
-          question: "同学们都喜欢在周末购物。",
-          answer: "Les étudiants aiment faire des achats le week-end.",
-          options: [
-            "Les étudiants aiment faire des achats le week-end.",
-            "Les professeurs aiment se reposer le week-end.",
-            "Les étudiants doivent étudier pendant le week-end.",
-            "Les enfants n'aiment pas faire les courses."
-          ]
-        },
-        {
-          id: 11,
-          question: "我们应该把这封信寄给她。",
-          answer: "Nous devons lui envoyer cette lettre.",
-          options: [
-            "Nous devons lui envoyer cette lettre.",
-            "Nous pouvons lire cette lettre pour elle.",
-            "Ils doivent nous envoyer cette lettre.",
-            "Nous voulons lui donner ce cadeau."
-          ]
-        },
-        {
-          id: 12,
-          question: "他昨天在博物馆待了一个小时。",
-          answer: "Il est resté une heure au musée hier.",
-          options: [
-            "Il est resté une heure au musée hier.",
-            "Il va rester une heure au musée demain.",
-            "Il a visité le musée pendant deux heures.",
-            "Elle est restée à la maison hier."
-          ]
-        },
-        {
-          id: 13,
-          question: "这家医院在山脚下，非常有名。",
-          answer: "Cet hôpital se trouve au pied de la montagne, il est très connu.",
-          options: [
-            "Cet hôpital se trouve au pied de la montagne, il est très connu.",
-            "这所学校位于山脚下。",
-            "这家医院很大但不有名。",
-            "这座山在医院的后面。"
-          ]
-        }
+        { id: 1, question: "今天的风景真美啊！", answer: "Quel beau paysage aujourd'hui !", options: ["Quel beau paysage aujourd'hui !", "Quel mauvais temps aujourd'hui !", "Quelle belle journée aujourd'hui !", "Le paysage est très beau demain."] },
+        { id: 2, question: "保罗十分想念他的家人。", answer: "Paul pense beaucoup à sa famille.", options: ["Paul pense beaucoup à sa famille.", "Paul oublie souvent sa famille.", "Paul téléphone souvent à sa famille.", "Paul habite avec sa famille."] },
+        { id: 3, question: "在这座大城市里只有几家小商铺。", answer: "Il n'y a que quelques petites boutiques dans cette grande ville.", options: ["Il n'y a que quelques petites boutiques dans cette grande ville.", "Il y a beaucoup de grands magasins dans cette ville.", "Il n'y a pas de petites boutiques dans cette grande ville.", "Il y a seulement un supermarché dans ce village."] },
+        { id: 4, question: "你明天可以给我打电话。", answer: "Tu peux me téléphoner demain.", options: ["Tu peux me téléphoner demain.", "Je vais te téléphoner demain.", "Tu dois m'appeler aujourd'hui.", "Tu peux venir me voir demain."] },
+        { id: 5, question: "她走得很慢，因为她不想太累。", answer: "Elle marche lentement parce qu'elle ne veut pas être trop fatiguée.", options: ["Elle marche lentement parce qu'elle ne veut pas être trop fatiguée.", "Elle marche vite parce qu'elle est en retard.", "Elle ne marche pas parce qu'elle est déjà fatiguée.", "Il marche lentement parce qu'il ne veut pas être fatigué."] },
+        { id: 6, question: "我们每天都在食堂吃饭。", answer: "Nous mangeons au resto-U tous les jours.", options: ["Nous mangeons au resto-U tous les jours.", "Nous allons souvent au restaurant.", "Ils mangent à la cantine aujourd'hui.", "Nous préparons les repas tous les jours."] },
+        { id: 7, question: "我刚刚在商场买了一些水果。", answer: "Je viens d'acheter des fruits dans le grand magasin.", options: ["Je viens d'acheter des fruits dans le grand magasin.", "Je vais acheter des蔬菜 au marché.", "Il vient d'acheter des pommes au supermarché.", "Je viens de manger des fruits dans le magasin."] },
+        { id: 8, question: "请鼓起勇气，不要害怕。", answer: "Aie du courage et n'aie pas peur.", options: ["Aie du courage et n'aie pas peur.", "Ayez de la patience et ne pleurez pas.", "Il faut avoir du courage et peur.", "Sois courageux et fais attention."] },
+        { id: 9, question: "这座房子面朝一条小河。", answer: "Cette maison donne sur une petite rivière.", options: ["Cette maison donne sur une petite rivière.", "Cette maison se trouve près de la montagne.", "Cet appartement donne sur la rue.", "Cette maison est loin de la rivière."] },
+        { id: 10, question: "同学们都喜欢在周末购物。", answer: "Les étudiants aiment faire des achats le week-end.", options: ["Les étudiants aiment faire des achats le week-end.", "Les professeurs aiment se reposer le week-end.", "Les étudiants doivent étudier pendant le week-end.", "Les enfants n'aiment pas faire les courses."] },
+        { id: 11, question: "我们应该把这封信寄给她。", answer: "Nous devons lui envoyer cette lettre.", options: ["Nous devons lui envoyer cette lettre.", "Nous pouvons lire cette lettre pour elle.", "Ils doivent nous envoyer cette lettre.", "Nous voulons lui donner ce cadeau."] },
+        { id: 12, question: "他昨天在博物馆待了一个小时。", answer: "Il est resté une heure au musée hier.", options: ["Il est resté une heure au musée hier.", "Il va rester une heure au musée demain.", "Il a visité le musée pendant deux heures.", "Elle est restée à la maison hier."] },
+        { id: 13, question: "这家医院在山脚下，非常有名。", answer: "Cet hôpital se trouve au pied de la montagne, il est très connu.", options: ["Cet hôpital se trouve au pied de la montagne, il est très connu.", "这所学校位于山脚下。", "这家医院很大但不有名。", "这座山在医院的后面。"] }
       ]
     };
 
-    // --- 新增：语法题库资料 (PPT原题) ---
+    // --- 语法题库资料 ---
     const grammarQuestionsData = [
       // 介词
       { id: 1, category: "介词", question: "Notre maison donne ______ la mer.", options: ["dans", "sur", "vers", "au pied de"], answer: "sur", explanation: "sur除了表示在...上面，还可表示“朝向”，常用于窗户、房间等朝向某处。" },
@@ -329,8 +79,8 @@
       { id: 9, category: "冠词", question: "Il mange ______ beurre sur sa baguette.", options: ["de", "un", "du", "le"], answer: "du", explanation: "beurre（黄油）是阳性不可数名词，需要用部分冠词 du。" },
       { id: 10, category: "冠词", question: "Elle a acheté pas mal ______ livres en français.", options: ["des", "de", "d'", "les"], answer: "de", explanation: "pas mal de 意为“不少”，是数量表达，后接名词省略冠词。" },
       // 代词
-      { id: 11, category: "代词", question: "Oui, je ______ vois sur le sofa. (le sac à main)", options: ["la", "le", "l'", "lui"], answer: "le", explanation: "le sac à main 是阳性单数直接宾语，用 le 代替。" },
-      { id: 12, category: "代词", question: "Il ______ présente sa copine. (à ses parents)", options: ["leur", "les", "lui", "la"], answer: "leur", explanation: "à ses parents 是复数间接宾语（人），用 leur 代替。" },
+      { id: 11, category: "代词", question: "Oui, je ______ vois sur le sofa. (代指 le sac à main)", options: ["la", "le", "l'", "lui"], answer: "le", explanation: "le sac à main 是阳性单数直接宾语，用 le 代替。" },
+      { id: 12, category: "代词", question: "Il ______ présente sa copine. (代指 à ses parents)", options: ["leur", "les", "lui", "la"], answer: "leur", explanation: "à ses parents 是复数间接宾语（人），用 leur 代替。" },
       { id: 13, category: "代词", question: "Ces livres sont intéressants, nous ______ avons lus.", options: ["le", "la", "les", "leur"], answer: "les", explanation: "les 代指 ces livres，作直接宾语前置时，复合过去时的过去分词 lus 需要与其进行性数配合（加s）。" },
       { id: 14, category: "代词", question: "Marine et Charlotte ______ sont dirigées vers le centre.", options: ["se", "s'", "les", "leur"], answer: "se", explanation: "se diriger 是代词式动词，主语是第三人称复数，自反代词用 se。" },
       { id: 15, category: "代词", question: "Il n'______ a que quelques magasins dans son village.", options: ["en", "y", "le", "la"], answer: "y", explanation: "il y a 是固定结构（存在句），在 il n'y a que (只有) 结构中，y 的位置保持不变。" },
@@ -345,10 +95,10 @@
       { id: 22, category: "句子结构", question: "______ Juliette et moi qui sommes en retard.", options: ["C'est", "Ce sont", "Il est", "Il y a"], answer: "Ce sont", explanation: "强调主语时用 C'est / Ce sont ... qui。因为 Juliette et moi 相当于 nous（复数），所以用 Ce sont。" },
       { id: 23, category: "句子结构", question: "______ me faut deux kilos de bœuf.", options: ["Il", "C'est", "Ce", "Y"], answer: "Il", explanation: "Il faut 结构表示“需要”，是无人称动词，只能用 Il。" },
       { id: 24, category: "句子结构", question: "______ une demi-heure pour aller à l'école.", options: ["Il faut", "Il y a", "C'est", "Il est"], answer: "Il faut", explanation: "Il faut + 时间，表示“需要花费多少时间”。" },
-      { id: 25, category: "句子结构", question: "______ est restée devant la Joconde. (Claudine)", options: ["Il", "Elle", "Ce", "On"], answer: "Elle", explanation: "Claudine 是女性名字，需用第三人称阴性单数代词 Elle 代替。" }
+      { id: 25, category: "句子结构", question: "______ est restée devant la Joconde. (代指 Claudine)", options: ["Il", "Elle", "Ce", "On"], answer: "Elle", explanation: "Claudine 是女性名字，需用第三人称阴性单数代词 Elle 代替。" }
     ];
 
-    // --- 新增：期中试卷资料 ---
+    // --- 期中试卷资料 ---
     const examData = {
       part1_mcq: [
         { id: 1, q: "Je vais à l'école avec __ amie.", options: ["mon", "ma", "moi", "mes"], answer: "mon" },
@@ -402,7 +152,7 @@
           { id: 2, q: "J'ai un rendez-vous avec __ professeur cet après-midi.", a: "mon" },
           { id: 3, q: "Mon oncle est un journaliste très célèbre, un personnage, __ !", a: "lui" },
           { id: 4, q: "Émilie et __, nous aimons bien le café.", a: "moi" },
-          { id: 5, q: "Émilie est __ amie fidèle, je l'aime beaucoup.", a: "ton" }, // 答案图给出的是 ton，原意可能也可是 mon，这里以答案为准
+          { id: 5, q: "Émilie est __ amie fidèle, je l'aime beaucoup.", a: "ton" },
           { id: 6, q: "Excusez-moi, monsieur, quel est __ numéro de téléphone, s'il vous plaît ?", a: "votre" },
           { id: 7, q: "Le professeur demande à Lucie de faire __ devoirs.", a: "ses" },
           { id: 8, q: "-Comment allez-vous, monsieur ?-Très bien, merci. Et __ ?", a: "vous" },
@@ -467,7 +217,7 @@
       }
     };
 
-    // --- 新增：核心语法综合测试卷资料 ---
+    // --- 核心语法综合测试卷资料 ---
     const exam2Data = {
       part1_mcq: [
         { id: 1, q: "Notre maison donne ______ la mer.", options: ["dans", "sur", "vers", "au pied de"], answer: "sur" },
@@ -541,7 +291,7 @@
       return newArr;
     };
 
-    // --- 模块 1：翻译训练 (保留原有功能) ---
+    // --- 模块 1：翻译训练 ---
     function TranslationQuiz() {
       const [category, setCategory] = useState('fr2zh');
       const [mode, setMode] = useState('mcq');
@@ -695,24 +445,20 @@
       const [selectedOption, setSelectedOption] = useState(null);
       const [isFinished, setIsFinished] = useState(false);
 
-      // 新增状态：视图、模式、历史、错题本
-      const [view, setView] = useState('quiz'); // 'quiz' 或 'records'
-      const [quizMode, setQuizMode] = useState('all'); // 'all' 或 'wrong'
+      const [view, setView] = useState('quiz');
+      const [quizMode, setQuizMode] = useState('all');
       const [history, setHistory] = useState([]);
       const [wrongQuestions, setWrongQuestions] = useState([]);
       const [showClearConfirm, setShowClearConfirm] = useState(false);
 
-      // 初始化读取本地存储
       useEffect(() => {
         const savedHistory = JSON.parse(localStorage.getItem('grammarHistory')) || [];
         const savedWrong = JSON.parse(localStorage.getItem('grammarWrong')) || [];
         setHistory(savedHistory);
         setWrongQuestions(savedWrong);
-        // 首次加载时启动全部题库
         startQuiz('all', savedWrong);
       }, []);
 
-      // 监听变动保存到本地存储
       useEffect(() => {
         localStorage.setItem('grammarHistory', JSON.stringify(history));
       }, [history]);
@@ -731,7 +477,6 @@
         setView('quiz');
 
         let pool = mode === 'all' ? grammarQuestionsData : currentWrong;
-        // 错题模式且无错题时，回退到全部
         if (mode === 'wrong' && pool.length === 0) {
           pool = grammarQuestionsData;
           setQuizMode('all');
@@ -748,11 +493,10 @@
           setCurrentIndex(currentIndex + 1); setIsAnswerRevealed(false); setSelectedOption(null);
         } else {
           setIsFinished(true);
-          // 记录历史
           const newRecord = {
             id: Date.now(),
             date: new Date().toLocaleString(),
-            score: score, // score is already updated 
+            score: score,
             total: questions.length,
             mode: quizMode === 'all' ? '全部题库' : '错题特训'
           };
@@ -770,12 +514,10 @@
 
         if (isCorrect) {
           setScore(score + 1);
-          // 错题特训中答对，将其移出错题本
           if (quizMode === 'wrong') {
             setWrongQuestions(prev => prev.filter(q => q.id !== currentQ.id));
           }
         } else {
-          // 答错，加入错题本 (避免重复加入)
           setWrongQuestions(prev => {
             if (!prev.find(q => q.id === currentQ.id)) {
                 const originalQ = grammarQuestionsData.find(q => q.id === currentQ.id);
@@ -797,7 +539,6 @@
                 <button onClick={() => setView('quiz')} className="bg-slate-100 text-slate-600 px-4 py-2 rounded-lg hover:bg-slate-200 font-medium transition-colors">🔙 返回题库</button>
               </div>
               
-              {/* 错题区 */}
               <div className="mb-10">
                 <div className="flex justify-between items-center mb-4">
                     <h3 className="text-xl font-bold text-slate-800 flex items-center">📝 错题本 <span className="ml-2 text-sm bg-rose-100 text-rose-700 px-2 py-1 rounded-full">{wrongQuestions.length} 题</span></h3>
@@ -832,7 +573,6 @@
                 )}
               </div>
 
-              {/* 历史区 */}
               <div>
                 <h3 className="text-xl font-bold text-slate-800 mb-4 flex items-center">🕰️ 作答历史</h3>
                 {history.length === 0 ? (
@@ -869,7 +609,6 @@
 
       return (
         <div className="max-w-3xl mx-auto animate-fade-in">
-          {/* 顶部工具栏 */}
           {!isFinished && (
             <div className="flex justify-end mb-4">
               <button onClick={() => setView('records')} className="bg-white border border-slate-200 text-slate-700 px-4 py-2 rounded-xl font-medium hover:bg-slate-50 shadow-sm transition-colors flex items-center">
@@ -959,7 +698,6 @@
       const checkAnswers = () => {
         const res = inputs.map((input, idx) => {
           const correctAns = conjugationExercises[idx].a.toLowerCase().trim();
-          // 兼容 suis resté 和 suis restée
           if (idx === 5 && (input.toLowerCase().trim() === 'suis resté' || input.toLowerCase().trim() === 'suis restée')) return true;
           return input.toLowerCase().trim() === correctAns;
         });
@@ -985,7 +723,7 @@
                         const newInputs = [...inputs];
                         newInputs[index] = e.target.value;
                         setInputs(newInputs);
-                        setResults(null); // 修改后清除结果
+                        setResults(null);
                       }}
                       placeholder="变位"
                     />
@@ -1008,9 +746,48 @@
       );
     }
 
+    // --- 模块 3：子组件 命令式与代词连用互动练习 ---
+    function ImperativePronounPractice() {
+      const exercises = [
+        { id: 1, q: "Est-ce que je peux écrire ", highlight: "à mes parents", qEnd: " ?", a: "Écris-leur !" },
+        { id: 2, q: "Est-ce que je dois prendre ", highlight: "une photo", qEnd: " ?", a: "Prenez-la ! / Prends-la !" },
+        { id: 3, q: "Est-ce que je peux rester ", highlight: "dans la maison", qEnd: " ?", a: "Restes-y ! / Restez-y !" },
+        { id: 4, q: "Est-ce que nous pouvons parler ", highlight: "de ce sujet", qEnd: " ?", a: "Parlons-en !" }
+      ];
+      const [revealed, setRevealed] = useState({});
+
+      const toggleReveal = (id) => {
+        setRevealed(prev => ({ ...prev, [id]: !prev[id] }));
+      };
+
+      return (
+        <div className="space-y-4">
+          {exercises.map(ex => (
+            <div key={ex.id} className="bg-white border-2 border-indigo-100 rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm hover:shadow transition-shadow">
+              <div className="text-slate-800 font-medium">
+                {ex.q} <span className="text-rose-600 font-bold underline decoration-rose-200 decoration-2 underline-offset-4">{ex.highlight}</span>{ex.qEnd}
+              </div>
+              <div className="flex items-center gap-3">
+                <button 
+                  onClick={() => toggleReveal(ex.id)} 
+                  className={`min-w-[90px] px-3 py-1.5 text-sm font-bold rounded-lg transition-colors 
+                    ${revealed[ex.id] ? 'bg-slate-200 text-slate-600 hover:bg-slate-300' : 'bg-indigo-600 text-white hover:bg-indigo-700'}`}
+                >
+                  {revealed[ex.id] ? '隐藏答案' : '显示答案'}
+                </button>
+                {revealed[ex.id] && (
+                  <span className="text-emerald-700 font-black text-lg animate-fade-in">{ex.a}</span>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
     // --- 模块 3：知识库 ---
     function KnowledgeBase() {
-      const [activeSection, setActiveSection] = useState('prepositions');
+      const [activeSection, setActiveSection] = useState('verbs'); // 将默认切换到动词以便查看新功能
       
       const sections = [
         { id: 'prepositions', title: '介词 (Prépositions)', icon: '📍' },
@@ -1021,40 +798,23 @@
         { id: 'conjugation', title: '动词变位大全 (Conjugaison)', icon: '🔄' }
       ];
 
-      // 定义动词变位数据，方便以表格形式渲染
       const conjugationData = [
-        { infinitive: 'être', meaning: '是', pp: 'été', aux: 'avoir',
-          present: [['je', 'suis', 'nous', 'sommes'], ['tu', 'es', 'vous', 'êtes'], ['il/elle', 'est', 'ils/elles', 'sont']] },
-        { infinitive: 'avoir', meaning: '有', pp: 'eu', aux: 'avoir',
-          present: [['j\'', 'ai', 'nous', 'avons'], ['tu', 'as', 'vous', 'avez'], ['il/elle', 'a', 'ils/elles', 'ont']] },
-        { infinitive: 'aller', meaning: '去', pp: 'allé', aux: 'être',
-          present: [['je', 'vais', 'nous', 'allons'], ['tu', 'vas', 'vous', 'allez'], ['il/elle', 'va', 'ils/elles', 'vont']] },
-        { infinitive: 'venir', meaning: '来', pp: 'venu', aux: 'être',
-          present: [['je', 'viens', 'nous', 'venons'], ['tu', 'viens', 'vous', 'venez'], ['il/elle', 'vient', 'ils/elles', 'viennent']] },
-        { infinitive: 'prendre', meaning: '拿/吃', pp: 'pris', aux: 'avoir',
-          present: [['je', 'prends', 'nous', 'prenons'], ['tu', 'prends', 'vous', 'prenez'], ['il/elle', 'prend', 'ils/elles', 'prennent']] },
-        { infinitive: 'lire', meaning: '读', pp: 'lu', aux: 'avoir',
-          present: [['je', 'lis', 'nous', 'lisons'], ['tu', 'lis', 'vous', 'lisez'], ['il/elle', 'lit', 'ils/elles', 'lisent']] },
-        { infinitive: 'faire', meaning: '做/从事', pp: 'fait', aux: 'avoir',
-          present: [['je', 'fais', 'nous', 'faisons'], ['tu', 'fais', 'vous', 'faites'], ['il/elle', 'fait', 'ils/elles', 'font']] },
-        { infinitive: 'dire', meaning: '说', pp: 'dit', aux: 'avoir',
-          present: [['je', 'dis', 'nous', 'disons'], ['tu', 'dis', 'vous', 'dites'], ['il/elle', 'dit', 'ils/elles', 'disent']] },
-        { infinitive: 'voir', meaning: '看见', pp: 'vu', aux: 'avoir',
-          present: [['je', 'vois', 'nous', 'voyons'], ['tu', 'vois', 'vous', 'voyez'], ['il/elle', 'voit', 'ils/elles', 'voient']] },
-        { infinitive: 'savoir', meaning: '知道/会', pp: 'su', aux: 'avoir',
-          present: [['je', 'sais', 'nous', 'savons'], ['tu', 'sais', 'vous', 'savez'], ['il/elle', 'sait', 'ils/elles', 'savent']] },
-        { infinitive: 'connaître', meaning: '认识', pp: 'connu', aux: 'avoir',
-          present: [['je', 'connais', 'nous', 'connaissons'], ['tu', 'connais', 'vous', 'connaissez'], ['il/elle', 'connaît', 'ils/elles', 'connaissent']] },
-        { infinitive: 'partir', meaning: '出发/离开', pp: 'parti', aux: 'être',
-          present: [['je', 'pars', 'nous', 'partons'], ['tu', 'pars', 'vous', 'partez'], ['il/elle', 'part', 'ils/elles', 'partent']] },
-        { infinitive: 'rester', meaning: '停留', pp: 'resté', aux: 'être',
-          present: [['je', 'reste', 'nous', 'restons'], ['tu', 'restes', 'vous', 'restez'], ['il/elle', 'reste', 'ils/elles', 'restent']] },
-        { infinitive: 'arriver', meaning: '到达', pp: 'arrivé', aux: 'être',
-          present: [['j\'', 'arrive', 'nous', 'arrivons'], ['tu', 'arrives', 'vous', 'arrivez'], ['il/elle', 'arrive', 'ils/elles', 'arrivent']] },
-        { infinitive: 'rentrer', meaning: '返回/回家', pp: 'rentré', aux: 'être',
-          present: [['je', 'rentre', 'nous', 'rentrons'], ['tu', 'rentres', 'vous', 'rentrez'], ['il/elle', 'rentre', 'ils/elles', 'rentrent']] },
-        { infinitive: 'devoir', meaning: '必须/应该', pp: 'dû', aux: 'avoir',
-          present: [['je', 'dois', 'nous', 'devons'], ['tu', 'dois', 'vous', 'devez'], ['il/elle', 'doit', 'ils/elles', 'doivent']] }
+        { infinitive: 'être', meaning: '是', pp: 'été', aux: 'avoir', present: [['je', 'suis', 'nous', 'sommes'], ['tu', 'es', 'vous', 'êtes'], ['il/elle', 'est', 'ils/elles', 'sont']] },
+        { infinitive: 'avoir', meaning: '有', pp: 'eu', aux: 'avoir', present: [['j\'', 'ai', 'nous', 'avons'], ['tu', 'as', 'vous', 'avez'], ['il/elle', 'a', 'ils/elles', 'ont']] },
+        { infinitive: 'aller', meaning: '去', pp: 'allé', aux: 'être', present: [['je', 'vais', 'nous', 'allons'], ['tu', 'vas', 'vous', 'allez'], ['il/elle', 'va', 'ils/elles', 'vont']] },
+        { infinitive: 'venir', meaning: '来', pp: 'venu', aux: 'être', present: [['je', 'viens', 'nous', 'venons'], ['tu', 'viens', 'vous', 'venez'], ['il/elle', 'vient', 'ils/elles', 'viennent']] },
+        { infinitive: 'prendre', meaning: '拿/吃', pp: 'pris', aux: 'avoir', present: [['je', 'prends', 'nous', 'prenons'], ['tu', 'prends', 'vous', 'prenez'], ['il/elle', 'prend', 'ils/elles', 'prennent']] },
+        { infinitive: 'lire', meaning: '读', pp: 'lu', aux: 'avoir', present: [['je', 'lis', 'nous', 'lisons'], ['tu', 'lis', 'vous', 'lisez'], ['il/elle', 'lit', 'ils/elles', 'lisent']] },
+        { infinitive: 'faire', meaning: '做/从事', pp: 'fait', aux: 'avoir', present: [['je', 'fais', 'nous', 'faisons'], ['tu', 'fais', 'vous', 'faites'], ['il/elle', 'fait', 'ils/elles', 'font']] },
+        { infinitive: 'dire', meaning: '说', pp: 'dit', aux: 'avoir', present: [['je', 'dis', 'nous', 'disons'], ['tu', 'dis', 'vous', 'dites'], ['il/elle', 'dit', 'ils/elles', 'disent']] },
+        { infinitive: 'voir', meaning: '看见', pp: 'vu', aux: 'avoir', present: [['je', 'vois', 'nous', 'voyons'], ['tu', 'vois', 'vous', 'voyez'], ['il/elle', 'voit', 'ils/elles', 'voient']] },
+        { infinitive: 'savoir', meaning: '知道/会', pp: 'su', aux: 'avoir', present: [['je', 'sais', 'nous', 'savons'], ['tu', 'sais', 'vous', 'savez'], ['il/elle', 'sait', 'ils/elles', 'savent']] },
+        { infinitive: 'connaître', meaning: '认识', pp: 'connu', aux: 'avoir', present: [['je', 'connais', 'nous', 'connaissons'], ['tu', 'connais', 'vous', 'connaissez'], ['il/elle', 'connaît', 'ils/elles', 'connaissent']] },
+        { infinitive: 'partir', meaning: '出发/离开', pp: 'parti', aux: 'être', present: [['je', 'pars', 'nous', 'partons'], ['tu', 'pars', 'vous', 'partez'], ['il/elle', 'part', 'ils/elles', 'partent']] },
+        { infinitive: 'rester', meaning: '停留', pp: 'resté', aux: 'être', present: [['je', 'reste', 'nous', 'restons'], ['tu', 'restes', 'vous', 'restez'], ['il/elle', 'reste', 'ils/elles', 'restent']] },
+        { infinitive: 'arriver', meaning: '到达', pp: 'arrivé', aux: 'être', present: [['j\'', 'arrive', 'nous', 'arrivons'], ['tu', 'arrives', 'vous', 'arrivez'], ['il/elle', 'arrive', 'ils/elles', 'arrivent']] },
+        { infinitive: 'rentrer', meaning: '返回/回家', pp: 'rentré', aux: 'être', present: [['je', 'rentre', 'nous', 'rentrons'], ['tu', 'rentres', 'vous', 'rentrez'], ['il/elle', 'rentre', 'ils/elles', 'rentrent']] },
+        { infinitive: 'devoir', meaning: '必须/应该', pp: 'dû', aux: 'avoir', present: [['je', 'dois', 'nous', 'devons'], ['tu', 'dois', 'vous', 'devez'], ['il/elle', 'doit', 'ils/elles', 'doivent']] }
       ];
 
       return (
@@ -1136,7 +896,7 @@
                 <h2 className="text-2xl font-bold text-slate-800 flex items-center"><span className="text-3xl mr-3">📖</span>冠词省略与部分冠词</h2>
                 
                 <div className="bg-yellow-50 border border-yellow-200 p-5 rounded-xl">
-                  <h3 className="font-bold text-yellow-800 mb-2">⚠️ 核心规则：冠词的省略 (de > d')</h3>
+                  <h3 className="font-bold text-yellow-800 mb-2">⚠️ 核心规则：冠词的省略 (de &gt; d')</h3>
                   <p className="text-yellow-900 mb-3">当遇到以下情况时，名词前的冠词需要省略，直接用 <strong>de</strong> 连接：</p>
                   <ul className="list-disc pl-5 space-y-2 text-yellow-800">
                     <li><strong>绝对否定句中：</strong> Il n’a pas <span className="text-red-500 font-bold">de</span> temps.</li>
@@ -1236,7 +996,7 @@
                   <h3 className="text-lg font-bold text-indigo-700 border-l-4 border-indigo-500 pl-3">代词式动词 (se + verbe)</h3>
                   <div className="bg-rose-50 border border-rose-100 p-5 rounded-xl text-rose-900">
                     <p className="font-bold mb-2">⚠️ 核心规则：</p>
-                    <p className="text-sm">在复合过去时中，代词式动词的助动词<strong>永远是 être</strong>！且过去分词必须与主语进行性数配合（除绝对不配合的特例外）。</p>
+                    <p className="text-sm">在复合过去时中，代词式动词的助动词<strong>永远是 être</strong>！且过去分词必须与主语进行性数配合（除绝对不配合的特例之外）。</p>
                     <p className="text-sm mt-2 text-rose-700">例：Elle <strong>s'est lavée</strong>. / Nous <strong>nous sommes rencontrés</strong> hier.</p>
                   </div>
                 </div>
@@ -1244,10 +1004,39 @@
             )}
 
             {activeSection === 'verbs' && (
-              <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 space-y-8">
+              <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 space-y-8 animate-fade-in">
                 <h2 className="text-2xl font-bold text-slate-800 flex items-center"><span className="text-3xl mr-3">⚡</span>核心动词语式与时态</h2>
 
                 <div className="space-y-4">
+                  <h3 className="text-lg font-bold text-indigo-700 border-l-4 border-indigo-500 pl-3">命令式 (Impératif)</h3>
+                  <div className="bg-slate-50 p-5 rounded-xl border border-slate-200 text-slate-700 text-sm space-y-3">
+                    <p className="text-base font-medium">👉 <strong>规则1：</strong> 由直陈式现在时去掉主语构成（只有 tu, nous, vous 三个人称）。</p>
+                    <p className="text-base font-medium">👉 <strong>规则2：</strong> 第一组动词(-er结尾)的 tu 形式必须去掉词尾的 s。 <span className="text-indigo-600 bg-white px-2 py-0.5 rounded shadow-sm border">Parle! (非 Parles!)</span></p>
+                    <p className="text-base font-medium">👉 <strong>规则3 (肯定式)：</strong> 代词置于动词后，用连字符连接。 <span className="text-indigo-600 bg-white px-2 py-0.5 rounded shadow-sm border">Donne-lui cette lettre.</span></p>
+                    <p className="text-base font-medium">👉 <strong>规则4 (否定式)：</strong> 代词恢复置于动词前。 <span className="text-indigo-600 bg-white px-2 py-0.5 rounded shadow-sm border">Ne le fais pas.</span></p>
+                    
+                    {/* 新增的特殊规则区块 */}
+                    <div className="mt-6 p-4 bg-rose-50 border border-rose-200 rounded-lg shadow-sm">
+                      <p className="font-bold text-rose-800 text-base mb-2">⚠️ 特殊拼写规则（命令式与 y / en 连用）：</p>
+                      <p className="text-rose-700 leading-relaxed text-sm md:text-base">
+                        为了发音方便，第一组动词（-er结尾）的 tu 形式在遇到副代词 <strong>y</strong> 或 <strong>en</strong> 时，
+                        <strong className="text-rose-900 underline decoration-rose-300">必须保留词尾的 "s"</strong>，并用连字符连接！
+                      </p>
+                      <p className="text-rose-600 mt-2 font-medium bg-white/60 p-2 rounded inline-block border border-rose-100">
+                        例：Vas-y ! (去吧) / Manges-en ! (吃点吧) / Restes-y ! (待在那儿)
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 新增的互动练习区块 */}
+                <div className="space-y-4 pt-4 border-t border-slate-100">
+                  <h3 className="text-lg font-bold text-indigo-700 border-l-4 border-indigo-500 pl-3">📝 实战：用命令式和代词回答句子</h3>
+                  <p className="text-sm text-slate-500 mb-3">点击按钮查看如何使用命令式与代词（注意特殊拼写规则）。</p>
+                  <ImperativePronounPractice />
+                </div>
+
+                <div className="space-y-4 pt-4 border-t border-slate-100">
                   <h3 className="text-lg font-bold text-indigo-700 border-l-4 border-indigo-500 pl-3">复合过去时 (Passé composé)</h3>
                   <p className="text-slate-600 text-sm">强调动作的结果或完成性。核心在于<strong>助动词的选择</strong>。</p>
                   
@@ -1271,16 +1060,6 @@
                       </ul>
                       <p className="text-xs text-blue-700 mt-2">例: Nous <strong>avons visité</strong> le musée.</p>
                     </div>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <h3 className="text-lg font-bold text-indigo-700 border-l-4 border-indigo-500 pl-3">命令式 (Impératif)</h3>
-                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 text-slate-700 text-sm space-y-2">
-                    <p>👉 <strong>规则1：</strong> 由直陈式现在时去掉主语构成（只有 tu, nous, vous 三个人称）。</p>
-                    <p>👉 <strong>规则2：</strong> 第一组动词(-er)的 tu 形式必须去掉词尾的 s。 <span className="text-indigo-600">Parle! (非 Parles!)</span></p>
-                    <p>👉 <strong>规则3 (肯定式)：</strong> 代词置于动词后，用连字符连接。 <span className="text-indigo-600">Donne-lui cette lettre.</span></p>
-                    <p>👉 <strong>规则4 (否定式)：</strong> 代词恢复置于动词前。 <span className="text-indigo-600">Ne le fais pas.</span></p>
                   </div>
                 </div>
 
@@ -1393,26 +1172,22 @@
       );
     }
 
-    // --- 新增模块 4：子组件 - 期中考试卷 ---
+    // --- 模块 4：子组件 - 期中考试卷 ---
     function ExamMidterm() {
       const [activePart, setActivePart] = useState('part1');
 
-      // Part 1 状态
       const [p1Answers, setP1Answers] = useState({});
       const [p1Score, setP1Score] = useState(null);
 
-      // Part 2 状态
       const [p2Answers, setP2Answers] = useState({ A: {}, B: {}, C: {}, D_a: {}, D_b: {} });
       const [p2Classify, setP2Classify] = useState({ Profession: [], Aliment: [], Famille: [], Temps: [] });
       const [p2Unclassified, setP2Unclassified] = useState(examData.part2_classify.words);
       const [selectedWord, setSelectedWord] = useState(null);
       const [p2Score, setP2Score] = useState(null);
 
-      // Part 3 & 4 状态
       const [p34Revealed, setP34Revealed] = useState(false);
       const [p34Scores, setP34Scores] = useState({ p3A: 0, p3B: 0, p4A: 0, p4B: 0 });
 
-      // -- Part 1 处理逻辑 --
       const handleP1Select = (qId, optionIndex) => {
         if (p1Score !== null) return;
         setP1Answers({ ...p1Answers, [qId]: optionIndex });
@@ -1428,7 +1203,6 @@
         setP1Score(score);
       };
 
-      // -- Part 2 处理逻辑 --
       const handleP2Input = (section, qId, value) => {
         if (p2Score !== null) return;
         setP2Answers({ ...p2Answers, [section]: { ...p2Answers[section], [qId]: value } });
@@ -1443,14 +1217,12 @@
       const assignWordToCategory = (category) => {
         if (!selectedWord || p2Score !== null) return;
         
-        // 从当前可能所在的类别或未分类中移除
         setP2Unclassified(p2Unclassified.filter(w => w !== selectedWord));
         const newClassify = { ...p2Classify };
         Object.keys(newClassify).forEach(k => {
           newClassify[k] = newClassify[k].filter(w => w !== selectedWord);
         });
 
-        // 加入新类别
         newClassify[category].push(selectedWord);
         setP2Classify(newClassify);
         setSelectedWord(null);
@@ -1466,7 +1238,6 @@
 
       const submitP2 = () => {
         let score = 0;
-        // 检查填空题
         ['A', 'B', 'C', 'D_a', 'D_b'].forEach(sec => {
           examData.part2_fill[sec].forEach(q => {
             const userAns = (p2Answers[sec][q.id] || '').trim().toLowerCase();
@@ -1476,7 +1247,6 @@
             }
           });
         });
-        // 检查分类题
         Object.keys(examData.part2_classify.answers).forEach(cat => {
           p2Classify[cat].forEach(word => {
             if (examData.part2_classify.answers[cat].includes(word)) {
@@ -1487,7 +1257,6 @@
         setP2Score(score);
       };
 
-      // -- 渲染函数 --
       const renderOptions = (q, selectedIdx, showResult) => {
         return (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-3">
@@ -1566,7 +1335,6 @@
                 {p2Score !== null && <div className="text-2xl font-black text-emerald-600 bg-emerald-50 px-4 py-1 rounded-lg">得分: {p2Score} / 35</div>}
               </div>
 
-              {/* A, B, C, D 填空 */}
               {[
                 { sec: 'A', title: 'A. 用适当的冠词填空 (5 * 1 = 5分)', desc: '如不需要请填 "/"' },
                 { sec: 'B', title: 'B. 用适当的介词补全下列句子 (10 * 0.5 = 5分)', desc: '备选：avec, à, entre, chez, sur, au, de, à, dans, en' },
@@ -1604,11 +1372,9 @@
                 </div>
               ))}
 
-              {/* E 词汇分类 */}
               <div className="bg-slate-50 p-5 rounded-xl border border-slate-200">
                 <h4 className="font-bold text-slate-800 mb-4">E. 将以下词语分类 (20 * 0.5 = 10分)</h4>
                 
-                {/* 词库 */}
                 <div className="mb-6 p-4 bg-white border-2 border-dashed border-indigo-200 rounded-xl">
                   <p className="text-sm text-slate-500 mb-2">待分类词语 (点击选中后，再点击下方类别框放入)：</p>
                   <div className="flex flex-wrap gap-2">
@@ -1624,7 +1390,6 @@
                   </div>
                 </div>
 
-                {/* 分类框 */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {['Profession', 'Aliment', 'Famille', 'Temps'].map(cat => (
                     <div 
@@ -1777,23 +1542,19 @@
       );
     }
 
-    // --- 新增模块 4：子组件 - 核心语法综合测试卷 ---
+    // --- 模块 4：子组件 - 核心语法综合测试卷 ---
     function ExamCoreGrammar() {
       const [activePart, setActivePart] = useState('part1');
 
-      // Part 1 状态
       const [p1Answers, setP1Answers] = useState({});
       const [p1Score, setP1Score] = useState(null);
 
-      // Part 2 状态
       const [p2Answers, setP2Answers] = useState({ A: {}, B: {}, C: {} });
       const [p2Score, setP2Score] = useState(null);
 
-      // Part 3 & 4 状态
       const [p34Revealed, setP34Revealed] = useState(false);
       const [p34Scores, setP34Scores] = useState({ p3A: 0, p3B: 0, p4A: 0, p4B: 0 });
 
-      // -- Part 1 处理逻辑 --
       const handleP1Select = (qId, optionIndex) => {
         if (p1Score !== null) return;
         setP1Answers({ ...p1Answers, [qId]: optionIndex });
@@ -1809,7 +1570,6 @@
         setP1Score(score);
       };
 
-      // -- Part 2 处理逻辑 --
       const handleP2Input = (section, qId, value) => {
         if (p2Score !== null) return;
         setP2Answers({ ...p2Answers, [section]: { ...p2Answers[section], [qId]: value } });
@@ -1821,7 +1581,6 @@
           exam2Data.part2_fill[sec].forEach(q => {
             const userAns = (p2Answers[sec][q.id] || '').trim().toLowerCase();
             const correctAns = q.a.toLowerCase();
-            // 兼容含有感叹号的变位情况
             if (userAns === correctAns || userAns === correctAns + '!') {
               score += 1;
             }
@@ -1830,7 +1589,6 @@
         setP2Score(score);
       };
 
-      // -- 渲染函数 --
       const renderOptions = (q, selectedIdx, showResult) => {
         return (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-3">
@@ -1932,7 +1690,7 @@
                             className={`w-32 px-2 py-1 border-b-2 bg-white focus:outline-none text-center font-medium
                               ${p2Score !== null ? (isCorrect ? 'border-emerald-500 text-emerald-700' : 'border-rose-500 text-rose-700') : 'border-slate-300 focus:border-indigo-500'}`}
                           />
-                          <span>{parts[1]}</span>
+                          <span>{finalParts[1]}</span>
                           {p2Score !== null && !isCorrect && <span className="ml-2 text-sm font-bold text-emerald-600 bg-emerald-100 px-2 rounded">正确: {q.a}</span>}
                         </div>
                       );
@@ -2061,7 +1819,7 @@
       );
     }
 
-    // --- 新增模块 4：全卷检测页面 (整合入口) ---
+    // --- 模块 4：全卷检测页面 (整合入口) ---
     function FullExam() {
       const [activePaper, setActivePaper] = useState('midterm');
 
@@ -2089,7 +1847,7 @@
 
     // --- 根组件 App ---
     function App() {
-      const [activeModule, setActiveModule] = useState('translation'); // translation, grammar, knowledge, fullexam
+      const [activeModule, setActiveModule] = useState('knowledge'); // 为了方便您检视新功能，预设进入知识库模块
 
       return (
         <div className="min-h-screen bg-slate-50 text-slate-800 font-sans p-4 md:p-8">
