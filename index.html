@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>法语翻译题库系统</title>
+  <title>法语翻译与语法学习系统</title>
   
   <!-- 引入 Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -50,11 +50,11 @@
       zh2fr: [
         { id: 1, question: "今天的风景真美啊！", answer: "Quel beau paysage aujourd'hui !", options: ["Quel beau paysage aujourd'hui !", "Quel mauvais temps aujourd'hui !", "Quelle belle journée aujourd'hui !", "Le paysage est très beau demain."] },
         { id: 2, question: "保罗十分想念他的家人。", answer: "Paul pense beaucoup à sa famille.", options: ["Paul pense beaucoup à sa famille.", "Paul oublie souvent sa famille.", "Paul téléphone souvent à sa famille.", "Paul habite avec sa famille."] },
-        { id: 3, question: "在这座大城市里只有几家小商铺。", answer: "Il n'y a que quelques petites boutiques dans cette grande ville.", options: ["Il n'y a que quelques petites boutiques dans cette grande ville.", "Il y a beaucoup de grands magasins dans cette ville.", "Il n'y a pas de petites boutiques dans cette grande ville.", "Il y a seulement un supermarché dans ce village."] },
+        { id: 3, question: "在这座大城市里只有几家小商铺。", answer: "Il n'y a que quelques petites boutiques dans cette grande ville.", options: ["Il n'y a que quelques petites boutiques dans cette grande ville.", "Il y a beaucoup de grands magasins dans cette ville.", "Il n'y a pas de petites boutiques dans cette grande ville.", "Il y a seulement une supermarché dans ce village."] },
         { id: 4, question: "你明天可以给我打电话。", answer: "Tu peux me téléphoner demain.", options: ["Tu peux me téléphoner demain.", "Je vais te téléphoner demain.", "Tu dois m'appeler aujourd'hui.", "Tu peux venir me voir demain."] },
         { id: 5, question: "她走得很慢，因为她不想太累。", answer: "Elle marche lentement parce qu'elle ne veut pas être trop fatiguée.", options: ["Elle marche lentement parce qu'elle ne veut pas être trop fatiguée.", "Elle marche vite parce qu'elle est en retard.", "Elle ne marche pas parce qu'elle est déjà fatiguée.", "Il marche lentement parce qu'il ne veut pas être fatigué."] },
         { id: 6, question: "我们每天都在食堂吃饭。", answer: "Nous mangeons au resto-U tous les jours.", options: ["Nous mangeons au resto-U tous les jours.", "Nous allons souvent au restaurant.", "Ils mangent à la cantine aujourd'hui.", "Nous préparons les repas tous les jours."] },
-        { id: 7, question: "我刚刚在商场买了一些水果。", answer: "Je viens d'acheter des fruits dans le grand magasin.", options: ["Je viens d'acheter des fruits dans le grand magasin.", "Je vais acheter des蔬菜 au marché.", "Il vient d'acheter des pommes au supermarché.", "Je viens de manger des fruits dans le magasin."] },
+        { id: 7, question: "我刚刚在商场买了一些水果。", answer: "Je viens d'acheter des fruits dans le grand magasin.", options: ["Je viens d'acheter des fruits dans le grand magasin.", "Je vais acheter des légumes au marché.", "Il vient d'acheter des pommes au supermarché.", "Je viens de manger des fruits dans le magasin."] },
         { id: 8, question: "请鼓起勇气，不要害怕。", answer: "Aie du courage et n'aie pas peur.", options: ["Aie du courage et n'aie pas peur.", "Ayez de la patience et ne pleurez pas.", "Il faut avoir du courage et peur.", "Sois courageux et fais attention."] },
         { id: 9, question: "这座房子面朝一条小河。", answer: "Cette maison donne sur une petite rivière.", options: ["Cette maison donne sur une petite rivière.", "Cette maison se trouve près de la montagne.", "Cet appartement donne sur la rue.", "Cette maison est loin de la rivière."] },
         { id: 10, question: "同学们都喜欢在周末购物。", answer: "Les étudiants aiment faire des achats le week-end.", options: ["Les étudiants aiment faire des achats le week-end.", "Les professeurs aiment se reposer le week-end.", "Les étudiants doivent étudier pendant le week-end.", "Les enfants n'aiment pas faire les courses."] },
@@ -79,8 +79,8 @@
       { id: 9, category: "冠词", question: "Il mange ______ beurre sur sa baguette.", options: ["de", "un", "du", "le"], answer: "du", explanation: "beurre（黄油）是阳性不可数名词，需要用部分冠词 du。" },
       { id: 10, category: "冠词", question: "Elle a acheté pas mal ______ livres en français.", options: ["des", "de", "d'", "les"], answer: "de", explanation: "pas mal de 意为“不少”，是数量表达，后接名词省略冠词。" },
       // 代词
-      { id: 11, category: "代词", question: "Oui, je ______ vois sur le sofa. (代指 le sac à main)", options: ["la", "le", "l'", "lui"], answer: "le", explanation: "le sac à main 是阳性单数直接宾语，用 le 代替。" },
-      { id: 12, category: "代词", question: "Il ______ présente sa copine. (代指 à ses parents)", options: ["leur", "les", "lui", "la"], answer: "leur", explanation: "à ses parents 是复数间接宾语（人），用 leur 代替。" },
+      { id: 11, category: "代词", question: "Oui, je ______ vois sur le sofa. (le sac à main)", options: ["la", "le", "l'", "lui"], answer: "le", explanation: "le sac à main 是阳性单数直接宾语，用 le 代替。" },
+      { id: 12, category: "代词", question: "Il ______ présente sa copine. (à ses parents)", options: ["leur", "les", "lui", "la"], answer: "leur", explanation: "à ses parents 是复数间接宾语（人），用 leur 代替。" },
       { id: 13, category: "代词", question: "Ces livres sont intéressants, nous ______ avons lus.", options: ["le", "la", "les", "leur"], answer: "les", explanation: "les 代指 ces livres，作直接宾语前置时，复合过去时的过去分词 lus 需要与其进行性数配合（加s）。" },
       { id: 14, category: "代词", question: "Marine et Charlotte ______ sont dirigées vers le centre.", options: ["se", "s'", "les", "leur"], answer: "se", explanation: "se diriger 是代词式动词，主语是第三人称复数，自反代词用 se。" },
       { id: 15, category: "代词", question: "Il n'______ a que quelques magasins dans son village.", options: ["en", "y", "le", "la"], answer: "y", explanation: "il y a 是固定结构（存在句），在 il n'y a que (只有) 结构中，y 的位置保持不变。" },
@@ -95,7 +95,7 @@
       { id: 22, category: "句子结构", question: "______ Juliette et moi qui sommes en retard.", options: ["C'est", "Ce sont", "Il est", "Il y a"], answer: "Ce sont", explanation: "强调主语时用 C'est / Ce sont ... qui。因为 Juliette et moi 相当于 nous（复数），所以用 Ce sont。" },
       { id: 23, category: "句子结构", question: "______ me faut deux kilos de bœuf.", options: ["Il", "C'est", "Ce", "Y"], answer: "Il", explanation: "Il faut 结构表示“需要”，是无人称动词，只能用 Il。" },
       { id: 24, category: "句子结构", question: "______ une demi-heure pour aller à l'école.", options: ["Il faut", "Il y a", "C'est", "Il est"], answer: "Il faut", explanation: "Il faut + 时间，表示“需要花费多少时间”。" },
-      { id: 25, category: "句子结构", question: "______ est restée devant la Joconde. (代指 Claudine)", options: ["Il", "Elle", "Ce", "On"], answer: "Elle", explanation: "Claudine 是女性名字，需用第三人称阴性单数代词 Elle 代替。" }
+      { id: 25, category: "句子结构", question: "______ est restée devant la Joconde. (Claudine)", options: ["Il", "Elle", "Ce", "On"], answer: "Elle", explanation: "Claudine 是女性名字，需用第三人称阴性单数代词 Elle 代替。" }
     ];
 
     // --- 期中试卷资料 ---
@@ -281,7 +281,6 @@
       }
     };
 
-    // 工具函数：打乱数组顺序 (Fisher-Yates)
     const shuffleArray = (array) => {
       const newArr = [...array];
       for (let i = newArr.length - 1; i > 0; i--) {
@@ -290,6 +289,56 @@
       }
       return newArr;
     };
+
+    // --- 模块 0：新增 - 翻译速记 (法译汉 & 汉译法大全) ---
+    function TranslationReview() {
+      const [mode, setMode] = useState('fr2zh');
+      const data = questionsData[mode];
+
+      return (
+        <div className="max-w-4xl mx-auto animate-fade-in">
+          {/* 选项卡 */}
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 mb-6 flex justify-center gap-4">
+            <button
+              onClick={() => setMode('fr2zh')}
+              className={`px-6 py-2.5 rounded-xl font-bold transition-all flex items-center gap-2 ${mode === 'fr2zh' ? 'bg-indigo-600 text-white shadow-md' : 'bg-slate-100 text-slate-500 hover:bg-indigo-50 hover:text-indigo-600'}`}
+            >
+              🇫🇷 法译汉速记
+            </button>
+            <button
+              onClick={() => setMode('zh2fr')}
+              className={`px-6 py-2.5 rounded-xl font-bold transition-all flex items-center gap-2 ${mode === 'zh2fr' ? 'bg-rose-600 text-white shadow-md' : 'bg-slate-100 text-slate-500 hover:bg-rose-50 hover:text-rose-600'}`}
+            >
+              🇨🇳 汉译法速记
+            </button>
+          </div>
+
+          {/* 列表区 */}
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
+            <h2 className="text-xl font-bold text-slate-800 mb-6 border-b pb-4">
+              {mode === 'fr2zh' ? '法译汉 - 核心句子对照表' : '汉译法 - 核心句子对照表'}
+            </h2>
+            <div className="space-y-4">
+              {data.map((item, index) => (
+                <div key={item.id} className="bg-slate-50 rounded-xl border border-slate-100 p-5 flex flex-col md:flex-row gap-4 hover:shadow-md hover:border-slate-300 transition-all">
+                  <div className="flex-shrink-0 w-8 h-8 bg-white border border-slate-200 text-slate-500 rounded-full flex items-center justify-center font-black shadow-sm">
+                    {index + 1}
+                  </div>
+                  <div className="flex-1 space-y-2">
+                    <p className={`text-lg font-bold ${mode === 'fr2zh' ? 'text-indigo-800' : 'text-slate-800'}`}>
+                      {item.question}
+                    </p>
+                    <p className={`text-base font-medium ${mode === 'fr2zh' ? 'text-slate-600' : 'text-rose-600'}`}>
+                      {item.answer}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+    }
 
     // --- 模块 1：翻译训练 ---
     function TranslationQuiz() {
@@ -787,7 +836,7 @@
 
     // --- 模块 3：知识库 ---
     function KnowledgeBase() {
-      const [activeSection, setActiveSection] = useState('verbs'); // 将默认切换到动词以便查看新功能
+      const [activeSection, setActiveSection] = useState('verbs'); 
       
       const sections = [
         { id: 'prepositions', title: '介词 (Prépositions)', icon: '📍' },
@@ -1015,7 +1064,7 @@
                     <p className="text-base font-medium">👉 <strong>规则3 (肯定式)：</strong> 代词置于动词后，用连字符连接。 <span className="text-indigo-600 bg-white px-2 py-0.5 rounded shadow-sm border">Donne-lui cette lettre.</span></p>
                     <p className="text-base font-medium">👉 <strong>规则4 (否定式)：</strong> 代词恢复置于动词前。 <span className="text-indigo-600 bg-white px-2 py-0.5 rounded shadow-sm border">Ne le fais pas.</span></p>
                     
-                    {/* 新增的特殊规则区块 */}
+                    {/* 特殊拼写规则区块 */}
                     <div className="mt-6 p-4 bg-rose-50 border border-rose-200 rounded-lg shadow-sm">
                       <p className="font-bold text-rose-800 text-base mb-2">⚠️ 特殊拼写规则（命令式与 y / en 连用）：</p>
                       <p className="text-rose-700 leading-relaxed text-sm md:text-base">
@@ -1029,7 +1078,7 @@
                   </div>
                 </div>
 
-                {/* 新增的互动练习区块 */}
+                {/* 互动练习区块 */}
                 <div className="space-y-4 pt-4 border-t border-slate-100">
                   <h3 className="text-lg font-bold text-indigo-700 border-l-4 border-indigo-500 pl-3">📝 实战：用命令式和代词回答句子</h3>
                   <p className="text-sm text-slate-500 mb-3">点击按钮查看如何使用命令式与代词（注意特殊拼写规则）。</p>
@@ -1819,7 +1868,7 @@
       );
     }
 
-    // --- 模块 4：全卷检测页面 (整合入口) ---
+    // --- 模块 5：全卷检测页面 (整合入口) ---
     function FullExam() {
       const [activePaper, setActivePaper] = useState('midterm');
 
@@ -1847,7 +1896,8 @@
 
     // --- 根组件 App ---
     function App() {
-      const [activeModule, setActiveModule] = useState('knowledge'); // 为了方便您检视新功能，预设进入知识库模块
+      // 默认开启新加的 review 翻译速记功能，方便您检阅
+      const [activeModule, setActiveModule] = useState('review'); 
 
       return (
         <div className="min-h-screen bg-slate-50 text-slate-800 font-sans p-4 md:p-8">
@@ -1865,6 +1915,12 @@
                   className={`whitespace-nowrap px-4 py-3 rounded-xl font-bold text-sm md:text-base transition-all ${activeModule === 'translation' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-50 hover:text-indigo-600'}`}
                 >
                   🌍 翻译训练
+                </button>
+                <button 
+                  onClick={() => setActiveModule('review')}
+                  className={`whitespace-nowrap px-4 py-3 rounded-xl font-bold text-sm md:text-base transition-all ${activeModule === 'review' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-50 hover:text-indigo-600'}`}
+                >
+                  📖 翻译速记
                 </button>
                 <button 
                   onClick={() => setActiveModule('grammar')}
@@ -1890,6 +1946,7 @@
 
           {/* 模块路由展示 */}
           {activeModule === 'translation' && <TranslationQuiz />}
+          {activeModule === 'review' && <TranslationReview />}
           {activeModule === 'grammar' && <GrammarQuiz />}
           {activeModule === 'knowledge' && <KnowledgeBase />}
           {activeModule === 'fullexam' && <FullExam />}
