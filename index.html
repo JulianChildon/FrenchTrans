@@ -348,19 +348,188 @@
       { id: 25, category: "句子结构", question: "______ est restée devant la Joconde. (Claudine)", options: ["Il", "Elle", "Ce", "On"], answer: "Elle", explanation: "Claudine 是女性名字，需用第三人称阴性单数代词 Elle 代替。" }
     ];
 
-    // --- 新增：变位填空练习资料 ---
-    const conjugationExercises = [
-      { id: 1, q: "Il ______ (savoir) faire la cuisine.", a: "sait" },
-      { id: 2, q: "Nous ______ (partir) à l'arrêt de bus.", a: "partons" },
-      { id: 3, q: "On ______ (faire) des achats dans le centre commercial.", a: "fait" },
-      { id: 4, q: "Elle ______ (lire) un journal le samedi.", a: "lit" },
-      { id: 5, q: "Je ______ (devoir) rester chez Cécile.", a: "dois" },
-      { id: 6, q: "Hier, je ______ (rester) dans la rue.", a: "suis resté" }, // 简易验证时也可接受 suis restée
-      { id: 7, q: "Il ______ (lire) ce livre hier soir.", a: "a lu" },
-      { id: 8, q: "Elles ______ (arriver) en ville pour faire des courses.", a: "sont arrivées" },
-      { id: 9, q: "Je ______ bien ce jeune homme. (savoir/connaître)", a: "connais" },
-      { id: 10, q: "Elle ______ faire la cuisine. (savoir/connaître)", a: "sait" }
-    ];
+    // --- 新增：期中试卷资料 ---
+    const examData = {
+      part1_mcq: [
+        { id: 1, q: "Je vais à l'école avec __ amie.", options: ["mon", "ma", "moi", "mes"], answer: "mon" },
+        { id: 2, q: "Céline et Laura sont __ .", options: ["étudiants", "étudiantes", "/", "étudiant"], answer: "étudiantes" },
+        { id: 3, q: "Est-ce que tu veux rentrer chez __ ?", options: ["tu", "toi", "ton", "sa"], answer: "toi" },
+        { id: 4, q: "C'est une voiture __ mon père.", options: ["à", "avec", "de", "/"], answer: "de" },
+        { id: 5, q: "Maintenant, vous __ toute la famille.", options: ["connaissance", "connnais", "connaissons", "connaissez"], answer: "connaissez" },
+        { id: 6, q: "Les étudiants sont dans __ classe.", options: ["mon", "ses", "leur", "leurs"], answer: "leur" },
+        { id: 7, q: "L'été __ le 22 juin.", options: ["commence", "commençons", "finit", "finis"], answer: "commence" },
+        { id: 8, q: "Mille neuf cent quatre-vingt-dix-huit. C'est en __ .", options: ["1989", "1984", "1998", "1988"], answer: "1998" },
+        { id: 9, q: "En quelle __ sommes-nous ? Nous sommes en été.", options: ["année", "date", "moi", "saison"], answer: "saison" },
+        { id: 10, q: "J'ai une voiture, il n'a pas __ voiture.", options: ["de", "une", "sa", "la"], answer: "de" },
+        { id: 11, q: "Mon père n'aime pas __ café.", options: ["un", "du", "le", "de"], answer: "le" },
+        { id: 12, q: "__ printemps. on peut voir partout des fleurs.", options: ["À", "Au", "En", "Dans"], answer: "Au" },
+        { id: 13, q: "Beaucoup __ étudiants rentrent à l'école aujourd'hui.", options: ["des", "de", "les", "d'"], answer: "d'" },
+        { id: 14, q: "Ils veulent prendre leurs vacances __ Janvier.", options: ["en", "au", "dans", "pour"], answer: "en" },
+        { id: 15, q: "Qu'est-ce que vous voulez boire, monsieur? Du __ ?", options: ["eau", "pain", "bière", "vin"], answer: "vin" },
+        { id: 16, q: "-Vas-tu à la mer ? -Non, je ne(n') __ vais pas.", options: ["en", "là", "y", "/"], answer: "y" },
+        { id: 17, q: "-Combien de filles y-a-t-il dans votre classe ? -Il y __ a vingt.", options: ["en", "là", "y", "/"], answer: "en" },
+        { id: 18, q: "Le professeur est-il content de votre travail ? - Il __ est content.", options: ["en", "là", "y", "/"], answer: "en" },
+        { id: 19, q: "-Qu'est-ce que c'est ? -C'est un __ vélo.", options: ["bel", "belle", "vieille", "beau"], answer: "beau" },
+        { id: 20, q: "Ces étudiants prennent __ belles photos.", options: ["des", "de", "une", "/"], answer: "de" },
+        { id: 21, q: "Non, pas de lait. Je n'aime pas __ lait.", options: ["un", "du", "le", "de la"], answer: "le" },
+        { id: 22, q: "Pour le dîner, elle ne prend pas grand-chose, un __ seulement.", options: ["viande", "salade", "soupe", "café"], answer: "café" },
+        { id: 23, q: "Le 22 juin, c'est le commencement de l'(__).", options: ["automne", "été", "printemps", "hiver"], answer: "été" },
+        { id: 24, q: "Au déjeuner, les Français prennent du vin ou de la bière, mais jamais __ lait.", options: ["un", "du", "le", "de"], answer: "de" },
+        { id: 25, q: "J'ai __ chance.", options: ["une", "un", "la", "de la"], answer: "de la" }
+      ],
+      part2_fill: {
+        A: [
+          { id: 1, q: "-Tu peux me donner ton numéro de portable ?-Bien sûr, c'est __ 01 49 52 18 36.", a: "le" },
+          { id: 2, q: "Le Camenbert est __ fromage très célèbre.", a: "un" },
+          { id: 3, q: "Nicolas boit __ lait tous les matins.", a: "du" },
+          { id: 4, q: "Il fait souvent __ vent au mois de septembre.", a: "du" },
+          { id: 5, q: "Lucas n'aime pas __ bière.", a: "la" }
+        ],
+        B: [
+          { id: 1, q: "Les Chinois aiment bien les bons repas, ils passent beaucoup de temps __ table.", a: "à" },
+          { id: 2, q: "Ces étudiants prennent __ belles photos.", a: "de" },
+          { id: 3, q: "__ printemps, il fait souvent du soleil.", a: "au" },
+          { id: 4, q: "Les employés vont au travail __ métro.", a: "en" },
+          { id: 5, q: "Moi, je suis étudiant __ département de français.", a: "dans" },
+          { id: 6, q: "Le dîner est un gros repas de la journée, il y a souvent de la soupe __ la place de salade.", a: "à" },
+          { id: 7, q: "Après le travail, je rentre __ moi.", a: "chez" },
+          { id: 8, q: "Le soir, les Français mangent souvent __ huit et neuf heures.", a: "entre" },
+          { id: 9, q: "Vous pouvez chercher __ Internet pour trouver l'adresse de ce restaurant.", a: "sur" },
+          { id: 10, q: "-Je vais voir un film, tu veux venir __ moi ?-Ah, pas de chance ! J'ai cours à midi.", a: "avec" }
+        ],
+        C: [
+          { id: 1, q: "Je vais vous présenter __ famille.", a: "ma" },
+          { id: 2, q: "J'ai un rendez-vous avec __ professeur cet après-midi.", a: "mon" },
+          { id: 3, q: "Mon oncle est un journaliste très célèbre, un personnage, __ !", a: "lui" },
+          { id: 4, q: "Émilie et __, nous aimons bien le café.", a: "moi" },
+          { id: 5, q: "Émilie est __ amie fidèle, je l'aime beaucoup.", a: "ton" }, // 答案图给出的是 ton，原意可能也可是 mon，这里以答案为准
+          { id: 6, q: "Excusez-moi, monsieur, quel est __ numéro de téléphone, s'il vous plaît ?", a: "votre" },
+          { id: 7, q: "Le professeur demande à Lucie de faire __ devoirs.", a: "ses" },
+          { id: 8, q: "-Comment allez-vous, monsieur ?-Très bien, merci. Et __ ?", a: "vous" },
+          { id: 9, q: "Ils sont tous mes collègues(同事), je travaille avec __ .", a: "eux" },
+          { id: 10, q: "Je suis très occupé cette semaine, parfois, je rentre chez __ après minuit.", a: "moi" }
+        ],
+        D_a: [
+          { id: 1, q: "Paul et Nicole ________ (connaître) bien ma famille.", a: "connaissent" },
+          { id: 2, q: "Nous ________ (faire) notre travail.", a: "faisons" },
+          { id: 3, q: "En été, les étudiants ________ (aller) souvent à la mer.", a: "vont" },
+          { id: 4, q: "Beaucoup de Français ________ (prendre) aussi leurs vacances au mois d'août.", a: "prennent" },
+          { id: 5, q: "À table, les Français ________ (parler) de toutes les choses intéressantes de la journée.", a: "parlent" }
+        ],
+        D_b: [
+          { id: 1, q: "Les cours ________ à huit heures le matin.", a: "commencent" },
+          { id: 2, q: "À midi, peut-être les gens ________ du vin ou de l'eau.", a: "boivent" },
+          { id: 3, q: "Quand il ________ , Stéphane sort son parapluie de son sac.", a: "pleut" },
+          { id: 4, q: "Au resto-U, on ne ________ pas beaucoup, mais on mange bien.", a: "paie" },
+          { id: 5, q: "Les étudiants rentrent à l'école, tout le monde ________ leur travail.", a: "reprend" }
+        ]
+      },
+      part2_classify: {
+        words: ["institutrice", "midi", "professeur", "fruit", "grand-mère", "tante", "frère", "fromage", "yaourt", "soir", "petit-déjeuner", "ouvrier", "père", "pain", "matin", "journaliste", "demain", "oncle", "employé", "aujourd'hui"],
+        answers: {
+          Profession: ["institutrice", "professeur", "ouvrier", "journaliste", "employé"],
+          Aliment: ["fruit", "fromage", "yaourt", "pain", "petit-déjeuner"],
+          Famille: ["grand-mère", "tante", "frère", "père", "oncle"],
+          Temps: ["midi", "soir", "matin", "demain", "aujourd'hui"]
+        }
+      },
+      part3_transform: {
+        A: [
+          { q: "Il y a du lait dans le frigo ?", a_oui: "Oui, il y en a.", a_non: "Non, il n'y en a pas." },
+          { q: "C'est un quartier tranquille, j'habite dans ce quartier depuis plus de 20 ans.", a: "C'est un quartier tranquille, j'y habite depuis plus de 20 ans." },
+          { q: "Est-ce que tu bois beaucoup d'eau tous les jours ?", a_oui: "Oui, j'en bois beaucoup tous les jours.", a_non: "Non, je n'en bois pas beaucoup tous les jours." },
+          { q: "Paul va-t-il au restaurant ?", a_oui: "Oui, il y va.", a_non: "Non, il n'y va pas." },
+          { q: "Il y a des tomates fraîches, je veux deux kilos de tomates.", a: "Il y a des tomates fraîches, j'en veux deux kilos." }
+        ],
+        B: [
+          { q: "Olivier boit du lait.", a: "Olivier ne boit pas de lait." },
+          { q: "Elle aime les fleurs.", a: "Elle n'aime pas les fleurs." },
+          { q: "On allume un feu dans la cheminée.", a: "On n'allume pas de feu dans la cheminée." },
+          { q: "Marie fait ses devoirs.", a: "Marie ne fait pas ses devoirs." },
+          { q: "J'ai des cours le mercredi.", a: "Je n'ai pas de cours le mercredi." }
+        ]
+      },
+      part4_translation: {
+        A: [
+          { q: "这是一张我外祖父母的结婚照。", a: "C'est une photo de mariage de mes grands-parents." },
+          { q: "我父亲是职员，我母亲是教师。", a: "Mon père est employé, ma mère est institutrice." },
+          { q: "北京春天的天气怎么样？", a: "Quel temps fait-il au printemps à Beijing?" },
+          { q: "冬天，经常刮风，天黑得早。", a: "En hiver, il fait souvent du vent et il fait nuit tôt." },
+          { q: "今天我们有足够的时间在家做饭。", a: "Nous avons assez de temps pour faire la cuisine à la maison aujourd'hui." }
+        ],
+        B: [
+          { q: "L'homme à côté de ma mère, c'est son frère aîné, mon oncle Hugo, il est un journaliste.", a: "在我妈妈旁边的男人是她的哥哥，我的叔叔雨果，他是一名记者。" },
+          { q: "En été, à Guangzhou, il pleut dès le matin et il fait un peu froid.", a: "在广州，夏天，从早上就开始下雨，会有点冷。" },
+          { q: "Les Chinois adorent manger en famille, ils passent beaucoup de temps à table.", a: "中国人喜欢家庭聚餐，他们会花很多时间在餐桌上度过。" },
+          { q: "Les étudiants vont souvent au resto-U, parce qu'ils ne payent pas beaucoup mais mangent bien là-bas.", a: "大学生们经常去大学食堂，因为那里吃得好并且花费不多。" },
+          { q: "Pour le déjeuner, on boit de l'eau, peut-être du vin ou de la bière aussi, mais jamais de lait.", a: "午餐时，我们会喝水，也可能喝酒和啤酒，但是从来不喝牛奶。" }
+        ]
+      }
+    };
+
+    // --- 新增：核心语法综合测试卷资料 ---
+    const exam2Data = {
+      part1_mcq: [
+        { id: 1, q: "Notre maison donne ______ la mer.", options: ["dans", "sur", "vers", "au pied de"], answer: "sur" },
+        { id: 2, q: "Les étudiants se dirigent ______ la bibliothèque.", options: ["vers", "pour", "chez", "après"], answer: "vers" },
+        { id: 3, q: "Il est resté ______ son ami hier soir.", options: ["dans", "sur", "chez", "vers"], answer: "chez" },
+        { id: 4, q: "L'université se trouve ______ une grande montagne.", options: ["au sommet de", "au pied de", "à la sortie de", "en retard de"], answer: "au pied de" },
+        { id: 5, q: "Nous sommes partis ______ Paris hier.", options: ["vers", "pour", "dans", "chez"], answer: "pour" },
+        { id: 6, q: "Il n'a pas ______ temps de faire du sport.", options: ["le", "de", "du", "un"], answer: "de" },
+        { id: 7, q: "Marie mange deux ______ riz.", options: ["bols de", "bols du", "bol de", "bols des"], answer: "bols de" },
+        { id: 8, q: "Il y a beaucoup ______ boutiques dans ce centre.", options: ["des", "de", "d'", "les"], answer: "de" },
+        { id: 9, q: "Il mange ______ beurre sur sa baguette.", options: ["de", "un", "du", "le"], answer: "du" },
+        { id: 10, q: "Elle a acheté pas mal ______ livres en français.", options: ["des", "de", "d'", "les"], answer: "de" },
+        { id: 11, q: "Oui, je ______ vois sur le sofa. (代指 le sac à main)", options: ["la", "le", "l'", "lui"], answer: "le" },
+        { id: 12, q: "Il ______ présente sa copine. (代指 à ses parents)", options: ["leur", "les", "lui", "la"], answer: "leur" },
+        { id: 13, q: "Ces livres sont intéressants, nous ______ avons lus.", options: ["le", "la", "les", "leur"], answer: "les" },
+        { id: 14, q: "Marine et Charlotte ______ sont dirigées vers le centre.", options: ["se", "s'", "les", "leur"], answer: "se" },
+        { id: 15, q: "Il n'______ a que quelques magasins dans son village.", options: ["en", "y", "le", "la"], answer: "y" },
+        { id: 16, q: "Hier, Claudine ______ restée pendant une heure.", options: ["a", "est", "était", "a été"], answer: "est" },
+        { id: 17, q: "Nous ______ visité le Louvre hier.", options: ["sommes", "avons", "étions", "visitions"], answer: "avons" },
+        { id: 18, q: "Elle ______ partie du magasin à dix-neuf heures.", options: ["est", "a", "était", "a été"], answer: "est" },
+        { id: 19, q: "Anne aime ces fleurs et elle ______ a achetées.", options: ["le", "la", "les", "leur"], answer: "les" },
+        { id: 20, q: "______-lui cette lettre !", options: ["Donne", "Donnes", "Donnez", "Donnons"], answer: "Donne" },
+        { id: 21, q: "______ dans un supermarché que Charlotte a fait des achats.", options: ["C'est", "Ce sont", "Il est", "Il y a"], answer: "C'est" },
+        { id: 22, q: "______ Juliette et moi qui sommes en retard.", options: ["C'est", "Ce sont", "Il est", "Il y a"], answer: "Ce sont" },
+        { id: 23, q: "______ me faut deux kilos de bœuf.", options: ["Il", "C'est", "Ce", "Y"], answer: "Il" },
+        { id: 24, q: "______ une demi-heure pour aller à l'école.", options: ["Il faut", "Il y a", "C'est", "Il est"], answer: "Il faut" },
+        { id: 25, q: "______ est restée devant la Joconde. (代指 Claudine)", options: ["Il", "Elle", "Ce", "On"], answer: "Elle" }
+      ],
+      part2_fill: {
+        A: [
+          { id: 1, q: "Je ________ bien ce jeune homme.", a: "connais" },
+          { id: 2, q: "Elle ________ faire la cuisine.", a: "sait" }
+        ],
+        B: [
+          { id: 1, q: "Il ________ (savoir) faire la cuisine.", a: "sait" },
+          { id: 2, q: "Nous ________ (partir) à l'arrêt de bus.", a: "partons" },
+          { id: 3, q: "On ________ (faire) des achats dans le centre commercial.", a: "fait" },
+          { id: 4, q: "Elle ________ (lire) un journal le samedi.", a: "lit" },
+          { id: 5, q: "Je ________ (devoir) rester chez Cécile.", a: "dois" }
+        ],
+        C: [
+          { id: 1, q: "Hier, je ________ (rester) dans la rue.", a: "suis resté" },
+          { id: 2, q: "Il ________ (lire) ce livre hier soir.", a: "a lu" },
+          { id: 3, q: "Elles ________ (arriver) en ville pour faire des courses.", a: "sont arrivées" }
+        ]
+      },
+      part3_transform: {
+        A: [
+          { q: "Juliette et moi sommes en retard. (强调主语)", a: "Ce sont Juliette et moi qui sommes en retard." },
+          { q: "Charlotte a fait des achats dans un supermarché. (强调地点状语)", a: "C'est dans un supermarché que Charlotte a fait des achats." },
+          { q: "Je l'ai vu hier. (强调时间状语)", a: "C'est hier que je l'ai vu." }
+        ],
+        B: [
+          { q: "Tu lui donnes cette lettre. (改为肯定命令式)", a: "Donne-lui cette lettre !" },
+          { q: "Tu ne le fais pas. (改为否定命令式)", a: "Ne le fais pas !" }
+        ]
+      },
+      part4_translation: {
+        A: questionsData.fr2zh.map(q => ({ q: q.question, a: q.answer })),
+        B: questionsData.zh2fr.map(q => ({ q: q.question, a: q.answer }))
+      }
+    };
 
     // 工具函数：打乱数组顺序 (Fisher-Yates)
     const shuffleArray = (array) => {
@@ -611,6 +780,19 @@
     }
 
     // --- 模块 3：子组件 变位填空练习 ---
+    const conjugationExercises = [
+      { id: 1, q: "Il ______ (savoir) faire la cuisine.", a: "sait" },
+      { id: 2, q: "Nous ______ (partir) à l'arrêt de bus.", a: "partons" },
+      { id: 3, q: "On ______ (faire) des achats dans le centre commercial.", a: "fait" },
+      { id: 4, q: "Elle ______ (lire) un journal le samedi.", a: "lit" },
+      { id: 5, q: "Je ______ (devoir) rester chez Cécile.", a: "dois" },
+      { id: 6, q: "Hier, je ______ (rester) dans la rue.", a: "suis resté" },
+      { id: 7, q: "Il ______ (lire) ce livre hier soir.", a: "a lu" },
+      { id: 8, q: "Elles ______ (arriver) en ville pour faire des courses.", a: "sont arrivées" },
+      { id: 9, q: "Je ______ bien ce jeune homme. (savoir/connaître)", a: "connais" },
+      { id: 10, q: "Elle ______ faire la cuisine. (savoir/connaître)", a: "sait" }
+    ];
+
     function ConjugationPractice() {
       const [inputs, setInputs] = useState(Array(10).fill(''));
       const [results, setResults] = useState(null);
@@ -1052,9 +1234,703 @@
       );
     }
 
+    // --- 新增模块 4：子组件 - 期中考试卷 ---
+    function ExamMidterm() {
+      const [activePart, setActivePart] = useState('part1');
+
+      // Part 1 状态
+      const [p1Answers, setP1Answers] = useState({});
+      const [p1Score, setP1Score] = useState(null);
+
+      // Part 2 状态
+      const [p2Answers, setP2Answers] = useState({ A: {}, B: {}, C: {}, D_a: {}, D_b: {} });
+      const [p2Classify, setP2Classify] = useState({ Profession: [], Aliment: [], Famille: [], Temps: [] });
+      const [p2Unclassified, setP2Unclassified] = useState(examData.part2_classify.words);
+      const [selectedWord, setSelectedWord] = useState(null);
+      const [p2Score, setP2Score] = useState(null);
+
+      // Part 3 & 4 状态
+      const [p34Revealed, setP34Revealed] = useState(false);
+      const [p34Scores, setP34Scores] = useState({ p3A: 0, p3B: 0, p4A: 0, p4B: 0 });
+
+      // -- Part 1 处理逻辑 --
+      const handleP1Select = (qId, optionIndex) => {
+        if (p1Score !== null) return;
+        setP1Answers({ ...p1Answers, [qId]: optionIndex });
+      };
+
+      const submitP1 = () => {
+        let score = 0;
+        examData.part1_mcq.forEach(q => {
+          if (p1Answers[q.id] !== undefined && q.options[p1Answers[q.id]] === q.answer) {
+            score += 1;
+          }
+        });
+        setP1Score(score);
+      };
+
+      // -- Part 2 处理逻辑 --
+      const handleP2Input = (section, qId, value) => {
+        if (p2Score !== null) return;
+        setP2Answers({ ...p2Answers, [section]: { ...p2Answers[section], [qId]: value } });
+      };
+
+      const handleWordClick = (word) => {
+        if (p2Score !== null) return;
+        if (selectedWord === word) setSelectedWord(null);
+        else setSelectedWord(word);
+      };
+
+      const assignWordToCategory = (category) => {
+        if (!selectedWord || p2Score !== null) return;
+        
+        // 从当前可能所在的类别或未分类中移除
+        setP2Unclassified(p2Unclassified.filter(w => w !== selectedWord));
+        const newClassify = { ...p2Classify };
+        Object.keys(newClassify).forEach(k => {
+          newClassify[k] = newClassify[k].filter(w => w !== selectedWord);
+        });
+
+        // 加入新类别
+        newClassify[category].push(selectedWord);
+        setP2Classify(newClassify);
+        setSelectedWord(null);
+      };
+
+      const unassignWord = (word, category) => {
+        if (p2Score !== null) return;
+        const newClassify = { ...p2Classify };
+        newClassify[category] = newClassify[category].filter(w => w !== word);
+        setP2Classify(newClassify);
+        setP2Unclassified([...p2Unclassified, word]);
+      };
+
+      const submitP2 = () => {
+        let score = 0;
+        // 检查填空题
+        ['A', 'B', 'C', 'D_a', 'D_b'].forEach(sec => {
+          examData.part2_fill[sec].forEach(q => {
+            const userAns = (p2Answers[sec][q.id] || '').trim().toLowerCase();
+            const correctAns = q.a.toLowerCase();
+            if (userAns === correctAns) {
+              score += (sec === 'A' || sec === 'D_a' || sec === 'D_b') ? 1 : 0.5;
+            }
+          });
+        });
+        // 检查分类题
+        Object.keys(examData.part2_classify.answers).forEach(cat => {
+          p2Classify[cat].forEach(word => {
+            if (examData.part2_classify.answers[cat].includes(word)) {
+              score += 0.5;
+            }
+          });
+        });
+        setP2Score(score);
+      };
+
+      // -- 渲染函数 --
+      const renderOptions = (q, selectedIdx, showResult) => {
+        return (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-3">
+            {q.options.map((opt, idx) => {
+              const isSelected = selectedIdx === idx;
+              const isCorrect = opt === q.answer;
+              let btnClass = "border rounded-lg px-3 py-2 text-sm text-left transition-colors ";
+              
+              if (!showResult) {
+                btnClass += isSelected ? "bg-indigo-100 border-indigo-400 text-indigo-800 font-bold" : "bg-white border-slate-200 hover:bg-slate-50";
+              } else {
+                if (isCorrect) btnClass += "bg-emerald-100 border-emerald-500 text-emerald-800 font-bold";
+                else if (isSelected && !isCorrect) btnClass += "bg-rose-100 border-rose-500 text-rose-800 line-through";
+                else btnClass += "bg-slate-50 border-slate-200 text-slate-400 opacity-50";
+              }
+
+              return (
+                <button key={idx} disabled={showResult} onClick={() => handleP1Select(q.id, idx)} className={btnClass}>
+                  {String.fromCharCode(65 + idx)}. {opt}
+                </button>
+              );
+            })}
+          </div>
+        );
+      };
+
+      return (
+        <div className="max-w-5xl mx-auto animate-fade-in">
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 mb-6 sticky top-4 z-10">
+            <h2 className="font-bold text-slate-800 mb-3 text-center">期中考试卷导航</h2>
+            <div className="flex flex-wrap gap-2 justify-center">
+              {[
+                { id: 'part1', title: 'I. 单项选择 (25分)' },
+                { id: 'part2', title: 'II. 填空与变位 (35分)' },
+                { id: 'part3', title: 'III. 句子变换 (20分)' },
+                { id: 'part4', title: 'IV. 翻译句子 (20分)' }
+              ].map(tab => (
+                <button 
+                  key={tab.id} onClick={() => setActivePart(tab.id)}
+                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${activePart === tab.id ? 'bg-indigo-600 text-white shadow-md' : 'bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-600'}`}
+                >
+                  {tab.title}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Part 1 */}
+          {activePart === 'part1' && (
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 animate-fade-in">
+              <div className="flex justify-between items-center mb-6 border-b pb-4">
+                <h3 className="text-xl font-bold text-indigo-800">I、单项选择题 (25 * 1 = 25分)</h3>
+                {p1Score !== null && <div className="text-2xl font-black text-emerald-600 bg-emerald-50 px-4 py-1 rounded-lg">得分: {p1Score} / 25</div>}
+              </div>
+              <div className="space-y-6">
+                {examData.part1_mcq.map((q, index) => (
+                  <div key={q.id} className="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                    <p className="font-medium text-slate-800 text-lg">{index + 1}. {q.q}</p>
+                    {renderOptions(q, p1Answers[q.id], p1Score !== null)}
+                  </div>
+                ))}
+              </div>
+              {p1Score === null && (
+                <div className="mt-8 flex justify-center">
+                  <button onClick={submitP1} className="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 shadow-md">提交第一部分</button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Part 2 */}
+          {activePart === 'part2' && (
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 animate-fade-in space-y-8">
+              <div className="flex justify-between items-center border-b pb-4">
+                <h3 className="text-xl font-bold text-indigo-800">II、填空与变位 (总计 35分)</h3>
+                {p2Score !== null && <div className="text-2xl font-black text-emerald-600 bg-emerald-50 px-4 py-1 rounded-lg">得分: {p2Score} / 35</div>}
+              </div>
+
+              {/* A, B, C, D 填空 */}
+              {[
+                { sec: 'A', title: 'A. 用适当的冠词填空 (5 * 1 = 5分)', desc: '如不需要请填 "/"' },
+                { sec: 'B', title: 'B. 用适当的介词补全下列句子 (10 * 0.5 = 5分)', desc: '备选：avec, à, entre, chez, sur, au, de, à, dans, en' },
+                { sec: 'C', title: 'C. 用最适当的重读人称代词或主有形容词填空 (10 * 0.5 = 5分)' },
+                { sec: 'D_a', title: 'D-a. 用括号内动词的直陈式现在时填空 (5 * 1 = 5分)' },
+                { sec: 'D_b', title: 'D-b. 选择合适的动词变位填空，不得重复使用 (5 * 1 = 5分)', desc: '备选词：pleuvoir, commencer, reprendre, payer, boire' },
+              ].map(section => (
+                <div key={section.sec} className="bg-slate-50 p-5 rounded-xl border border-slate-200">
+                  <h4 className="font-bold text-slate-800 mb-1">{section.title}</h4>
+                  {section.desc && <p className="text-sm text-indigo-600 mb-4">{section.desc}</p>}
+                  <div className="space-y-4">
+                    {examData.part2_fill[section.sec].map((q, idx) => {
+                      const parts = q.q.split('__');
+                      const partsD = q.q.split('________');
+                      const finalParts = parts.length > 1 ? parts : partsD;
+                      const userAns = p2Answers[section.sec][q.id] || '';
+                      const isCorrect = userAns.trim().toLowerCase() === q.a.toLowerCase();
+
+                      return (
+                        <div key={q.id} className="flex flex-wrap items-center gap-2 text-slate-700">
+                          <span className="w-5 text-slate-400">{idx + 1}.</span>
+                          <span>{finalParts[0]}</span>
+                          <input 
+                            type="text" disabled={p2Score !== null}
+                            value={userAns} onChange={e => handleP2Input(section.sec, q.id, e.target.value)}
+                            className={`w-24 px-2 py-1 border-b-2 bg-white focus:outline-none text-center font-medium
+                              ${p2Score !== null ? (isCorrect ? 'border-emerald-500 text-emerald-700' : 'border-rose-500 text-rose-700') : 'border-slate-300 focus:border-indigo-500'}`}
+                          />
+                          <span>{finalParts[1]}</span>
+                          {p2Score !== null && !isCorrect && <span className="ml-2 text-sm font-bold text-emerald-600 bg-emerald-100 px-2 rounded">正确: {q.a}</span>}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+
+              {/* E 词汇分类 */}
+              <div className="bg-slate-50 p-5 rounded-xl border border-slate-200">
+                <h4 className="font-bold text-slate-800 mb-4">E. 将以下词语分类 (20 * 0.5 = 10分)</h4>
+                
+                {/* 词库 */}
+                <div className="mb-6 p-4 bg-white border-2 border-dashed border-indigo-200 rounded-xl">
+                  <p className="text-sm text-slate-500 mb-2">待分类词语 (点击选中后，再点击下方类别框放入)：</p>
+                  <div className="flex flex-wrap gap-2">
+                    {p2Unclassified.map(word => (
+                      <button 
+                        key={word} onClick={() => handleWordClick(word)} disabled={p2Score !== null}
+                        className={`px-3 py-1 rounded-lg text-sm font-medium border transition-all ${selectedWord === word ? 'bg-indigo-600 text-white border-indigo-600 shadow-md transform -translate-y-1' : 'bg-white text-slate-700 border-slate-300 hover:border-indigo-400'}`}
+                      >
+                        {word}
+                      </button>
+                    ))}
+                    {p2Unclassified.length === 0 && <span className="text-sm text-emerald-600 font-bold">已全部分类！</span>}
+                  </div>
+                </div>
+
+                {/* 分类框 */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {['Profession', 'Aliment', 'Famille', 'Temps'].map(cat => (
+                    <div 
+                      key={cat} onClick={() => assignWordToCategory(cat)}
+                      className={`min-h-[150px] p-3 rounded-xl border-2 transition-colors cursor-pointer flex flex-col
+                        ${selectedWord ? 'border-indigo-400 bg-indigo-50/50 hover:bg-indigo-100' : 'border-slate-200 bg-white'}`}
+                    >
+                      <h5 className="font-bold text-center text-indigo-800 border-b pb-2 mb-2">{cat}</h5>
+                      <div className="flex flex-wrap gap-2 flex-grow content-start">
+                        {p2Classify[cat].map(word => {
+                          const isCorrect = examData.part2_classify.answers[cat].includes(word);
+                          return (
+                            <button 
+                              key={word} onClick={(e) => { e.stopPropagation(); unassignWord(word, cat); }} disabled={p2Score !== null}
+                              className={`px-2 py-1 rounded text-xs font-medium text-white shadow-sm flex items-center gap-1
+                                ${p2Score === null ? 'bg-indigo-500 hover:bg-rose-500' : (isCorrect ? 'bg-emerald-500' : 'bg-rose-500')}`}
+                            >
+                              {word} {p2Score === null && <span>×</span>}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {p2Score === null && (
+                <div className="mt-8 flex justify-center">
+                  <button onClick={submitP2} className="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 shadow-md">提交第二部分</button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Part 3 & 4 (主观题合集) */}
+          {(activePart === 'part3' || activePart === 'part4') && (
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 animate-fade-in">
+              <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6 rounded-r-lg">
+                <p className="text-yellow-800 text-sm">💡 主观题评分说明：请在输入框写下您的答案。完成后点击下方「查看参考答案并评分」，对照标准答案为自己打分。</p>
+              </div>
+
+              {activePart === 'part3' && (
+                <div className="space-y-8">
+                  <h3 className="text-xl font-bold text-indigo-800 border-b pb-2">III、句子变换 (20分)</h3>
+                  
+                  <div className="space-y-6">
+                    <h4 className="font-bold text-slate-700">A. 请用 y 或 en 改写下列句子 (5 * 2 = 10分)</h4>
+                    {examData.part3_transform.A.map((q, idx) => (
+                      <div key={idx} className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <p className="font-medium text-slate-800 mb-2">{idx + 1}. {q.q}</p>
+                        <textarea className="w-full h-16 p-2 text-sm border border-slate-300 rounded focus:border-indigo-500 focus:ring-0 resize-none mb-2" placeholder="输入您的改写..."></textarea>
+                        {p34Revealed && (
+                          <div className="bg-emerald-50 p-3 rounded-lg border border-emerald-100 text-sm">
+                            <span className="font-bold text-emerald-800">参考答案：</span><br/>
+                            {q.a_oui && <span className="text-emerald-700 block">肯定: {q.a_oui}</span>}
+                            {q.a_non && <span className="text-emerald-700 block">否定: {q.a_non}</span>}
+                            {q.a && <span className="text-emerald-700 block">{q.a}</span>}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="space-y-6">
+                    <h4 className="font-bold text-slate-700">B. 将下列句子改为否定句 (5 * 2 = 10分)</h4>
+                    {examData.part3_transform.B.map((q, idx) => (
+                      <div key={idx} className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <p className="font-medium text-slate-800 mb-2">{idx + 1}. {q.q}</p>
+                        <input type="text" className="w-full p-2 text-sm border border-slate-300 rounded focus:border-indigo-500 mb-2" placeholder="输入否定句..." />
+                        {p34Revealed && (
+                          <div className="bg-emerald-50 p-2 rounded-lg border border-emerald-100 text-sm text-emerald-700 font-medium">参考答案：{q.a}</div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {activePart === 'part4' && (
+                <div className="space-y-8">
+                  <h3 className="text-xl font-bold text-indigo-800 border-b pb-2">IV、翻译句子 (20分)</h3>
+                  
+                  <div className="space-y-6">
+                    <h4 className="font-bold text-slate-700">A. 把下列句子译成法语 (5 * 2 = 10分)</h4>
+                    {examData.part4_translation.A.map((q, idx) => (
+                      <div key={idx} className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <p className="font-medium text-slate-800 mb-2">{idx + 1}. {q.q}</p>
+                        <input type="text" className="w-full p-2 text-sm border border-slate-300 rounded focus:border-indigo-500 mb-2" placeholder="Traduction en français..." />
+                        {p34Revealed && (
+                          <div className="bg-emerald-50 p-2 rounded-lg border border-emerald-100 text-sm text-emerald-700 font-medium">参考答案：{q.a}</div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="space-y-6">
+                    <h4 className="font-bold text-slate-700">B. 把下列句子译成中文 (5 * 2 = 10分)</h4>
+                    {examData.part4_translation.B.map((q, idx) => (
+                      <div key={idx} className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <p className="font-medium text-slate-800 mb-2">{idx + 1}. {q.q}</p>
+                        <input type="text" className="w-full p-2 text-sm border border-slate-300 rounded focus:border-indigo-500 mb-2" placeholder="中文翻译..." />
+                        {p34Revealed && (
+                          <div className="bg-emerald-50 p-2 rounded-lg border border-emerald-100 text-sm text-emerald-700 font-medium">参考答案：{q.a}</div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {!p34Revealed ? (
+                 <div className="mt-8 flex justify-center border-t pt-6">
+                  <button onClick={() => setP34Revealed(true)} className="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 shadow-md">完成作答，查看参考答案</button>
+                </div>
+              ) : (
+                <div className="mt-8 border-t pt-6 text-center">
+                  <h4 className="font-bold text-slate-800 mb-4 text-lg">自我评分板</h4>
+                  <div className="flex flex-wrap justify-center gap-4 mb-4">
+                    {activePart === 'part3' && (
+                      <>
+                        <label className="flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-lg border">
+                          III-A 得分: <input type="number" max="10" min="0" className="w-16 border rounded p-1 text-center" onChange={e => setP34Scores({...p34Scores, p3A: Number(e.target.value)})} /> / 10
+                        </label>
+                        <label className="flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-lg border">
+                          III-B 得分: <input type="number" max="10" min="0" className="w-16 border rounded p-1 text-center" onChange={e => setP34Scores({...p34Scores, p3B: Number(e.target.value)})} /> / 10
+                        </label>
+                      </>
+                    )}
+                    {activePart === 'part4' && (
+                      <>
+                        <label className="flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-lg border">
+                          IV-A 得分: <input type="number" max="10" min="0" className="w-16 border rounded p-1 text-center" onChange={e => setP34Scores({...p34Scores, p4A: Number(e.target.value)})} /> / 10
+                        </label>
+                        <label className="flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-lg border">
+                          IV-B 得分: <input type="number" max="10" min="0" className="w-16 border rounded p-1 text-center" onChange={e => setP34Scores({...p34Scores, p4B: Number(e.target.value)})} /> / 10
+                        </label>
+                      </>
+                    )}
+                  </div>
+                  <div className="text-xl font-black text-indigo-700 bg-indigo-50 inline-block px-6 py-2 rounded-xl">
+                    本页总计得分: {activePart === 'part3' ? p34Scores.p3A + p34Scores.p3B : p34Scores.p4A + p34Scores.p4B} / 20
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+        </div>
+      );
+    }
+
+    // --- 新增模块 4：子组件 - 核心语法综合测试卷 ---
+    function ExamCoreGrammar() {
+      const [activePart, setActivePart] = useState('part1');
+
+      // Part 1 状态
+      const [p1Answers, setP1Answers] = useState({});
+      const [p1Score, setP1Score] = useState(null);
+
+      // Part 2 状态
+      const [p2Answers, setP2Answers] = useState({ A: {}, B: {}, C: {} });
+      const [p2Score, setP2Score] = useState(null);
+
+      // Part 3 & 4 状态
+      const [p34Revealed, setP34Revealed] = useState(false);
+      const [p34Scores, setP34Scores] = useState({ p3A: 0, p3B: 0, p4A: 0, p4B: 0 });
+
+      // -- Part 1 处理逻辑 --
+      const handleP1Select = (qId, optionIndex) => {
+        if (p1Score !== null) return;
+        setP1Answers({ ...p1Answers, [qId]: optionIndex });
+      };
+
+      const submitP1 = () => {
+        let score = 0;
+        exam2Data.part1_mcq.forEach(q => {
+          if (p1Answers[q.id] !== undefined && q.options[p1Answers[q.id]] === q.answer) {
+            score += 1;
+          }
+        });
+        setP1Score(score);
+      };
+
+      // -- Part 2 处理逻辑 --
+      const handleP2Input = (section, qId, value) => {
+        if (p2Score !== null) return;
+        setP2Answers({ ...p2Answers, [section]: { ...p2Answers[section], [qId]: value } });
+      };
+
+      const submitP2 = () => {
+        let score = 0;
+        ['A', 'B', 'C'].forEach(sec => {
+          exam2Data.part2_fill[sec].forEach(q => {
+            const userAns = (p2Answers[sec][q.id] || '').trim().toLowerCase();
+            const correctAns = q.a.toLowerCase();
+            // 兼容含有感叹号的变位情况
+            if (userAns === correctAns || userAns === correctAns + '!') {
+              score += 1;
+            }
+          });
+        });
+        setP2Score(score);
+      };
+
+      // -- 渲染函数 --
+      const renderOptions = (q, selectedIdx, showResult) => {
+        return (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-3">
+            {q.options.map((opt, idx) => {
+              const isSelected = selectedIdx === idx;
+              const isCorrect = opt === q.answer;
+              let btnClass = "border rounded-lg px-3 py-2 text-sm text-left transition-colors ";
+              
+              if (!showResult) {
+                btnClass += isSelected ? "bg-indigo-100 border-indigo-400 text-indigo-800 font-bold" : "bg-white border-slate-200 hover:bg-slate-50";
+              } else {
+                if (isCorrect) btnClass += "bg-emerald-100 border-emerald-500 text-emerald-800 font-bold";
+                else if (isSelected && !isCorrect) btnClass += "bg-rose-100 border-rose-500 text-rose-800 line-through";
+                else btnClass += "bg-slate-50 border-slate-200 text-slate-400 opacity-50";
+              }
+
+              return (
+                <button key={idx} disabled={showResult} onClick={() => handleP1Select(q.id, idx)} className={btnClass}>
+                  {String.fromCharCode(65 + idx)}. {opt}
+                </button>
+              );
+            })}
+          </div>
+        );
+      };
+
+      return (
+        <div className="animate-fade-in">
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 mb-6 sticky top-4 z-10">
+            <h2 className="font-bold text-slate-800 mb-3 text-center">核心语法综合卷导航</h2>
+            <div className="flex flex-wrap gap-2 justify-center">
+              {[
+                { id: 'part1', title: 'I. 单项选择 (25分)' },
+                { id: 'part2', title: 'II. 填空与动词变位 (10分)' },
+                { id: 'part3', title: 'III. 句子变换 (10分)' },
+                { id: 'part4', title: 'IV. 翻译句子 (25分)' }
+              ].map(tab => (
+                <button 
+                  key={tab.id} onClick={() => setActivePart(tab.id)}
+                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${activePart === tab.id ? 'bg-indigo-600 text-white shadow-md' : 'bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-600'}`}
+                >
+                  {tab.title}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Part 1 */}
+          {activePart === 'part1' && (
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 animate-fade-in">
+              <div className="flex justify-between items-center mb-6 border-b pb-4">
+                <h3 className="text-xl font-bold text-indigo-800">I、单项选择题 (25 * 1 = 25分)</h3>
+                {p1Score !== null && <div className="text-2xl font-black text-emerald-600 bg-emerald-50 px-4 py-1 rounded-lg">得分: {p1Score} / 25</div>}
+              </div>
+              <div className="space-y-6">
+                {exam2Data.part1_mcq.map((q, index) => (
+                  <div key={q.id} className="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                    <p className="font-medium text-slate-800 text-lg">{index + 1}. {q.q}</p>
+                    {renderOptions(q, p1Answers[q.id], p1Score !== null)}
+                  </div>
+                ))}
+              </div>
+              {p1Score === null && (
+                <div className="mt-8 flex justify-center">
+                  <button onClick={submitP1} className="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 shadow-md">提交第一部分</button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Part 2 */}
+          {activePart === 'part2' && (
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 animate-fade-in space-y-8">
+              <div className="flex justify-between items-center border-b pb-4">
+                <h3 className="text-xl font-bold text-indigo-800">II、填空与动词变位 (总计 10分)</h3>
+                {p2Score !== null && <div className="text-2xl font-black text-emerald-600 bg-emerald-50 px-4 py-1 rounded-lg">得分: {p2Score} / 10</div>}
+              </div>
+
+              {[
+                { sec: 'A', title: 'A. 词汇辨析：使用savoir或connaître的直陈式现在时填空 (2 * 1 = 2分)' },
+                { sec: 'B', title: 'B. 动词变位：将括号内的动词变为直陈式现在时 (5 * 1 = 5分)' },
+                { sec: 'C', title: 'C. 动词变位：将下列句子变为复合过去时 (3 * 1 = 3分)' }
+              ].map(section => (
+                <div key={section.sec} className="bg-slate-50 p-5 rounded-xl border border-slate-200">
+                  <h4 className="font-bold text-slate-800 mb-4">{section.title}</h4>
+                  <div className="space-y-4">
+                    {exam2Data.part2_fill[section.sec].map((q, idx) => {
+                      const parts = q.q.split('________');
+                      const userAns = p2Answers[section.sec][q.id] || '';
+                      const isCorrect = userAns.trim().toLowerCase() === q.a.toLowerCase() || userAns.trim().toLowerCase() === q.a.toLowerCase() + '!';
+
+                      return (
+                        <div key={q.id} className="flex flex-wrap items-center gap-2 text-slate-700">
+                          <span className="w-5 text-slate-400">{idx + 1}.</span>
+                          <span>{parts[0]}</span>
+                          <input 
+                            type="text" disabled={p2Score !== null}
+                            value={userAns} onChange={e => handleP2Input(section.sec, q.id, e.target.value)}
+                            className={`w-32 px-2 py-1 border-b-2 bg-white focus:outline-none text-center font-medium
+                              ${p2Score !== null ? (isCorrect ? 'border-emerald-500 text-emerald-700' : 'border-rose-500 text-rose-700') : 'border-slate-300 focus:border-indigo-500'}`}
+                          />
+                          <span>{parts[1]}</span>
+                          {p2Score !== null && !isCorrect && <span className="ml-2 text-sm font-bold text-emerald-600 bg-emerald-100 px-2 rounded">正确: {q.a}</span>}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+
+              {p2Score === null && (
+                <div className="mt-8 flex justify-center">
+                  <button onClick={submitP2} className="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 shadow-md">提交第二部分</button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Part 3 & 4 (主观题合集) */}
+          {(activePart === 'part3' || activePart === 'part4') && (
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 animate-fade-in">
+              <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6 rounded-r-lg">
+                <p className="text-yellow-800 text-sm">💡 主观题评分说明：请在输入框写下您的答案。完成后点击下方「查看参考答案并评分」，对照标准答案为自己打分。</p>
+              </div>
+
+              {activePart === 'part3' && (
+                <div className="space-y-8">
+                  <h3 className="text-xl font-bold text-indigo-800 border-b pb-2">III、句子变换 (10分)</h3>
+                  
+                  <div className="space-y-6">
+                    <h4 className="font-bold text-slate-700">A. 强调句转换（请使用 C'est... qui / C'est... que / Ce sont... qui 结构重写句子）</h4>
+                    {exam2Data.part3_transform.A.map((q, idx) => (
+                      <div key={idx} className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <p className="font-medium text-slate-800 mb-2">{idx + 1}. {q.q}</p>
+                        <textarea className="w-full h-16 p-2 text-sm border border-slate-300 rounded focus:border-indigo-500 focus:ring-0 resize-none mb-2" placeholder="输入您的改写..."></textarea>
+                        {p34Revealed && (
+                          <div className="bg-emerald-50 p-3 rounded-lg border border-emerald-100 text-sm text-emerald-700 font-medium">参考答案：{q.a}</div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="space-y-6">
+                    <h4 className="font-bold text-slate-700">B. 命令式转换</h4>
+                    {exam2Data.part3_transform.B.map((q, idx) => (
+                      <div key={idx} className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <p className="font-medium text-slate-800 mb-2">{idx + 1}. {q.q}</p>
+                        <input type="text" className="w-full p-2 text-sm border border-slate-300 rounded focus:border-indigo-500 mb-2" placeholder="输入命令式..." />
+                        {p34Revealed && (
+                          <div className="bg-emerald-50 p-2 rounded-lg border border-emerald-100 text-sm text-emerald-700 font-medium">参考答案：{q.a}</div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {activePart === 'part4' && (
+                <div className="space-y-8">
+                  <h3 className="text-xl font-bold text-indigo-800 border-b pb-2">IV、翻译句子 (25分)</h3>
+                  
+                  <div className="space-y-6">
+                    <h4 className="font-bold text-slate-700">A. 法译汉 (把下列句子译成中文)</h4>
+                    {exam2Data.part4_translation.A.map((q, idx) => (
+                      <div key={idx} className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <p className="font-medium text-slate-800 mb-2">{idx + 1}. {q.q}</p>
+                        <input type="text" className="w-full p-2 text-sm border border-slate-300 rounded focus:border-indigo-500 mb-2" placeholder="中文翻译..." />
+                        {p34Revealed && (
+                          <div className="bg-emerald-50 p-2 rounded-lg border border-emerald-100 text-sm text-emerald-700 font-medium">参考答案：{q.a}</div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="space-y-6">
+                    <h4 className="font-bold text-slate-700">B. 汉译法 (把下列句子译成法语)</h4>
+                    {exam2Data.part4_translation.B.map((q, idx) => (
+                      <div key={idx} className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <p className="font-medium text-slate-800 mb-2">{idx + 1}. {q.q}</p>
+                        <input type="text" className="w-full p-2 text-sm border border-slate-300 rounded focus:border-indigo-500 mb-2" placeholder="Traduction en français..." />
+                        {p34Revealed && (
+                          <div className="bg-emerald-50 p-2 rounded-lg border border-emerald-100 text-sm text-emerald-700 font-medium">参考答案：{q.a}</div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {!p34Revealed ? (
+                 <div className="mt-8 flex justify-center border-t pt-6">
+                  <button onClick={() => setP34Revealed(true)} className="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 shadow-md">完成作答，查看参考答案</button>
+                </div>
+              ) : (
+                <div className="mt-8 border-t pt-6 text-center">
+                  <h4 className="font-bold text-slate-800 mb-4 text-lg">自我评分板</h4>
+                  <div className="flex flex-wrap justify-center gap-4 mb-4">
+                    {activePart === 'part3' && (
+                      <>
+                        <label className="flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-lg border">
+                          III-A 得分: <input type="number" max="10" min="0" className="w-16 border rounded p-1 text-center" onChange={e => setP34Scores({...p34Scores, p3A: Number(e.target.value)})} />
+                        </label>
+                        <label className="flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-lg border">
+                          III-B 得分: <input type="number" max="10" min="0" className="w-16 border rounded p-1 text-center" onChange={e => setP34Scores({...p34Scores, p3B: Number(e.target.value)})} />
+                        </label>
+                      </>
+                    )}
+                    {activePart === 'part4' && (
+                      <>
+                        <label className="flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-lg border">
+                          IV-A 得分: <input type="number" max="10" min="0" className="w-16 border rounded p-1 text-center" onChange={e => setP34Scores({...p34Scores, p4A: Number(e.target.value)})} />
+                        </label>
+                        <label className="flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-lg border">
+                          IV-B 得分: <input type="number" max="10" min="0" className="w-16 border rounded p-1 text-center" onChange={e => setP34Scores({...p34Scores, p4B: Number(e.target.value)})} />
+                        </label>
+                      </>
+                    )}
+                  </div>
+                  <div className="text-xl font-black text-indigo-700 bg-indigo-50 inline-block px-6 py-2 rounded-xl">
+                    本页总计得分: {activePart === 'part3' ? p34Scores.p3A + p34Scores.p3B : p34Scores.p4A + p34Scores.p4B}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+        </div>
+      );
+    }
+
+    // --- 新增模块 4：全卷检测页面 (整合入口) ---
+    function FullExam() {
+      const [activePaper, setActivePaper] = useState('midterm');
+
+      return (
+        <div className="max-w-5xl mx-auto animate-fade-in">
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 mb-6 flex justify-center gap-4">
+            <button 
+              onClick={() => setActivePaper('midterm')}
+              className={`px-6 py-2 rounded-xl font-bold transition-all ${activePaper === 'midterm' ? 'bg-rose-600 text-white shadow-md' : 'bg-slate-100 text-slate-500 hover:bg-rose-50 hover:text-rose-600'}`}
+            >
+              📝 试卷一：期中考综合卷
+            </button>
+            <button 
+              onClick={() => setActivePaper('core')}
+              className={`px-6 py-2 rounded-xl font-bold transition-all ${activePaper === 'core' ? 'bg-indigo-600 text-white shadow-md' : 'bg-slate-100 text-slate-500 hover:bg-indigo-50 hover:text-indigo-600'}`}
+            >
+              📘 试卷二：核心语法综合测试
+            </button>
+          </div>
+
+          {activePaper === 'midterm' ? <ExamMidterm /> : <ExamCoreGrammar />}
+        </div>
+      );
+    }
+
     // --- 根组件 App ---
     function App() {
-      const [activeModule, setActiveModule] = useState('translation'); // translation, grammar, knowledge
+      const [activeModule, setActiveModule] = useState('translation'); // translation, grammar, knowledge, fullexam
 
       return (
         <div className="min-h-screen bg-slate-50 text-slate-800 font-sans p-4 md:p-8">
@@ -1062,28 +1938,34 @@
           {/* 顶部导航 */}
           <div className="max-w-6xl mx-auto mb-8">
             <h1 className="text-3xl md:text-4xl font-black text-center text-indigo-800 tracking-tight mb-8 drop-shadow-sm">
-              🇫🇷 法语翻译与语法综合系统
+              法语翻译与语法综合系统
             </h1>
             
-            <div className="flex justify-center">
-              <div className="inline-flex bg-white rounded-2xl shadow-sm p-1.5 border border-slate-200">
+            <div className="flex justify-center flex-wrap gap-2">
+              <div className="inline-flex bg-white rounded-2xl shadow-sm p-1.5 border border-slate-200 overflow-x-auto">
                 <button 
                   onClick={() => setActiveModule('translation')}
-                  className={`px-6 py-3 rounded-xl font-bold text-sm md:text-base transition-all ${activeModule === 'translation' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-50 hover:text-indigo-600'}`}
+                  className={`whitespace-nowrap px-4 py-3 rounded-xl font-bold text-sm md:text-base transition-all ${activeModule === 'translation' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-50 hover:text-indigo-600'}`}
                 >
                   🌍 翻译训练
                 </button>
                 <button 
                   onClick={() => setActiveModule('grammar')}
-                  className={`px-6 py-3 rounded-xl font-bold text-sm md:text-base transition-all ${activeModule === 'grammar' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-50 hover:text-indigo-600'}`}
+                  className={`whitespace-nowrap px-4 py-3 rounded-xl font-bold text-sm md:text-base transition-all ${activeModule === 'grammar' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-50 hover:text-indigo-600'}`}
                 >
                   📝 语法题库
                 </button>
                 <button 
                   onClick={() => setActiveModule('knowledge')}
-                  className={`px-6 py-3 rounded-xl font-bold text-sm md:text-base transition-all ${activeModule === 'knowledge' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-50 hover:text-indigo-600'}`}
+                  className={`whitespace-nowrap px-4 py-3 rounded-xl font-bold text-sm md:text-base transition-all ${activeModule === 'knowledge' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-50 hover:text-indigo-600'}`}
                 >
                   📚 知识库大全
+                </button>
+                <button 
+                  onClick={() => setActiveModule('fullexam')}
+                  className={`whitespace-nowrap px-4 py-3 rounded-xl font-bold text-sm md:text-base transition-all ${activeModule === 'fullexam' ? 'bg-rose-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-50 hover:text-rose-600'}`}
+                >
+                  ⏱️ 全卷检测
                 </button>
               </div>
             </div>
@@ -1093,6 +1975,7 @@
           {activeModule === 'translation' && <TranslationQuiz />}
           {activeModule === 'grammar' && <GrammarQuiz />}
           {activeModule === 'knowledge' && <KnowledgeBase />}
+          {activeModule === 'fullexam' && <FullExam />}
 
         </div>
       );
