@@ -680,6 +680,42 @@
         { id: 'conjugation', title: '动词变位大全 (Conjugaison)', icon: '🔄' }
       ];
 
+      // 定义动词变位数据，方便以表格形式渲染
+      const conjugationData = [
+        { infinitive: 'être', meaning: '是', pp: 'été', aux: 'avoir',
+          present: [['je', 'suis', 'nous', 'sommes'], ['tu', 'es', 'vous', 'êtes'], ['il/elle', 'est', 'ils/elles', 'sont']] },
+        { infinitive: 'avoir', meaning: '有', pp: 'eu', aux: 'avoir',
+          present: [['j\'', 'ai', 'nous', 'avons'], ['tu', 'as', 'vous', 'avez'], ['il/elle', 'a', 'ils/elles', 'ont']] },
+        { infinitive: 'aller', meaning: '去', pp: 'allé', aux: 'être',
+          present: [['je', 'vais', 'nous', 'allons'], ['tu', 'vas', 'vous', 'allez'], ['il/elle', 'va', 'ils/elles', 'vont']] },
+        { infinitive: 'venir', meaning: '来', pp: 'venu', aux: 'être',
+          present: [['je', 'viens', 'nous', 'venons'], ['tu', 'viens', 'vous', 'venez'], ['il/elle', 'vient', 'ils/elles', 'viennent']] },
+        { infinitive: 'prendre', meaning: '拿/吃', pp: 'pris', aux: 'avoir',
+          present: [['je', 'prends', 'nous', 'prenons'], ['tu', 'prends', 'vous', 'prenez'], ['il/elle', 'prend', 'ils/elles', 'prennent']] },
+        { infinitive: 'lire', meaning: '读', pp: 'lu', aux: 'avoir',
+          present: [['je', 'lis', 'nous', 'lisons'], ['tu', 'lis', 'vous', 'lisez'], ['il/elle', 'lit', 'ils/elles', 'lisent']] },
+        { infinitive: 'faire', meaning: '做/从事', pp: 'fait', aux: 'avoir',
+          present: [['je', 'fais', 'nous', 'faisons'], ['tu', 'fais', 'vous', 'faites'], ['il/elle', 'fait', 'ils/elles', 'font']] },
+        { infinitive: 'dire', meaning: '说', pp: 'dit', aux: 'avoir',
+          present: [['je', 'dis', 'nous', 'disons'], ['tu', 'dis', 'vous', 'dites'], ['il/elle', 'dit', 'ils/elles', 'disent']] },
+        { infinitive: 'voir', meaning: '看见', pp: 'vu', aux: 'avoir',
+          present: [['je', 'vois', 'nous', 'voyons'], ['tu', 'vois', 'vous', 'voyez'], ['il/elle', 'voit', 'ils/elles', 'voient']] },
+        { infinitive: 'savoir', meaning: '知道/会', pp: 'su', aux: 'avoir',
+          present: [['je', 'sais', 'nous', 'savons'], ['tu', 'sais', 'vous', 'savez'], ['il/elle', 'sait', 'ils/elles', 'savent']] },
+        { infinitive: 'connaître', meaning: '认识', pp: 'connu', aux: 'avoir',
+          present: [['je', 'connais', 'nous', 'connaissons'], ['tu', 'connais', 'vous', 'connaissez'], ['il/elle', 'connaît', 'ils/elles', 'connaissent']] },
+        { infinitive: 'partir', meaning: '出发/离开', pp: 'parti', aux: 'être',
+          present: [['je', 'pars', 'nous', 'partons'], ['tu', 'pars', 'vous', 'partez'], ['il/elle', 'part', 'ils/elles', 'partent']] },
+        { infinitive: 'rester', meaning: '停留', pp: 'resté', aux: 'être',
+          present: [['je', 'reste', 'nous', 'restons'], ['tu', 'restes', 'vous', 'restez'], ['il/elle', 'reste', 'ils/elles', 'restent']] },
+        { infinitive: 'arriver', meaning: '到达', pp: 'arrivé', aux: 'être',
+          present: [['j\'', 'arrive', 'nous', 'arrivons'], ['tu', 'arrives', 'vous', 'arrivez'], ['il/elle', 'arrive', 'ils/elles', 'arrivent']] },
+        { infinitive: 'rentrer', meaning: '返回/回家', pp: 'rentré', aux: 'être',
+          present: [['je', 'rentre', 'nous', 'rentrons'], ['tu', 'rentres', 'vous', 'rentrez'], ['il/elle', 'rentre', 'ils/elles', 'rentrent']] },
+        { infinitive: 'devoir', meaning: '必须/应该', pp: 'dû', aux: 'avoir',
+          present: [['je', 'dois', 'nous', 'devons'], ['tu', 'dois', 'vous', 'devez'], ['il/elle', 'doit', 'ils/elles', 'doivent']] }
+      ];
+
       return (
         <div className="flex flex-col md:flex-row gap-6 animate-fade-in max-w-6xl mx-auto">
           {/* 侧边导航 */}
@@ -977,90 +1013,32 @@
                 <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
                   <h2 className="text-2xl font-bold text-slate-800 flex items-center mb-6"><span className="text-3xl mr-3">🔄</span>必背动词变位字典</h2>
                   
-                  <div className="grid md:grid-cols-2 gap-4">
-                    {/* 基础动词扩充 */}
-                    <div className="border border-slate-200 rounded-lg p-4 bg-slate-50">
-                      <h4 className="font-bold text-indigo-800 text-lg mb-2">être (是)</h4>
-                      <p className="text-sm text-slate-700 mb-1">suis, es, est, sommes, êtes, sont</p>
-                      <p className="text-xs text-slate-500">P.P: été (助动词: avoir)</p>
-                    </div>
-                    <div className="border border-slate-200 rounded-lg p-4 bg-slate-50">
-                      <h4 className="font-bold text-indigo-800 text-lg mb-2">avoir (有)</h4>
-                      <p className="text-sm text-slate-700 mb-1">ai, as, a, avons, avez, ont</p>
-                      <p className="text-xs text-slate-500">P.P: eu (助动词: avoir)</p>
-                    </div>
-                    <div className="border border-slate-200 rounded-lg p-4 bg-slate-50">
-                      <h4 className="font-bold text-indigo-800 text-lg mb-2">aller (去)</h4>
-                      <p className="text-sm text-slate-700 mb-1">vais, vas, va, allons, allez, vont</p>
-                      <p className="text-xs text-slate-500">P.P: allé (助动词: être)</p>
-                    </div>
-                    <div className="border border-slate-200 rounded-lg p-4 bg-slate-50">
-                      <h4 className="font-bold text-indigo-800 text-lg mb-2">venir (来)</h4>
-                      <p className="text-sm text-slate-700 mb-1">viens, viens, vient, venons, venez, viennent</p>
-                      <p className="text-xs text-slate-500">P.P: venu (助动词: être)</p>
-                    </div>
-
-                    {/* PPT提及的动词 */}
-                    <div className="border border-slate-200 rounded-lg p-4 bg-slate-50">
-                      <h4 className="font-bold text-indigo-800 text-lg mb-2">prendre (拿/吃)</h4>
-                      <p className="text-sm text-slate-700 mb-1">prends, prends, prend, prenons, prenez, prennent</p>
-                      <p className="text-xs text-slate-500">P.P: pris (助动词: avoir)</p>
-                    </div>
-                    <div className="border border-slate-200 rounded-lg p-4 bg-slate-50">
-                      <h4 className="font-bold text-indigo-800 text-lg mb-2">lire (读)</h4>
-                      <p className="text-sm text-slate-700 mb-1">lis, lis, lit, lisons, lisez, lisent</p>
-                      <p className="text-xs text-slate-500">P.P: lu (助动词: avoir)</p>
-                    </div>
-                    <div className="border border-slate-200 rounded-lg p-4 bg-slate-50">
-                      <h4 className="font-bold text-indigo-800 text-lg mb-2">faire (做/从事)</h4>
-                      <p className="text-sm text-slate-700 mb-1">fais, fais, fait, faisons, faites, font</p>
-                      <p className="text-xs text-slate-500">P.P: fait (助动词: avoir)</p>
-                    </div>
-                    <div className="border border-slate-200 rounded-lg p-4 bg-slate-50">
-                      <h4 className="font-bold text-indigo-800 text-lg mb-2">dire (说)</h4>
-                      <p className="text-sm text-slate-700 mb-1">dis, dis, dit, disons, dites, disent</p>
-                      <p className="text-xs text-slate-500">P.P: dit (助动词: avoir)</p>
-                    </div>
-                    <div className="border border-slate-200 rounded-lg p-4 bg-slate-50">
-                      <h4 className="font-bold text-indigo-800 text-lg mb-2">voir (看见)</h4>
-                      <p className="text-sm text-slate-700 mb-1">vois, vois, voit, voyons, voyez, voient</p>
-                      <p className="text-xs text-slate-500">P.P: vu (助动词: avoir)</p>
-                    </div>
-                    <div className="border border-slate-200 rounded-lg p-4 bg-slate-50">
-                      <h4 className="font-bold text-indigo-800 text-lg mb-2">savoir (知道/会)</h4>
-                      <p className="text-sm text-slate-700 mb-1">sais, sais, sait, savons, savez, savent</p>
-                      <p className="text-xs text-slate-500">P.P: su (助动词: avoir)</p>
-                    </div>
-                    <div className="border border-slate-200 rounded-lg p-4 bg-slate-50">
-                      <h4 className="font-bold text-indigo-800 text-lg mb-2">connaître (认识)</h4>
-                      <p className="text-sm text-slate-700 mb-1">connais, connais, connaît, connaissons, connaissez, connaissent</p>
-                      <p className="text-xs text-slate-500">P.P: connu (助动词: avoir)</p>
-                    </div>
-                    <div className="border border-slate-200 rounded-lg p-4 bg-slate-50">
-                      <h4 className="font-bold text-indigo-800 text-lg mb-2">partir (出发/离开)</h4>
-                      <p className="text-sm text-slate-700 mb-1">pars, pars, part, partons, partez, partent</p>
-                      <p className="text-xs text-rose-500">P.P: parti (助动词: être)</p>
-                    </div>
-                    <div className="border border-slate-200 rounded-lg p-4 bg-slate-50">
-                      <h4 className="font-bold text-indigo-800 text-lg mb-2">rester (停留)</h4>
-                      <p className="text-sm text-slate-700 mb-1">reste, restes, reste, restons, restez, restent</p>
-                      <p className="text-xs text-rose-500">P.P: resté (助动词: être)</p>
-                    </div>
-                    <div className="border border-slate-200 rounded-lg p-4 bg-slate-50">
-                      <h4 className="font-bold text-indigo-800 text-lg mb-2">arriver (到达)</h4>
-                      <p className="text-sm text-slate-700 mb-1">arrive, arrives, arrive, arrivons, arrivez, arrivent</p>
-                      <p className="text-xs text-rose-500">P.P: arrivé (助动词: être)</p>
-                    </div>
-                    <div className="border border-slate-200 rounded-lg p-4 bg-slate-50">
-                      <h4 className="font-bold text-indigo-800 text-lg mb-2">rentrer (返回/回家)</h4>
-                      <p className="text-sm text-slate-700 mb-1">rentre, rentres, rentre, rentrons, rentrez, rentrent</p>
-                      <p className="text-xs text-rose-500">P.P: rentré (助动词: être)</p>
-                    </div>
-                    <div className="border border-slate-200 rounded-lg p-4 bg-slate-50">
-                      <h4 className="font-bold text-indigo-800 text-lg mb-2">devoir (必须/应该)</h4>
-                      <p className="text-sm text-slate-700 mb-1">dois, dois, doit, devons, devez, doivent</p>
-                      <p className="text-xs text-slate-500">P.P: dû (助动词: avoir)</p>
-                    </div>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {conjugationData.map((verb, index) => (
+                      <div key={index} className="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow">
+                        <div className="bg-indigo-50 px-4 py-3 border-b border-slate-200 flex justify-between items-center">
+                          <h4 className="font-bold text-indigo-800 text-lg m-0">{verb.infinitive} <span className="text-sm font-normal text-indigo-600 ml-1">({verb.meaning})</span></h4>
+                        </div>
+                        <div className="p-0">
+                          <table className="w-full text-sm text-left border-collapse">
+                            <tbody className="divide-y divide-slate-100">
+                              {verb.present.map((row, rIdx) => (
+                                <tr key={rIdx} className="hover:bg-slate-50/50">
+                                  <td className="py-2 pl-4 pr-2 font-medium text-slate-500 w-[20%] bg-slate-50/50">{row[0]}</td>
+                                  <td className="py-2 px-2 text-indigo-700 font-bold w-[30%]">{row[1]}</td>
+                                  <td className="py-2 px-2 font-medium text-slate-500 w-[20%] bg-slate-50/50 border-l border-slate-100">{row[2]}</td>
+                                  <td className="py-2 pr-4 pl-2 text-indigo-700 font-bold w-[30%]">{row[3]}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                        <div className="bg-slate-50 px-4 py-2 border-t border-slate-200 text-xs text-slate-500 flex justify-between">
+                          <span><span className="font-medium text-slate-600">P.P:</span> {verb.pp}</span>
+                          <span><span className="font-medium text-slate-600">助动词:</span> <span className={verb.aux === 'être' ? 'text-rose-500 font-bold' : 'text-slate-600 font-medium'}>{verb.aux}</span></span>
+                        </div>
+                      </div>
+                    ))}
                   </div>
 
                   {/* 变位填空练习组件 */}
