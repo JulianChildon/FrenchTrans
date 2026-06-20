@@ -353,37 +353,118 @@
       const [isFinished, setIsFinished] = useState(false);
       const [errorMsg, setErrorMsg] = useState('');
 
+      const [view, setView] = useState('quiz');
+      const [quizMode, setQuizMode] = useState('all');
+      const [history, setHistory] = useState([]);
+      const [wrongQuestions, setWrongQuestions] = useState([]);
+      const [showClearConfirm, setShowClearConfirm] = useState(false);
+
       useEffect(() => {
-        const rawQuestions = questionsData[category];
-        const processedQuestions = rawQuestions.map(q => ({
+        const savedHistory = JSON.parse(localStorage.getItem('translationHistory')) || [];
+        const savedWrong = JSON.parse(localStorage.getItem('translationWrong')) || [];
+        setHistory(savedHistory);
+        setWrongQuestions(savedWrong);
+        startQuiz('all', savedWrong, category);
+      }, []);
+
+      useEffect(() => {
+        localStorage.setItem('translationHistory', JSON.stringify(history));
+      }, [history]);
+
+      useEffect(() => {
+        localStorage.setItem('translationWrong', JSON.stringify(wrongQuestions));
+      }, [wrongQuestions]);
+
+      const startQuiz = (modeParam = quizMode, currentWrong = wrongQuestions, currentCat = category) => {
+        setQuizMode(modeParam);
+        setCategory(currentCat);
+        setScore(0);
+        setCurrentIndex(0);
+        setUserInput('');
+        setIsAnswerRevealed(false);
+        setSelectedOption(null);
+        setIsFinished(false);
+        setErrorMsg('');
+        setView('quiz');
+
+        let pool = [];
+        if (modeParam === 'all') {
+          pool = questionsData[currentCat].map(q => ({ ...q, itemCategory: currentCat }));
+        } else {
+          pool = currentWrong;
+          if (pool.length === 0) {
+            pool = questionsData[currentCat].map(q => ({ ...q, itemCategory: currentCat }));
+            setQuizMode('all');
+          }
+        }
+
+        const processedQuestions = shuffleArray(pool).map(q => ({
           ...q, shuffledOptions: shuffleArray(q.options)
         }));
         setQuestions(processedQuestions);
-        resetQuiz();
-      }, [category]);
-
-      const resetQuiz = () => {
-        setCurrentIndex(0); setScore(0); setUserInput(''); setIsAnswerRevealed(false);
-        setSelectedOption(null); setIsFinished(false); setErrorMsg('');
       };
 
       const handleModeChange = (newMode) => {
-        setMode(newMode); resetQuiz();
+        setMode(newMode);
+        startQuiz(quizMode, wrongQuestions, category);
       };
 
-      const handleNextQuestion = () => {
+      const handleNextQuestion = (finalScore = score) => {
+        const activeScore = typeof finalScore === 'number' ? finalScore : score;
         if (currentIndex < questions.length - 1) {
           setCurrentIndex(currentIndex + 1); setUserInput(''); setIsAnswerRevealed(false);
           setSelectedOption(null); setErrorMsg('');
         } else {
           setIsFinished(true);
+          const newRecord = {
+            id: Date.now(),
+            date: new Date().toLocaleString(),
+            score: activeScore,
+            total: questions.length,
+            mode: quizMode === 'all' ? (category === 'fr2zh' ? '法译中' : '中译法') : '错题特训'
+          };
+          setHistory(prev => [newRecord, ...prev]);
         }
       };
 
       const handleOptionClick = (option) => {
         if (isAnswerRevealed) return;
         setSelectedOption(option); setIsAnswerRevealed(true);
-        if (option === questions[currentIndex].answer) setScore(score + 1);
+        const currentQ = questions[currentIndex];
+        
+        if (option === currentQ.answer) {
+          setScore(score + 1);
+          if (quizMode === 'wrong') {
+            setWrongQuestions(prev => prev.filter(q => !(q.id === currentQ.id && q.itemCategory === currentQ.itemCategory)));
+          }
+        } else {
+          setWrongQuestions(prev => {
+            if (!prev.find(q => q.id === currentQ.id && q.itemCategory === currentQ.itemCategory)) {
+              return [...prev, currentQ];
+            }
+            return prev;
+          });
+        }
+      };
+
+      const handleSelfGrade = (isCorrect) => {
+        const currentQ = questions[currentIndex];
+        let newScore = score;
+        if (isCorrect) {
+          newScore = score + 1;
+          setScore(newScore);
+          if (quizMode === 'wrong') {
+            setWrongQuestions(prev => prev.filter(q => !(q.id === currentQ.id && q.itemCategory === currentQ.itemCategory)));
+          }
+        } else {
+          setWrongQuestions(prev => {
+            if (!prev.find(q => q.id === currentQ.id && q.itemCategory === currentQ.itemCategory)) {
+              return [...prev, currentQ];
+            }
+            return prev;
+          });
+        }
+        handleNextQuestion(newScore);
       };
 
       const handleRevealAnswer = () => {
@@ -393,6 +474,82 @@
 
       if (questions.length === 0) return <div className="text-center p-10">载入中...</div>;
 
+      if (view === 'records') {
+        return (
+          <div className="max-w-3xl mx-auto animate-fade-in">
+            <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-6 md:p-8">
+              <div className="flex justify-between items-center mb-6 border-b pb-4">
+                <h2 className="text-2xl font-bold text-indigo-800">📊 错题本与作答记录</h2>
+                <button onClick={() => setView('quiz')} className="bg-slate-100 text-slate-600 px-4 py-2 rounded-lg hover:bg-slate-200 font-medium transition-colors">🔙 返回练习</button>
+              </div>
+              
+              <div className="mb-10">
+                <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-xl font-bold text-slate-800 flex items-center">📝 错题本 <span className="ml-2 text-sm bg-rose-100 text-rose-700 px-2 py-1 rounded-full">{wrongQuestions.length} 题</span></h3>
+                    {wrongQuestions.length > 0 && (
+                      showClearConfirm ? (
+                        <div className="flex gap-2 items-center">
+                          <span className="text-sm text-rose-600 font-bold">确认清空？</span>
+                          <button onClick={() => { setWrongQuestions([]); setShowClearConfirm(false); }} className="text-sm bg-rose-500 text-white px-3 py-1.5 rounded hover:bg-rose-600">是</button>
+                          <button onClick={() => setShowClearConfirm(false)} className="text-sm bg-slate-200 text-slate-700 px-3 py-1.5 rounded hover:bg-slate-300">否</button>
+                        </div>
+                      ) : (
+                        <div className="flex gap-2">
+                          <button onClick={() => setShowClearConfirm(true)} className="text-sm bg-slate-100 text-slate-600 px-3 py-1.5 rounded hover:bg-slate-200 transition-colors">清空</button>
+                          <button onClick={() => startQuiz('wrong')} className="text-sm bg-rose-500 text-white px-4 py-1.5 rounded hover:bg-rose-600 shadow-sm font-bold transition-colors">▶️ 错题特训</button>
+                        </div>
+                      )
+                    )}
+                </div>
+                {wrongQuestions.length === 0 ? (
+                  <div className="text-slate-500 bg-slate-50 p-6 rounded-xl text-center border border-slate-100">太棒了！当前没有错题记录。</div>
+                ) : (
+                  <div className="space-y-4 max-h-[32rem] overflow-y-auto pr-2">
+                    {wrongQuestions.map((wq, i) => (
+                        <div key={i} className="bg-rose-50 p-4 rounded-xl border border-rose-100 relative">
+                          <span className="absolute top-4 right-4 text-xs font-bold bg-rose-200 text-rose-800 px-2 py-1 rounded">
+                            {wq.itemCategory === 'fr2zh' ? '法译中' : '中译法'}
+                          </span>
+                          <p className="font-medium text-slate-800 mb-2 pr-16">{i + 1}. {wq.question}</p>
+                          <p className="text-sm text-emerald-700 font-bold mb-1">正确答案：{wq.answer}</p>
+                        </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <h3 className="text-xl font-bold text-slate-800 mb-4 flex items-center">🕰️ 作答历史</h3>
+                {history.length === 0 ? (
+                  <div className="text-slate-500 bg-slate-50 p-6 rounded-xl text-center border border-slate-100">暂无作答记录。</div>
+                ) : (
+                  <div className="max-h-64 overflow-y-auto border border-slate-100 rounded-xl">
+                    <table className="w-full text-left border-collapse text-sm">
+                      <thead>
+                        <tr className="bg-slate-100 text-slate-600">
+                          <th className="p-3">完成时间</th>
+                          <th className="p-3">测验模式</th>
+                          <th className="p-3">得分</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100">
+                        {history.map(record => (
+                          <tr key={record.id} className="hover:bg-slate-50 transition-colors">
+                            <td className="p-3 text-slate-600">{record.date}</td>
+                            <td className="p-3"><span className={`px-2 py-1 rounded font-medium text-xs ${record.mode === '错题特训' ? 'bg-rose-100 text-rose-700' : 'bg-indigo-100 text-indigo-700'}`}>{record.mode}</span></td>
+                            <td className="p-3 font-bold text-indigo-600">{record.score} / {record.total}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      }
+
       const currentQuestion = questions[currentIndex];
 
       return (
@@ -401,8 +558,8 @@
           <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-6">
             <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
               <div className="flex bg-slate-100 p-1 rounded-lg">
-                <button className={`px-4 py-2 rounded-md font-medium transition-colors ${category === 'fr2zh' ? 'bg-white shadow text-indigo-600' : 'text-slate-500'}`} onClick={() => setCategory('fr2zh')}>法译中</button>
-                <button className={`px-4 py-2 rounded-md font-medium transition-colors ${category === 'zh2fr' ? 'bg-white shadow text-indigo-600' : 'text-slate-500'}`} onClick={() => setCategory('zh2fr')}>中译法</button>
+                <button className={`px-4 py-2 rounded-md font-medium transition-colors ${category === 'fr2zh' ? 'bg-white shadow text-indigo-600' : 'text-slate-500'}`} onClick={() => startQuiz('all', wrongQuestions, 'fr2zh')}>法译中</button>
+                <button className={`px-4 py-2 rounded-md font-medium transition-colors ${category === 'zh2fr' ? 'bg-white shadow text-indigo-600' : 'text-slate-500'}`} onClick={() => startQuiz('all', wrongQuestions, 'zh2fr')}>中译法</button>
               </div>
               <div className="flex bg-slate-100 p-1 rounded-lg">
                 <button className={`px-4 py-2 rounded-md font-medium transition-colors ${mode === 'mcq' ? 'bg-white shadow text-emerald-600' : 'text-slate-500'}`} onClick={() => handleModeChange('mcq')}>选择题模式</button>
@@ -411,18 +568,35 @@
             </div>
           </div>
 
+          {!isFinished && (
+            <div className="flex justify-end mb-4">
+              <button onClick={() => setView('records')} className="bg-white border border-slate-200 text-slate-700 px-4 py-2 rounded-xl font-medium hover:bg-slate-50 shadow-sm transition-colors flex items-center">
+                📊 错题本与记录
+                {wrongQuestions.length > 0 && <span className="ml-2 bg-rose-500 text-white text-xs px-2 py-0.5 rounded-full">{wrongQuestions.length}</span>}
+              </button>
+            </div>
+          )}
+
           {isFinished ? (
             <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 text-center">
               <div className="text-5xl mb-4">🏆</div>
               <h2 className="text-2xl font-bold mb-2">翻译测验完成！</h2>
               <p className="text-lg text-slate-600 mb-6">得分：<span className="text-indigo-600 font-bold text-3xl">{score}</span> / {questions.length}</p>
-              <button onClick={resetQuiz} className="bg-indigo-600 text-white px-8 py-3 rounded-lg hover:bg-indigo-700 shadow-md">重新开始测验</button>
+              <div className="flex gap-4 justify-center">
+                <button onClick={() => startQuiz('all')} className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 shadow-md font-medium transition-colors">再练一次 (全部)</button>
+                <button onClick={() => setView('records')} className="bg-white border border-slate-200 text-slate-700 px-6 py-3 rounded-lg hover:bg-slate-50 shadow-sm font-medium transition-colors">查看错题记录</button>
+              </div>
             </div>
           ) : (
             <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-6 md:p-8">
               <div className="flex justify-between items-center mb-6 text-sm font-medium text-slate-500">
-                <span>进度：{currentIndex + 1} / {questions.length}</span>
-                <span>得分：{score}</span>
+                <div className="flex items-center gap-3">
+                  <span className={`px-3 py-1 rounded-full text-xs ${quizMode === 'wrong' ? 'bg-rose-100 text-rose-700' : 'bg-indigo-100 text-indigo-800'}`}>
+                    {quizMode === 'wrong' ? '错题特训' : '全部题库'}
+                  </span>
+                  <span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full">当前类别：{currentQuestion.itemCategory === 'fr2zh' ? '法译中' : '中译法'}</span>
+                </div>
+                <span>进度：{currentIndex + 1} / {questions.length} &nbsp;|&nbsp; 得分：{score}</span>
               </div>
               <div className="w-full bg-slate-100 rounded-full h-2 mb-8">
                 <div className="bg-indigo-500 h-2 rounded-full transition-all duration-300" style={{ width: `${((currentIndex + 1) / questions.length) * 100}%` }}></div>
@@ -447,7 +621,7 @@
                     );
                   })}
                   {isAnswerRevealed && (
-                    <div className="mt-8 flex justify-end animate-fade-in"><button onClick={handleNextQuestion} className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 shadow-sm">下一题 ➔</button></div>
+                    <div className="mt-8 flex justify-end animate-fade-in"><button onClick={() => handleNextQuestion(score)} className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 shadow-sm">下一题 ➔</button></div>
                   )}
                 </div>
               )}
@@ -471,8 +645,8 @@
                       <div className="text-center">
                         <p className="text-slate-600 font-medium mb-4">请为自己评分：您翻译得正确吗？</p>
                         <div className="flex gap-4 justify-center">
-                          <button onClick={() => { handleNextQuestion(); }} className="flex-1 max-w-[160px] bg-white border-2 border-rose-200 text-rose-600 hover:bg-rose-50 px-4 py-3 rounded-xl font-bold">❌ 需要练习</button>
-                          <button onClick={() => { setScore(score + 1); handleNextQuestion(); }} className="flex-1 max-w-[160px] bg-emerald-500 text-white hover:bg-emerald-600 px-4 py-3 rounded-xl font-bold shadow-sm">✅ 完全正确</button>
+                          <button onClick={() => { handleSelfGrade(false); }} className="flex-1 max-w-[160px] bg-white border-2 border-rose-200 text-rose-600 hover:bg-rose-50 px-4 py-3 rounded-xl font-bold">❌ 需要练习</button>
+                          <button onClick={() => { handleSelfGrade(true); }} className="flex-1 max-w-[160px] bg-emerald-500 text-white hover:bg-emerald-600 px-4 py-3 rounded-xl font-bold shadow-sm">✅ 完全正确</button>
                         </div>
                       </div>
                     </div>
@@ -1922,8 +2096,8 @@
 
     // --- 根组件 App ---
     function App() {
-      // 默认开启新加的 review 翻译速记功能，方便您检阅
-      const [activeModule, setActiveModule] = useState('review'); 
+      // 回到默认的翻译训练界面，方便检查新功能
+      const [activeModule, setActiveModule] = useState('translation'); 
 
       return (
         <div className="min-h-screen bg-slate-50 text-slate-800 font-sans p-4 md:p-8">
