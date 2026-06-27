@@ -5,16 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Software Engineering Terms Quiz</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Mobile Drag & Drop Polyfill for Touch Support -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mobile-drag-drop@2.3.0-rc.2/default.css">
+    <script src="https://cdn.jsdelivr.net/npm/mobile-drag-drop@2.3.0-rc.2/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mobile-drag-drop@2.3.0-rc.2/scroll-behaviour.min.js"></script>
+
     <style>
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Nunito', sans-serif;
             background-color: #f3f4f6;
         }
         
         .draggable-item {
             cursor: grab;
             transition: all 0.2s ease;
+            /* Enhance touch support and prevent text selection during drag */
+            touch-action: manipulation; 
+            user-select: none;
+            -webkit-user-select: none;
         }
         
         .draggable-item:active {
@@ -24,10 +34,10 @@
         
         .drop-zone {
             display: inline-block;
-            min-width: 200px;
-            height: 32px;
+            min-width: 240px;
+            height: 42px;
             border: 2px dashed #9ca3af;
-            border-radius: 4px;
+            border-radius: 12px;
             vertical-align: middle;
             margin: 0 8px;
             background-color: #f9fafb;
@@ -51,7 +61,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 4px;
+            border-radius: 12px;
             box-shadow: none;
         }
 
@@ -71,40 +81,81 @@
         }
 
         .question-text {
-            line-height: 2.2;
+            line-height: 2.3;
         }
     </style>
 </head>
-<body class="text-gray-800 p-4 md:p-8">
+<body class="text-gray-800 p-4 md:p-8 bg-indigo-50/50">
 
-    <div class="max-w-5xl mx-auto bg-white rounded-xl shadow-lg p-6 md:p-10">
-        <div class="border-b pb-4 mb-6">
-            <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Software Engineering Terms</h1>
-            <p class="text-lg font-medium text-gray-700">Choose the correct terms from the following list <span class="font-bold">[13 marks]</span></p>
-            <p class="text-sm text-gray-500 mt-1">💡 Instructions: Drag the terms from the box below and drop them into the correct blanks. You can click a filled blank to return the term to the box.</p>
-        </div>
-
-        <div class="bg-blue-50 border border-blue-200 rounded-lg p-5 mb-8">
-            <div id="term-bank" class="flex flex-wrap gap-3">
-                <!-- Terms will be generated here by JavaScript -->
+    <div class="max-w-5xl mx-auto bg-white rounded-[2rem] shadow-xl p-6 md:p-10 border border-gray-100">
+        <div class="border-b border-gray-100 pb-5 mb-8">
+            <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3 tracking-tight">Software Engineering Terms</h1>
+            
+            <div class="flex flex-wrap justify-start mt-4 mb-2 space-x-3 bg-gray-100 p-1.5 rounded-2xl w-fit">
+                <button id="tab-dnd" class="px-6 py-3 bg-white shadow text-indigo-700 rounded-xl font-bold transition-all text-lg">Drag & Drop Mode</button>
+                <button id="tab-mc" class="px-6 py-3 text-gray-500 hover:text-indigo-600 hover:bg-gray-200/50 rounded-xl font-bold transition-all text-lg">Multiple Choice Mode</button>
             </div>
         </div>
 
-        <div id="questions-container" class="space-y-6">
-            <!-- Questions will be generated here by JavaScript -->
+        <div id="dnd-container" class="block">
+            <div class="mb-6">
+                <p class="text-xl font-semibold text-gray-700">Choose the correct terms from the following list <span class="font-bold text-indigo-600">[13 marks]</span></p>
+                <p class="text-base text-gray-500 mt-2 bg-blue-50/50 p-4 rounded-xl border border-blue-100">💡 <strong>Instructions:</strong> Drag the terms from the box below and drop them into the correct blanks. You can click a filled blank to return the term to the box.</p>
+            </div>
+            
+            <div class="bg-indigo-50/70 border-2 border-indigo-100 rounded-2xl p-6 mb-10 shadow-inner">
+                <div id="term-bank" class="flex flex-wrap gap-4">
+                    <!-- Terms will be generated here by JavaScript -->
+                </div>
+            </div>
+
+            <div id="questions-container" class="space-y-8">
+                <!-- Questions will be generated here by JavaScript -->
+            </div>
+
+            <div class="mt-12 flex flex-col sm:flex-row items-center justify-between border-t border-gray-100 pt-8 gap-4">
+                <div id="score-display" class="text-2xl font-extrabold text-gray-800 hidden bg-indigo-50 px-6 py-3 rounded-2xl border-2 border-indigo-100">
+                    Score: <span id="score-value" class="text-indigo-600">0</span> / 13
+                </div>
+                <div class="flex gap-4 w-full sm:w-auto">
+                    <button id="reset-btn" class="flex-1 sm:flex-none px-8 py-3.5 border-2 border-gray-300 text-gray-700 font-bold text-lg rounded-2xl hover:bg-gray-50 hover:border-gray-400 transition-all">
+                        Reset
+                    </button>
+                    <button id="submit-btn" class="flex-1 sm:flex-none px-8 py-3.5 bg-indigo-600 text-white font-bold text-lg rounded-2xl hover:bg-indigo-700 hover:scale-105 active:scale-95 shadow-lg shadow-indigo-200 transition-all">
+                        Submit Answers
+                    </button>
+                </div>
+            </div>
         </div>
 
-        <div class="mt-10 flex flex-col sm:flex-row items-center justify-between border-t pt-6 gap-4">
-            <div id="score-display" class="text-xl font-bold text-gray-800 hidden">
-                Score: <span id="score-value" class="text-indigo-600">0</span> / 13
+        <div id="mc-container" class="hidden flex-col items-center min-h-[400px]">
+            <p class="text-base text-gray-500 mb-8 w-full text-left bg-blue-50/50 p-4 rounded-2xl border border-blue-100">💡 <strong>Instructions:</strong> Read the definition and select the correct software engineering term from the four options.</p>
+            
+            <div id="mc-quiz-area" class="w-full flex flex-col items-center">
+                <div class="w-full flex justify-between items-center mb-8 px-2">
+                    <span id="mc-progress" class="text-base font-bold text-indigo-600 bg-indigo-100 px-5 py-2 rounded-full border-2 border-indigo-200">Question 1 / 13</span>
+                    <span class="text-base font-bold text-gray-600 bg-gray-100 px-5 py-2 rounded-full border-2 border-gray-200">Score: <span id="mc-current-score" class="text-gray-900 text-lg">0</span></span>
+                </div>
+                
+                <div class="w-full bg-white border-2 border-indigo-100 rounded-[2rem] p-8 md:p-10 mb-8 shadow-xl shadow-indigo-50 text-center">
+                    <p id="mc-question-text" class="text-xl md:text-2xl font-extrabold text-gray-800 leading-relaxed tracking-wide"></p>
+                </div>
+                
+                <div id="mc-options" class="grid grid-cols-1 md:grid-cols-2 gap-5 w-full">
+                    <!-- Options injected here -->
+                </div>
+
+                <div id="mc-feedback-area" class="mt-10 flex flex-col items-center h-28">
+                    <p id="mc-feedback-text" class="text-xl font-extrabold mb-4 transition-opacity"></p>
+                    <button id="mc-next-btn" class="hidden px-10 py-4 bg-indigo-600 text-white font-bold text-lg rounded-2xl hover:bg-indigo-700 shadow-xl shadow-indigo-200 transition-all transform hover:scale-105 active:scale-95">Next Question</button>
+                </div>
             </div>
-            <div class="flex gap-4 w-full sm:w-auto">
-                <button id="reset-btn" class="flex-1 sm:flex-none px-6 py-2.5 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors">
-                    Reset
-                </button>
-                <button id="submit-btn" class="flex-1 sm:flex-none px-6 py-2.5 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 shadow-md transition-colors">
-                    Submit Answers
-                </button>
+
+            <div id="mc-result-area" class="hidden w-full flex-col items-center py-16 text-center bg-indigo-50/50 rounded-[3rem] border-2 border-indigo-100">
+                <div class="text-8xl mb-8 drop-shadow-md">🏆</div>
+                <h3 class="text-4xl font-extrabold text-gray-900 mb-4 tracking-tight">Quiz Complete!</h3>
+                <p class="text-2xl text-gray-600 mb-10 font-medium">You scored <span id="mc-final-score" class="text-indigo-600 font-black text-5xl mx-3"></span> out of 13</p>
+                <button id="mc-restart-btn" class="px-10 py-4 bg-white border-4 border-indigo-600 text-indigo-700 font-black text-xl rounded-2xl hover:bg-indigo-50 hover:scale-105 active:scale-95 transition-all shadow-lg shadow-indigo-200">Play Again</button>
             </div>
         </div>
     </div>
@@ -143,11 +194,185 @@
         ];
 
         let draggedElement = null;
+        let isDragging = false;
+        let autoScrollInterval = null;
+
+        let mcQuestionsList = [];
+        let currentMcQuestionIndex = 0;
+        let currentMcScore = 0;
+        let isMcAnswered = false;
 
         function initApp() {
+            // Initialize mobile drag and drop polyfill with scroll behaviour
+            MobileDragDrop.polyfill({
+                dragImageTranslateOverride: MobileDragDrop.scrollBehaviourDragImageTranslateOverride
+            });
+            // Prevent default touchmove to avoid scroll issues during active dragging on mobile
+            window.addEventListener('touchmove', function() {}, {passive: false});
+
             renderTermsBank();
             renderQuestions();
             setupEventListeners();
+
+            setupTabs();
+            initMCQuiz();
+        }
+
+        function setupTabs() {
+            const tabDnd = document.getElementById('tab-dnd');
+            const tabMc = document.getElementById('tab-mc');
+            const containerDnd = document.getElementById('dnd-container');
+            const containerMc = document.getElementById('mc-container');
+
+            tabDnd.addEventListener('click', () => {
+                tabDnd.classList.add('bg-white', 'shadow', 'text-indigo-700');
+                tabDnd.classList.remove('text-gray-500', 'hover:text-indigo-600', 'hover:bg-gray-200/50');
+                
+                tabMc.classList.remove('bg-white', 'shadow', 'text-indigo-700');
+                tabMc.classList.add('text-gray-500', 'hover:text-indigo-600', 'hover:bg-gray-200/50');
+                
+                containerDnd.classList.remove('hidden');
+                containerDnd.classList.add('block');
+                containerMc.classList.remove('flex');
+                containerMc.classList.add('hidden');
+            });
+
+            tabMc.addEventListener('click', () => {
+                tabMc.classList.add('bg-white', 'shadow', 'text-indigo-700');
+                tabMc.classList.remove('text-gray-500', 'hover:text-indigo-600', 'hover:bg-gray-200/50');
+                
+                tabDnd.classList.remove('bg-white', 'shadow', 'text-indigo-700');
+                tabDnd.classList.add('text-gray-500', 'hover:text-indigo-600', 'hover:bg-gray-200/50');
+                
+                containerDnd.classList.add('hidden');
+                containerDnd.classList.remove('block');
+                containerMc.classList.add('flex');
+                containerMc.classList.remove('hidden');
+            });
+        }
+
+        function initMCQuiz() {
+            // Create a randomized pool of questions
+            mcQuestionsList = [...questions].sort(() => Math.random() - 0.5);
+            currentMcQuestionIndex = 0;
+            currentMcScore = 0;
+            
+            document.getElementById('mc-quiz-area').classList.remove('hidden');
+            document.getElementById('mc-quiz-area').classList.add('flex');
+            document.getElementById('mc-result-area').classList.add('hidden');
+            document.getElementById('mc-result-area').classList.remove('flex');
+            
+            updateMCScoreDisplay();
+            renderMCQuestion();
+            
+            // Avoid duplicate listeners
+            const nextBtn = document.getElementById('mc-next-btn');
+            nextBtn.replaceWith(nextBtn.cloneNode(true));
+            document.getElementById('mc-next-btn').addEventListener('click', handleMCNext);
+            
+            const restartBtn = document.getElementById('mc-restart-btn');
+            restartBtn.replaceWith(restartBtn.cloneNode(true));
+            document.getElementById('mc-restart-btn').addEventListener('click', initMCQuiz);
+        }
+
+        function renderMCQuestion() {
+            isMcAnswered = false;
+            document.getElementById('mc-next-btn').classList.add('hidden');
+            document.getElementById('mc-feedback-text').textContent = '';
+            
+            const q = mcQuestionsList[currentMcQuestionIndex];
+            
+            // Format the question text by replacing the blank with a generic blank line
+            const questionText = `${q.prefix ? q.prefix + ' ' : ''}_______ ${q.suffix ? q.suffix : ''}`;
+            document.getElementById('mc-question-text').textContent = questionText;
+            document.getElementById('mc-progress').textContent = `Question ${currentMcQuestionIndex + 1} / ${mcQuestionsList.length}`;
+
+            // Generate Options
+            const correctAnswer = terms.find(t => t.id === q.answerId);
+            
+            // Get 3 random wrong answers
+            let wrongAnswers = terms.filter(t => t.id !== q.answerId).sort(() => Math.random() - 0.5).slice(0, 3);
+            
+            // Combine and shuffle to get 4 options
+            let options = [correctAnswer, ...wrongAnswers].sort(() => Math.random() - 0.5);
+            
+            const optionsContainer = document.getElementById('mc-options');
+            optionsContainer.innerHTML = '';
+            
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'mc-option-btn w-full p-5 border-2 border-gray-200 rounded-2xl text-left font-bold text-gray-700 text-lg hover:border-indigo-400 hover:bg-indigo-50 hover:shadow-md transition-all flex items-center justify-between focus:outline-none';
+                btn.innerHTML = `<span>${opt.text}</span> <span class="icon w-8 h-8 flex shrink-0 items-center justify-center rounded-full border-2 border-gray-300 bg-white"></span>`;
+                
+                btn.addEventListener('click', () => handleMCOptionClick(btn, opt.id, q.answerId));
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function handleMCOptionClick(clickedBtn, selectedId, correctId) {
+            if (isMcAnswered) return; // Prevent multiple clicks
+            isMcAnswered = true;
+
+            const buttons = document.querySelectorAll('.mc-option-btn');
+            const feedbackText = document.getElementById('mc-feedback-text');
+            const nextBtn = document.getElementById('mc-next-btn');
+
+            // Disable all buttons visually
+            buttons.forEach(btn => {
+                btn.classList.remove('hover:border-indigo-400', 'hover:bg-indigo-50');
+                btn.style.cursor = 'default';
+            });
+
+            if (selectedId === correctId) {
+                // Correct Choice
+                currentMcScore++;
+                updateMCScoreDisplay();
+                clickedBtn.classList.add('border-green-500', 'bg-green-50', 'text-green-800');
+                clickedBtn.classList.remove('border-gray-200', 'text-gray-700');
+                clickedBtn.querySelector('.icon').classList.add('bg-green-500', 'border-green-500');
+                clickedBtn.querySelector('.icon').innerHTML = '<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>';
+                
+                feedbackText.textContent = "✅ Correct! Well done.";
+                feedbackText.className = "text-xl font-extrabold text-green-600 mb-4";
+            } else {
+                // Wrong Choice
+                clickedBtn.classList.add('border-red-500', 'bg-red-50', 'text-red-800');
+                clickedBtn.classList.remove('border-gray-200', 'text-gray-700');
+                clickedBtn.querySelector('.icon').classList.add('bg-red-500', 'border-red-500');
+                clickedBtn.querySelector('.icon').innerHTML = '<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg>';
+                
+                // Highlight the correct answer for the user to learn
+                const correctBtn = Array.from(buttons).find(b => b.querySelector('span').textContent === terms.find(t => t.id === correctId).text);
+                if(correctBtn) {
+                     correctBtn.classList.add('border-green-500', 'bg-green-50', 'text-green-800');
+                     correctBtn.classList.remove('border-gray-200', 'text-gray-700');
+                     correctBtn.querySelector('.icon').classList.add('bg-green-500', 'border-green-500');
+                     correctBtn.querySelector('.icon').innerHTML = '<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>';
+                }
+
+                feedbackText.textContent = "❌ Incorrect.";
+                feedbackText.className = "text-xl font-extrabold text-red-600 mb-4";
+            }
+
+            nextBtn.classList.remove('hidden');
+        }
+
+        function handleMCNext() {
+            currentMcQuestionIndex++;
+            if (currentMcQuestionIndex < mcQuestionsList.length) {
+                renderMCQuestion();
+            } else {
+                // End of MC quiz
+                document.getElementById('mc-quiz-area').classList.add('hidden');
+                document.getElementById('mc-quiz-area').classList.remove('flex');
+                document.getElementById('mc-result-area').classList.remove('hidden');
+                document.getElementById('mc-result-area').classList.add('flex');
+                document.getElementById('mc-final-score').textContent = currentMcScore;
+            }
+        }
+
+        function updateMCScoreDisplay() {
+            document.getElementById('mc-current-score').textContent = currentMcScore;
         }
 
         function renderTermsBank() {
@@ -165,11 +390,11 @@
 
         function createTermElement(term) {
             const el = document.createElement('div');
-            el.className = 'draggable-item bg-white border border-gray-300 text-gray-800 px-3 py-1.5 rounded shadow-sm text-sm font-medium hover:bg-gray-50';
+            el.className = 'draggable-item bg-white border-2 border-gray-200 text-gray-800 px-4 py-2.5 rounded-xl shadow-sm text-base md:text-lg font-bold hover:bg-indigo-50 hover:border-indigo-300 hover:-translate-y-0.5';
             el.draggable = true;
             el.dataset.id = term.id;
             // Add numbering visual as in the original image
-            el.innerHTML = `<span class="text-gray-400 mr-1">①</span> ${term.text}`.replace('①', `&#${10111 + term.id};`);
+            el.innerHTML = `<span class="text-indigo-400 mr-1 font-black">①</span> ${term.text}`.replace('①', `&#${10111 + term.id};`);
             
             el.addEventListener('dragstart', handleDragStart);
             el.addEventListener('dragend', handleDragEnd);
@@ -184,10 +409,10 @@
 
             questions.forEach((q, index) => {
                 const qDiv = document.createElement('div');
-                qDiv.className = 'text-base text-gray-800 question-text flex items-baseline flex-wrap';
+                qDiv.className = 'text-lg md:text-xl text-gray-800 question-text flex items-baseline flex-wrap font-medium tracking-wide';
                 
                 const numSpan = document.createElement('span');
-                numSpan.className = 'font-bold mr-2 text-gray-900 w-8 inline-block';
+                numSpan.className = 'font-extrabold mr-3 text-indigo-700 w-10 inline-block text-xl';
                 numSpan.textContent = `1.${index + 1}.`;
 
                 const prefixSpan = document.createElement('span');
@@ -216,6 +441,7 @@
 
         function handleDragStart(e) {
             draggedElement = this;
+            isDragging = true;
             e.dataTransfer.effectAllowed = 'move';
             // Slight delay to allow visually moving it before hiding original
             setTimeout(() => {
@@ -230,6 +456,8 @@
         function handleDragEnd(e) {
             this.style.opacity = '1';
             draggedElement = null;
+            isDragging = false;
+            clearAutoScroll();
             document.querySelectorAll('.drop-zone').forEach(z => z.classList.remove('drag-over'));
         }
 
@@ -351,6 +579,41 @@
             
             // Re-shuffle bank
             renderTermsBank();
+        }
+
+        // Global Auto-scroll functionality for Desktop browsers
+        document.addEventListener('dragover', function(e) {
+            if (!isDragging) return;
+            
+            const threshold = 60; // Distance from edge in pixels
+            const scrollSpeed = 15;
+            
+            clearInterval(autoScrollInterval);
+            
+            // Near top edge
+            if (e.clientY < threshold) {
+                autoScrollInterval = setInterval(() => window.scrollBy(0, -scrollSpeed), 20);
+            } 
+            // Near bottom edge
+            else if (window.innerHeight - e.clientY < threshold) {
+                autoScrollInterval = setInterval(() => window.scrollBy(0, scrollSpeed), 20);
+            }
+        });
+
+        document.addEventListener('dragleave', function(e) {
+            // Clear scroll if mouse leaves the window
+            if (!e.relatedTarget) {
+                clearAutoScroll();
+            }
+        });
+
+        document.addEventListener('drop', function() {
+            clearAutoScroll();
+        });
+
+        function clearAutoScroll() {
+            clearInterval(autoScrollInterval);
+            autoScrollInterval = null;
         }
 
         // Initialize on load
