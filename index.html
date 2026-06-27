@@ -1,2162 +1,360 @@
 <!DOCTYPE html>
-<html lang="zh-Hans">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>法语翻译与语法学习系统</title>
-  
-  <!-- 引入 Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- 引入 React 与 ReactDOM -->
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-  
-  <!-- 引入 Babel 以在浏览器编译 JSX -->
-  <script src="https://unpkg.com/@babel/standalone@7.23.6/babel.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Software Engineering Terms Quiz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        
+        .draggable-item {
+            cursor: grab;
+            transition: all 0.2s ease;
+        }
+        
+        .draggable-item:active {
+            cursor: grabbing;
+            transform: scale(0.95);
+        }
+        
+        .drop-zone {
+            display: inline-block;
+            min-width: 200px;
+            height: 32px;
+            border: 2px dashed #9ca3af;
+            border-radius: 4px;
+            vertical-align: middle;
+            margin: 0 8px;
+            background-color: #f9fafb;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        
+        .drop-zone.drag-over {
+            background-color: #e0e7ff;
+            border-color: #4f46e5;
+            border-style: solid;
+        }
 
-  <style>
-    .animate-fade-in {
-      animation: fadeIn 0.4s ease-out forwards;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
+        .drop-zone .draggable-item {
+            position: absolute;
+            top: -2px; /* Adjust based on border */
+            left: -2px;
+            width: calc(100% + 4px);
+            height: calc(100% + 4px);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            box-shadow: none;
+        }
+
+        /* Result styling */
+        .correct-answer {
+            border-color: #10b981;
+            background-color: #d1fae5;
+            color: #047857;
+            border-style: solid;
+        }
+        
+        .wrong-answer {
+            border-color: #ef4444;
+            background-color: #fee2e2;
+            color: #b91c1c;
+            border-style: solid;
+        }
+
+        .question-text {
+            line-height: 2.2;
+        }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans">
-  <div id="root"></div>
+<body class="text-gray-800 p-4 md:p-8">
 
-  <script type="text/babel" data-type="module">
-    const { useState, useEffect } = React;
-
-    // --- 题库资料 ---
-    const questionsData = {
-      fr2zh: [
-        { id: 1, question: "Il me faut un kilo de pommes et un poisson.", answer: "我需要一公斤苹果和一条鱼。", options: ["我需要一公斤苹果和一条鱼。", "我想要一公斤草莓和一只鸡。", "他需要一公斤苹果和一条鱼。", "我买了一公斤苹果和一条鱼。"] },
-        { id: 2, question: "J'ai demandé à Lucie de sortir avec moi après les cours.", answer: "我邀请露西课后和我一起出去。", options: ["我邀请露西课后和我一起出去。", "露西要求我下课后和她一起出去。", "我问露西明天是否要一起出门。", "课后我必须和露西一起去图书馆。"] },
-        { id: 3, question: "Ils viennent de faire des courses dans le grand magasin.", answer: "他们刚在大型商场购物。", options: ["他们刚在大型商场购物。", "他们正准备去大型商场购物。", "他们经常在大型商场里买东西。", "她们刚刚从超级市场买完东西回来。"] },
-        { id: 4, question: "Aie de la patience ! Ce travail n'est pas difficile.", answer: "耐心一点！这份工作并不难。", options: ["耐心一点！这份工作并不难。", "快一点！这份工作很容易。", "不要着急！这份工作非常困难。", "请保持安静！这项任务很简单。"] },
-        { id: 5, question: "Il y a pas mal de petits magasins dans notre village.", answer: "我们村子里有不少小店铺。", options: ["我们村子里有不少小店铺。", "我们城市里有很多大型商场。", "我们村子里没有什么小店铺。", "那个小镇上有一些不错的商店。"] },
-        { id: 6, question: "Elle n'a pas le temps de lire le journal le matin.", answer: "她早上没有时间看报纸。", options: ["她早上没有时间看报纸。", "她每天早上都会花时间看报纸。", "他晚上通常没有时间看书。", "她早上不想看任何新闻。"] },
-        { id: 7, question: "Nous partons pour le centre-ville dans une heure.", answer: "一小时后我们出发前往市中心。", options: ["一小时后我们出发前往市中心。", "我们已经在市中心待了一小时。", "半小时后我们将抵达市中心。", "我们打算花一小时前往市中心。"] },
-        { id: 8, question: "Mon ami sait bien faire la cuisine chez lui.", answer: "我的朋友在家很会做饭。", options: ["我的朋友在家很会做饭。", "我的朋友喜欢去餐厅吃饭。", "他的朋友在家做饭做得不好。", "我的朋友正在家里学习做饭。"] },
-        { id: 9, question: "On se dirige vers l'arrêt de bus ensemble.", answer: "我们一起朝着公交站走去。", options: ["我们一起朝着公交站走去。", "他们正一起走向火车站。", "我们在公交站等了很久。", "我们打算一起搭乘公交车。"] },
-        { id: 10, question: "Il reste encore beaucoup de gens dans le supermarché.", answer: "超市里还有很多人。", options: ["超市里还有很多人。", "超市里已经没有多少人了。", "今天去超市的人非常多。", "超市外面排了很长的队伍。"] },
-        { id: 11, question: "Il demande à son père de le réveiller à sept heures.", answer: "他让父亲七点叫醒他。", options: ["他让父亲七点叫醒他。", "他的父亲要求他七点起床。", "他每天早上七点叫醒父亲。", "他问父亲明天是否七点起床。"] },
-        { id: 12, question: "Nous ne perdons pas de temps pendant nos courses.", answer: "我们购物时从不浪费时间。", options: ["我们购物时从不浪费时间。", "我们花了很多时间在购物上。", "他们买东西时总是动作很快。", "我们没有时间去买东西。"] }
-      ],
-      zh2fr: [
-        { id: 1, question: "今天的风景真美啊！", answer: "Quel beau paysage aujourd'hui !", options: ["Quel beau paysage aujourd'hui !", "Quel mauvais temps aujourd'hui !", "Quelle belle journée aujourd'hui !", "Le paysage est très beau demain."] },
-        { id: 2, question: "保罗十分想念他的家人。", answer: "Paul pense beaucoup à sa famille.", options: ["Paul pense beaucoup à sa famille.", "Paul oublie souvent sa famille.", "Paul téléphone souvent à sa famille.", "Paul habite avec sa famille."] },
-        { id: 3, question: "在这座大城市里只有几家小商铺。", answer: "Il n'y a que quelques petites boutiques dans cette grande ville.", options: ["Il n'y a que quelques petites boutiques dans cette grande ville.", "Il y a beaucoup de grands magasins dans cette ville.", "Il n'y a pas de petites boutiques dans cette grande ville.", "Il y a seulement une supermarché dans ce village."] },
-        { id: 4, question: "你明天可以给我打电话。", answer: "Tu peux me téléphoner demain.", options: ["Tu peux me téléphoner demain.", "Je vais te téléphoner demain.", "Tu dois m'appeler aujourd'hui.", "Tu peux venir me voir demain."] },
-        { id: 5, question: "她走得很慢，因为她不想太累。", answer: "Elle marche lentement parce qu'elle ne veut pas être trop fatiguée.", options: ["Elle marche lentement parce qu'elle ne veut pas être trop fatiguée.", "Elle marche vite parce qu'elle est en retard.", "Elle ne marche pas parce qu'elle est déjà fatiguée.", "Il marche lentement parce qu'il ne veut pas être fatigué."] },
-        { id: 6, question: "我们每天都在食堂吃饭。", answer: "Nous mangeons au resto-U tous les jours.", options: ["Nous mangeons au resto-U tous les jours.", "Nous allons souvent au restaurant.", "Ils mangent à la cantine aujourd'hui.", "Nous préparons les repas tous les jours."] },
-        { id: 7, question: "我刚刚在商场买了一些水果。", answer: "Je viens d'acheter des fruits dans le grand magasin.", options: ["Je viens d'acheter des fruits dans le grand magasin.", "Je vais acheter des légumes au marché.", "Il vient d'acheter des pommes au supermarché.", "Je viens de manger des fruits dans le magasin."] },
-        { id: 8, question: "请鼓起勇气，不要害怕。", answer: "Aie du courage et n'aie pas peur.", options: ["Aie du courage et n'aie pas peur.", "Ayez de la patience et ne pleurez pas.", "Il faut avoir du courage et peur.", "Sois courageux et fais attention."] },
-        { id: 9, question: "这座房子面朝一条小河。", answer: "Cette maison donne sur une petite rivière.", options: ["Cette maison donne sur une petite rivière.", "Cette maison se trouve près de la montagne.", "Cet appartement donne sur la rue.", "Cette maison est loin de la rivière."] },
-        { id: 10, question: "同学们都喜欢在周末购物。", answer: "Les étudiants aiment faire des achats le week-end.", options: ["Les étudiants aiment faire des achats le week-end.", "Les professeurs aiment se reposer le week-end.", "Les étudiants doivent étudier pendant le week-end.", "Les enfants n'aiment pas faire les courses."] },
-        { id: 11, question: "我们应该把这封信寄给她。", answer: "Nous devons lui envoyer cette lettre.", options: ["Nous devons lui envoyer cette lettre.", "Nous pouvons lire cette lettre pour elle.", "Ils doivent nous envoyer cette lettre.", "Nous voulons lui donner ce cadeau."] },
-        { id: 12, question: "他昨天在博物馆待了一个小时。", answer: "Il est resté une heure au musée hier.", options: ["Il est resté une heure au musée hier.", "Il va rester une heure au musée demain.", "Il a visité le musée pendant deux heures.", "Elle est restée à la maison hier."] },
-        { id: 13, question: "这家医院在山脚下，非常有名。", answer: "Cet hôpital se trouve au pied de la montagne, il est très connu.", options: ["Cet hôpital se trouve au pied de la montagne, il est très connu.", "这所学校位于山脚下。", "这家医院很大但不有名。", "这座山在医院的后面。"] }
-      ]
-    };
-
-    // --- 语法题库资料 ---
-    const grammarQuestionsData = [
-      // 介词
-      { id: 1, category: "介词", question: "Notre maison donne ______ la mer.", options: ["dans", "sur", "vers", "au pied de"], answer: "sur", explanation: "sur除了表示在...上面，还可表示“朝向”，常用于窗户、房间等朝向某处。" },
-      { id: 2, category: "介词", question: "Les étudiants se dirigent ______ la bibliothèque.", options: ["vers", "pour", "chez", "après"], answer: "vers", explanation: "se diriger vers... 固定搭配，意为“朝...方向走去”。" },
-      { id: 3, category: "介词", question: "Il est resté ______ son ami hier soir.", options: ["dans", "sur", "chez", "vers"], answer: "chez", explanation: "chez 意为“在某人家里”或“在某人处”。" },
-      { id: 4, category: "介词", question: "L'université se trouve ______ une grande montagne.", options: ["au sommet de", "au pied de", "à la sortie de", "en retard de"], answer: "au pied de", explanation: "au pied de 意为“在...脚下”，常用于描述位于高大山峰或建筑的底部。" },
-      { id: 5, category: "介词", question: "Nous sommes partis ______ Paris hier.", options: ["vers", "pour", "dans", "chez"], answer: "pour", explanation: "partir pour + 地点，表示“出发前往某地”。" },
-      // 冠词
-      { id: 6, category: "冠词", question: "Il n'a pas ______ temps de faire du sport.", options: ["le", "de", "du", "un"], answer: "de", explanation: "在绝对否定句中，不定冠词或部分冠词通常变为 de。" },
-      { id: 7, category: "冠词", question: "Marie mange deux ______ riz.", options: ["bols de", "bols du", "bol de", "bols des"], answer: "bols de", explanation: "表示数量的词组（如 bol de, kilo de）后接名词时，省略冠词直接用 de 连接。deux决定了bol需要用复数。" },
-      { id: 8, category: "冠词", question: "Il y a beaucoup ______ boutiques dans ce centre.", options: ["des", "de", "d'", "les"], answer: "de", explanation: "beaucoup de 是固定数量表达，其后名词的冠词省略。" },
-      { id: 9, category: "冠词", question: "Il mange ______ beurre sur sa baguette.", options: ["de", "un", "du", "le"], answer: "du", explanation: "beurre（黄油）是阳性不可数名词，需要用部分冠词 du。" },
-      { id: 10, category: "冠词", question: "Elle a acheté pas mal ______ livres en français.", options: ["des", "de", "d'", "les"], answer: "de", explanation: "pas mal de 意为“不少”，是数量表达，后接名词省略冠词。" },
-      // 代词
-      { id: 11, category: "代词", question: "Oui, je ______ vois sur le sofa. (le sac à main)", options: ["la", "le", "l'", "lui"], answer: "le", explanation: "le sac à main 是阳性单数直接宾语，用 le 代替。" },
-      { id: 12, category: "代词", question: "Il ______ présente sa copine. (à ses parents)", options: ["leur", "les", "lui", "la"], answer: "leur", explanation: "à ses parents 是复数间接宾语（人），用 leur 代替。" },
-      { id: 13, category: "代词", question: "Ces livres sont intéressants, nous ______ avons lus.", options: ["le", "la", "les", "leur"], answer: "les", explanation: "les 代指 ces livres，作直接宾语前置时，复合过去时的过去分词 lus 需要与其进行性数配合（加s）。" },
-      { id: 14, category: "代词", question: "Marine et Charlotte ______ sont dirigées vers le centre.", options: ["se", "s'", "les", "leur"], answer: "se", explanation: "se diriger 是代词式动词，主语是第三人称复数，自反代词用 se。" },
-      { id: 15, category: "代词", question: "Il n'______ a que quelques magasins dans son village.", options: ["en", "y", "le", "la"], answer: "y", explanation: "il y a 是固定结构（存在句），在 il n'y a que (只有) 结构中，y 的位置保持不变。" },
-      // 动词
-      { id: 16, category: "动词", question: "Hier, Claudine ______ restée pendant une heure.", options: ["a", "est", "était", "a été"], answer: "est", explanation: "rester 是表示状态停留的动词，其复合过去时需用 être 作助动词，且与主语 Claudine (阴性) 配合加 e。" },
-      { id: 17, category: "动词", question: "Nous ______ visité le Louvre hier.", options: ["sommes", "avons", "étions", "visitions"], answer: "avons", explanation: "visiter 是及物动词，其复合过去时用 avoir 作助动词。" },
-      { id: 18, category: "动词", question: "Elle ______ partie du magasin à dix-neuf heures.", options: ["est", "a", "était", "a été"], answer: "est", explanation: "partir (离开) 属于位移动词，复合过去时使用 être 作助动词并配合。" },
-      { id: 19, category: "动词", question: "Anne aime ces fleurs et elle ______ a achetées.", options: ["le", "la", "les", "leur"], answer: "les", explanation: "les 代替 ces fleurs (阴性复数直宾)，前置于助动词 a 时，过去分词 achetées 与其进行了性数配合。" },
-      { id: 20, category: "动词", question: "______-lui cette lettre !", options: ["Donne", "Donnes", "Donnez", "Donnons"], answer: "Donne", explanation: "命令式中，以 -er 结尾的动词的 tu 形式需去掉词尾的 s。肯定命令式中代词后置并用连字符连接。" },
-      // 句子结构
-      { id: 21, category: "句子结构", question: "______ dans un supermarché que Charlotte a fait des achats.", options: ["C'est", "Ce sont", "Il est", "Il y a"], answer: "C'est", explanation: "强调地点状语 dans un supermarché 时，使用 C'est ... que 结构。" },
-      { id: 22, category: "句子结构", question: "______ Juliette et moi qui sommes en retard.", options: ["C'est", "Ce sont", "Il est", "Il y a"], answer: "Ce sont", explanation: "强调主语时用 C'est / Ce sont ... qui。因为 Juliette et moi 相当于 nous（复数），所以用 Ce sont。" },
-      { id: 23, category: "句子结构", question: "______ me faut deux kilos de bœuf.", options: ["Il", "C'est", "Ce", "Y"], answer: "Il", explanation: "Il faut 结构表示“需要”，是无人称动词，只能用 Il。" },
-      { id: 24, category: "句子结构", question: "______ une demi-heure pour aller à l'école.", options: ["Il faut", "Il y a", "C'est", "Il est"], answer: "Il faut", explanation: "Il faut + 时间，表示“需要花费多少时间”。" },
-      { id: 25, category: "句子结构", question: "______ est restée devant la Joconde. (Claudine)", options: ["Il", "Elle", "Ce", "On"], answer: "Elle", explanation: "Claudine 是女性名字，需用第三人称阴性单数代词 Elle 代替。" }
-    ];
-
-    // --- 期中试卷资料 ---
-    const examData = {
-      part1_mcq: [
-        { id: 1, q: "Je vais à l'école avec __ amie.", options: ["mon", "ma", "moi", "mes"], answer: "mon" },
-        { id: 2, q: "Céline et Laura sont __ .", options: ["étudiants", "étudiantes", "/", "étudiant"], answer: "étudiantes" },
-        { id: 3, q: "Est-ce que tu veux rentrer chez __ ?", options: ["tu", "toi", "ton", "sa"], answer: "toi" },
-        { id: 4, q: "C'est une voiture __ mon père.", options: ["à", "avec", "de", "/"], answer: "de" },
-        { id: 5, q: "Maintenant, vous __ toute la famille.", options: ["connaissance", "connnais", "connaissons", "connaissez"], answer: "connaissez" },
-        { id: 6, q: "Les étudiants sont dans __ classe.", options: ["mon", "ses", "leur", "leurs"], answer: "leur" },
-        { id: 7, q: "L'été __ le 22 juin.", options: ["commence", "commençons", "finit", "finis"], answer: "commence" },
-        { id: 8, q: "Mille neuf cent quatre-vingt-dix-huit. C'est en __ .", options: ["1989", "1984", "1998", "1988"], answer: "1998" },
-        { id: 9, q: "En quelle __ sommes-nous ? Nous sommes en été.", options: ["année", "date", "moi", "saison"], answer: "saison" },
-        { id: 10, q: "J'ai une voiture, il n'a pas __ voiture.", options: ["de", "une", "sa", "la"], answer: "de" },
-        { id: 11, q: "Mon père n'aime pas __ café.", options: ["un", "du", "le", "de"], answer: "le" },
-        { id: 12, q: "__ printemps. on peut voir partout des fleurs.", options: ["À", "Au", "En", "Dans"], answer: "Au" },
-        { id: 13, q: "Beaucoup __ étudiants rentrent à l'école aujourd'hui.", options: ["des", "de", "les", "d'"], answer: "d'" },
-        { id: 14, q: "Ils veulent prendre leurs vacances __ Janvier.", options: ["en", "au", "dans", "pour"], answer: "en" },
-        { id: 15, q: "Qu'est-ce que vous voulez boire, monsieur? Du __ ?", options: ["eau", "pain", "bière", "vin"], answer: "vin" },
-        { id: 16, q: "-Vas-tu à la mer ? -Non, je ne(n') __ vais pas.", options: ["en", "là", "y", "/"], answer: "y" },
-        { id: 17, q: "-Combien de filles y-a-t-il dans votre classe ? -Il y __ a vingt.", options: ["en", "là", "y", "/"], answer: "en" },
-        { id: 18, q: "Le professeur est-il content de votre travail ? - Il __ est content.", options: ["en", "là", "y", "/"], answer: "en" },
-        { id: 19, q: "-Qu'est-ce que c'est ? -C'est un __ vélo.", options: ["bel", "belle", "vieille", "beau"], answer: "beau" },
-        { id: 20, q: "Ces étudiants prennent __ belles photos.", options: ["des", "de", "une", "/"], answer: "de" },
-        { id: 21, q: "Non, pas de lait. Je n'aime pas __ lait.", options: ["un", "du", "le", "de la"], answer: "le" },
-        { id: 22, q: "Pour le dîner, elle ne prend pas grand-chose, un __ seulement.", options: ["viande", "salade", "soupe", "café"], answer: "café" },
-        { id: 23, q: "Le 22 juin, c'est le commencement de l'(__).", options: ["automne", "été", "printemps", "hiver"], answer: "été" },
-        { id: 24, q: "Au déjeuner, les Français prennent du vin ou de la bière, mais jamais __ lait.", options: ["un", "du", "le", "de"], answer: "de" },
-        { id: 25, q: "J'ai __ chance.", options: ["une", "un", "la", "de la"], answer: "de la" }
-      ],
-      part2_fill: {
-        A: [
-          { id: 1, q: "-Tu peux me donner ton numéro de portable ?-Bien sûr, c'est __ 01 49 52 18 36.", a: "le" },
-          { id: 2, q: "Le Camenbert est __ fromage très célèbre.", a: "un" },
-          { id: 3, q: "Nicolas boit __ lait tous les matins.", a: "du" },
-          { id: 4, q: "Il fait souvent __ vent au mois de septembre.", a: "du" },
-          { id: 5, q: "Lucas n'aime pas __ bière.", a: "la" }
-        ],
-        B: [
-          { id: 1, q: "Les Chinois aiment bien les bons repas, ils passent beaucoup de temps __ table.", a: "à" },
-          { id: 2, q: "Ces étudiants prennent __ belles photos.", a: "de" },
-          { id: 3, q: "__ printemps, il fait souvent du soleil.", a: "au" },
-          { id: 4, q: "Les employés vont au travail __ métro.", a: "en" },
-          { id: 5, q: "Moi, je suis étudiant __ département de français.", a: "dans" },
-          { id: 6, q: "Le dîner est un gros repas de la journée, il y a souvent de la soupe __ la place de salade.", a: "à" },
-          { id: 7, q: "Après le travail, je rentre __ moi.", a: "chez" },
-          { id: 8, q: "Le soir, les Français mangent souvent __ huit et neuf heures.", a: "entre" },
-          { id: 9, q: "Vous pouvez chercher __ Internet pour trouver l'adresse de ce restaurant.", a: "sur" },
-          { id: 10, q: "-Je vais voir un film, tu veux venir __ moi ?-Ah, pas de chance ! J'ai cours à midi.", a: "avec" }
-        ],
-        C: [
-          { id: 1, q: "Je vais vous présenter __ famille.", a: "ma" },
-          { id: 2, q: "J'ai un rendez-vous avec __ professeur cet après-midi.", a: "mon" },
-          { id: 3, q: "Mon oncle est un journaliste très célèbre, un personnage, __ !", a: "lui" },
-          { id: 4, q: "Émilie et __, nous aimons bien le café.", a: "moi" },
-          { id: 5, q: "Émilie est __ amie fidèle, je l'aime beaucoup.", a: "ton" },
-          { id: 6, q: "Excusez-moi, monsieur, quel est __ numéro de téléphone, s'il vous plaît ?", a: "votre" },
-          { id: 7, q: "Le professeur demande à Lucie de faire __ devoirs.", a: "ses" },
-          { id: 8, q: "-Comment allez-vous, monsieur ?-Très bien, merci. Et __ ?", a: "vous" },
-          { id: 9, q: "Ils sont tous mes collègues(同事), je travaille avec __ .", a: "eux" },
-          { id: 10, q: "Je suis très occupé cette semaine, parfois, je rentre chez __ après minuit.", a: "moi" }
-        ],
-        D_a: [
-          { id: 1, q: "Paul et Nicole ________ (connaître) bien ma famille.", a: "connaissent" },
-          { id: 2, q: "Nous ________ (faire) notre travail.", a: "faisons" },
-          { id: 3, q: "En été, les étudiants ________ (aller) souvent à la mer.", a: "vont" },
-          { id: 4, q: "Beaucoup de Français ________ (prendre) aussi leurs vacances au mois d'août.", a: "prennent" },
-          { id: 5, q: "À table, les Français ________ (parler) de toutes les choses intéressantes de la journée.", a: "parlent" }
-        ],
-        D_b: [
-          { id: 1, q: "Les cours ________ à huit heures le matin.", a: "commencent" },
-          { id: 2, q: "À midi, peut-être les gens ________ du vin ou de l'eau.", a: "boivent" },
-          { id: 3, q: "Quand il ________ , Stéphane sort son parapluie de son sac.", a: "pleut" },
-          { id: 4, q: "Au resto-U, on ne ________ pas beaucoup, mais on mange bien.", a: "paie" },
-          { id: 5, q: "Les étudiants rentrent à l'école, tout le monde ________ leur travail.", a: "reprend" }
-        ]
-      },
-      part2_classify: {
-        words: ["institutrice", "midi", "professeur", "fruit", "grand-mère", "tante", "frère", "fromage", "yaourt", "soir", "petit-déjeuner", "ouvrier", "père", "pain", "matin", "journaliste", "demain", "oncle", "employé", "aujourd'hui"],
-        answers: {
-          Profession: ["institutrice", "professeur", "ouvrier", "journaliste", "employé"],
-          Aliment: ["fruit", "fromage", "yaourt", "pain", "petit-déjeuner"],
-          Famille: ["grand-mère", "tante", "frère", "père", "oncle"],
-          Temps: ["midi", "soir", "matin", "demain", "aujourd'hui"]
-        }
-      },
-      part3_transform: {
-        A: [
-          { q: "Il y a du lait dans le frigo ?", a_oui: "Oui, il y en a.", a_non: "Non, il n'y en a pas." },
-          { q: "C'est un quartier tranquille, j'habite dans ce quartier depuis plus de 20 ans.", a: "C'est un quartier tranquille, j'y habite depuis plus de 20 ans." },
-          { q: "Est-ce que tu bois beaucoup d'eau tous les jours ?", a_oui: "Oui, j'en bois beaucoup tous les jours.", a_non: "Non, je n'en bois pas beaucoup tous les jours." },
-          { q: "Paul va-t-il au restaurant ?", a_oui: "Oui, il y va.", a_non: "Non, il n'y va pas." },
-          { q: "Il y a des tomates fraîches, je veux deux kilos de tomates.", a: "Il y a des tomates fraîches, j'en veux deux kilos." }
-        ],
-        B: [
-          { q: "Olivier boit du lait.", a: "Olivier ne boit pas de lait." },
-          { q: "Elle aime les fleurs.", a: "Elle n'aime pas les fleurs." },
-          { q: "On allume un feu dans la cheminée.", a: "On n'allume pas de feu dans la cheminée." },
-          { q: "Marie fait ses devoirs.", a: "Marie ne fait pas ses devoirs." },
-          { q: "J'ai des cours le mercredi.", a: "Je n'ai pas de cours le mercredi." }
-        ]
-      },
-      part4_translation: {
-        A: [
-          { q: "这是一张我外祖父母的结婚照。", a: "C'est une photo de mariage de mes grands-parents." },
-          { q: "我父亲是职员，我母亲是教师。", a: "Mon père est employé, ma mère est institutrice." },
-          { q: "北京春天的天气怎么样？", a: "Quel temps fait-il au printemps à Beijing?" },
-          { q: "冬天，经常刮风，天黑得早。", a: "En hiver, il fait souvent du vent et il fait nuit tôt." },
-          { q: "今天我们有足够的时间在家做饭。", a: "Nous avons assez de temps pour faire la cuisine à la maison aujourd'hui." }
-        ],
-        B: [
-          { q: "L'homme à côté de ma mère, c'est son frère aîné, mon oncle Hugo, il est un journaliste.", a: "在我妈妈旁边的男人是她的哥哥，我的叔叔雨果，他是一名记者。" },
-          { q: "En été, à Guangzhou, il pleut dès le matin et il fait un peu froid.", a: "在广州，夏天，从早上就开始下雨，会有点冷。" },
-          { q: "Les Chinois adorent manger en famille, ils passent beaucoup de temps à table.", a: "中国人喜欢家庭聚餐，他们会花很多时间在餐桌上度过。" },
-          { q: "Les étudiants vont souvent au resto-U, parce qu'ils ne payent pas beaucoup mais mangent bien là-bas.", a: "大学生们经常去大学食堂，因为那里吃得好并且花费不多。" },
-          { q: "Pour le déjeuner, on boit de l'eau, peut-être du vin ou de la bière aussi, mais jamais de lait.", a: "午餐时，我们会喝水，也可能喝酒和啤酒，但是从来不喝牛奶。" }
-        ]
-      }
-    };
-
-    // --- 核心语法综合测试卷资料 ---
-    const exam2Data = {
-      part1_mcq: [
-        { id: 1, q: "Notre maison donne ______ la mer.", options: ["dans", "sur", "vers", "au pied de"], answer: "sur" },
-        { id: 2, q: "Les étudiants se dirigent ______ la bibliothèque.", options: ["vers", "pour", "chez", "après"], answer: "vers" },
-        { id: 3, q: "Il est resté ______ son ami hier soir.", options: ["dans", "sur", "chez", "vers"], answer: "chez" },
-        { id: 4, q: "L'université se trouve ______ une grande montagne.", options: ["au sommet de", "au pied de", "à la sortie de", "en retard de"], answer: "au pied de" },
-        { id: 5, q: "Nous sommes partis ______ Paris hier.", options: ["vers", "pour", "dans", "chez"], answer: "pour" },
-        { id: 6, q: "Il n'a pas ______ temps de faire du sport.", options: ["le", "de", "du", "un"], answer: "de" },
-        { id: 7, q: "Marie mange deux ______ riz.", options: ["bols de", "bols du", "bol de", "bols des"], answer: "bols de" },
-        { id: 8, q: "Il y a beaucoup ______ boutiques dans ce centre.", options: ["des", "de", "d'", "les"], answer: "de" },
-        { id: 9, q: "Il mange ______ beurre sur sa baguette.", options: ["de", "un", "du", "le"], answer: "du" },
-        { id: 10, q: "Elle a acheté pas mal ______ livres en français.", options: ["des", "de", "d'", "les"], answer: "de" },
-        { id: 11, q: "Oui, je ______ vois sur le sofa. (代指 le sac à main)", options: ["la", "le", "l'", "lui"], answer: "le" },
-        { id: 12, q: "Il ______ présente sa copine. (代指 à ses parents)", options: ["leur", "les", "lui", "la"], answer: "leur" },
-        { id: 13, q: "Ces livres sont intéressants, nous ______ avons lus.", options: ["le", "la", "les", "leur"], answer: "les" },
-        { id: 14, q: "Marine et Charlotte ______ sont dirigées vers le centre.", options: ["se", "s'", "les", "leur"], answer: "se" },
-        { id: 15, q: "Il n'______ a que quelques magasins dans son village.", options: ["en", "y", "le", "la"], answer: "y" },
-        { id: 16, q: "Hier, Claudine ______ restée pendant une heure.", options: ["a", "est", "était", "a été"], answer: "est" },
-        { id: 17, q: "Nous ______ visité le Louvre hier.", options: ["sommes", "avons", "étions", "visitions"], answer: "avons" },
-        { id: 18, q: "Elle ______ partie du magasin à dix-neuf heures.", options: ["est", "a", "était", "a été"], answer: "est" },
-        { id: 19, q: "Anne aime ces fleurs et elle ______ a achetées.", options: ["le", "la", "les", "leur"], answer: "les" },
-        { id: 20, q: "______-lui cette lettre !", options: ["Donne", "Donnes", "Donnez", "Donnons"], answer: "Donne" },
-        { id: 21, q: "______ dans un supermarché que Charlotte a fait des achats.", options: ["C'est", "Ce sont", "Il est", "Il y a"], answer: "C'est" },
-        { id: 22, q: "______ Juliette et moi qui sommes en retard.", options: ["C'est", "Ce sont", "Il est", "Il y a"], answer: "Ce sont" },
-        { id: 23, q: "______ me faut deux kilos de bœuf.", options: ["Il", "C'est", "Ce", "Y"], answer: "Il" },
-        { id: 24, q: "______ une demi-heure pour aller à l'école.", options: ["Il faut", "Il y a", "C'est", "Il est"], answer: "Il faut" },
-        { id: 25, q: "______ est restée devant la Joconde. (代指 Claudine)", options: ["Il", "Elle", "Ce", "On"], answer: "Elle" }
-      ],
-      part2_fill: {
-        A: [
-          { id: 1, q: "Je ________ bien ce jeune homme.", a: "connais" },
-          { id: 2, q: "Elle ________ faire la cuisine.", a: "sait" }
-        ],
-        B: [
-          { id: 1, q: "Il ________ (savoir) faire la cuisine.", a: "sait" },
-          { id: 2, q: "Nous ________ (partir) à l'arrêt de bus.", a: "partons" },
-          { id: 3, q: "On ________ (faire) des achats dans le centre commercial.", a: "fait" },
-          { id: 4, q: "Elle ________ (lire) un journal le samedi.", a: "lit" },
-          { id: 5, q: "Je ________ (devoir) rester chez Cécile.", a: "dois" }
-        ],
-        C: [
-          { id: 1, q: "Hier, je ________ (rester) dans la rue.", a: "suis resté" },
-          { id: 2, q: "Il ________ (lire) ce livre hier soir.", a: "a lu" },
-          { id: 3, q: "Elles ________ (arriver) en ville pour faire des courses.", a: "sont arrivées" }
-        ]
-      },
-      part3_transform: {
-        A: [
-          { q: "Juliette et moi sommes en retard. (强调主语)", a: "Ce sont Juliette et moi qui sommes en retard." },
-          { q: "Charlotte a fait des achats dans un supermarché. (强调地点状语)", a: "C'est dans un supermarché que Charlotte a fait des achats." },
-          { q: "Je l'ai vu hier. (强调时间状语)", a: "C'est hier que je l'ai vu." }
-        ],
-        B: [
-          { q: "Tu lui donnes cette lettre. (改为肯定命令式)", a: "Donne-lui cette lettre !" },
-          { q: "Tu ne le fais pas. (改为否定命令式)", a: "Ne le fais pas !" }
-        ]
-      },
-      part4_translation: {
-        A: questionsData.fr2zh.map(q => ({ q: q.question, a: q.answer })),
-        B: questionsData.zh2fr.map(q => ({ q: q.question, a: q.answer }))
-      }
-    };
-
-    const shuffleArray = (array) => {
-      const newArr = [...array];
-      for (let i = newArr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
-      }
-      return newArr;
-    };
-
-    // --- 模块 0：新增 - 翻译速记 (法译汉 & 汉译法大全) ---
-    function TranslationReview() {
-      const [mode, setMode] = useState('fr2zh');
-      const data = questionsData[mode];
-
-      return (
-        <div className="max-w-4xl mx-auto animate-fade-in">
-          {/* 选项卡 */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 mb-6 flex justify-center gap-4">
-            <button
-              onClick={() => setMode('fr2zh')}
-              className={`px-6 py-2.5 rounded-xl font-bold transition-all flex items-center gap-2 ${mode === 'fr2zh' ? 'bg-indigo-600 text-white shadow-md' : 'bg-slate-100 text-slate-500 hover:bg-indigo-50 hover:text-indigo-600'}`}
-            >
-              🇫🇷 法译汉速记
-            </button>
-            <button
-              onClick={() => setMode('zh2fr')}
-              className={`px-6 py-2.5 rounded-xl font-bold transition-all flex items-center gap-2 ${mode === 'zh2fr' ? 'bg-rose-600 text-white shadow-md' : 'bg-slate-100 text-slate-500 hover:bg-rose-50 hover:text-rose-600'}`}
-            >
-              🇨🇳 汉译法速记
-            </button>
-          </div>
-
-          {/* 列表区 */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
-            <h2 className="text-xl font-bold text-slate-800 mb-6 border-b pb-4">
-              {mode === 'fr2zh' ? '法译汉 - 核心句子对照表' : '汉译法 - 核心句子对照表'}
-            </h2>
-            <div className="space-y-4">
-              {data.map((item, index) => (
-                <div key={item.id} className="bg-slate-50 rounded-xl border border-slate-100 p-5 flex flex-col md:flex-row gap-4 hover:shadow-md hover:border-slate-300 transition-all">
-                  <div className="flex-shrink-0 w-8 h-8 bg-white border border-slate-200 text-slate-500 rounded-full flex items-center justify-center font-black shadow-sm">
-                    {index + 1}
-                  </div>
-                  <div className="flex-1 space-y-2">
-                    <p className={`text-lg font-bold ${mode === 'fr2zh' ? 'text-indigo-800' : 'text-slate-800'}`}>
-                      {item.question}
-                    </p>
-                    <p className={`text-base font-medium ${mode === 'fr2zh' ? 'text-slate-600' : 'text-rose-600'}`}>
-                      {item.answer}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+    <div class="max-w-5xl mx-auto bg-white rounded-xl shadow-lg p-6 md:p-10">
+        <div class="border-b pb-4 mb-6">
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Software Engineering Terms</h1>
+            <p class="text-lg font-medium text-gray-700">Choose the correct terms from the following list <span class="font-bold">[13 marks]</span></p>
+            <p class="text-sm text-gray-500 mt-1">💡 Instructions: Drag the terms from the box below and drop them into the correct blanks. You can click a filled blank to return the term to the box.</p>
         </div>
-      );
-    }
 
-    // --- 模块 1：翻译训练 ---
-    function TranslationQuiz() {
-      const [category, setCategory] = useState('fr2zh');
-      const [mode, setMode] = useState('mcq');
-      const [questions, setQuestions] = useState([]);
-      const [currentIndex, setCurrentIndex] = useState(0);
-      const [score, setScore] = useState(0);
-      const [userInput, setUserInput] = useState('');
-      const [isAnswerRevealed, setIsAnswerRevealed] = useState(false);
-      const [selectedOption, setSelectedOption] = useState(null);
-      const [isFinished, setIsFinished] = useState(false);
-      const [errorMsg, setErrorMsg] = useState('');
-
-      const [view, setView] = useState('quiz');
-      const [quizMode, setQuizMode] = useState('all');
-      const [history, setHistory] = useState([]);
-      const [wrongQuestions, setWrongQuestions] = useState([]);
-      const [showClearConfirm, setShowClearConfirm] = useState(false);
-
-      useEffect(() => {
-        const savedHistory = JSON.parse(localStorage.getItem('translationHistory')) || [];
-        const savedWrong = JSON.parse(localStorage.getItem('translationWrong')) || [];
-        setHistory(savedHistory);
-        setWrongQuestions(savedWrong);
-        startQuiz('all', savedWrong, category);
-      }, []);
-
-      useEffect(() => {
-        localStorage.setItem('translationHistory', JSON.stringify(history));
-      }, [history]);
-
-      useEffect(() => {
-        localStorage.setItem('translationWrong', JSON.stringify(wrongQuestions));
-      }, [wrongQuestions]);
-
-      const startQuiz = (modeParam = quizMode, currentWrong = wrongQuestions, currentCat = category) => {
-        setQuizMode(modeParam);
-        setCategory(currentCat);
-        setScore(0);
-        setCurrentIndex(0);
-        setUserInput('');
-        setIsAnswerRevealed(false);
-        setSelectedOption(null);
-        setIsFinished(false);
-        setErrorMsg('');
-        setView('quiz');
-
-        let pool = [];
-        if (modeParam === 'all') {
-          pool = questionsData[currentCat].map(q => ({ ...q, itemCategory: currentCat }));
-        } else {
-          pool = currentWrong;
-          if (pool.length === 0) {
-            pool = questionsData[currentCat].map(q => ({ ...q, itemCategory: currentCat }));
-            setQuizMode('all');
-          }
-        }
-
-        const processedQuestions = shuffleArray(pool).map(q => ({
-          ...q, shuffledOptions: shuffleArray(q.options)
-        }));
-        setQuestions(processedQuestions);
-      };
-
-      const handleModeChange = (newMode) => {
-        setMode(newMode);
-        startQuiz(quizMode, wrongQuestions, category);
-      };
-
-      const handleNextQuestion = (finalScore = score) => {
-        const activeScore = typeof finalScore === 'number' ? finalScore : score;
-        if (currentIndex < questions.length - 1) {
-          setCurrentIndex(currentIndex + 1); setUserInput(''); setIsAnswerRevealed(false);
-          setSelectedOption(null); setErrorMsg('');
-        } else {
-          setIsFinished(true);
-          const newRecord = {
-            id: Date.now(),
-            date: new Date().toLocaleString(),
-            score: activeScore,
-            total: questions.length,
-            mode: quizMode === 'all' ? (category === 'fr2zh' ? '法译中' : '中译法') : '错题特训'
-          };
-          setHistory(prev => [newRecord, ...prev]);
-        }
-      };
-
-      const handleOptionClick = (option) => {
-        if (isAnswerRevealed) return;
-        setSelectedOption(option); setIsAnswerRevealed(true);
-        const currentQ = questions[currentIndex];
-        
-        if (option === currentQ.answer) {
-          setScore(score + 1);
-          if (quizMode === 'wrong') {
-            setWrongQuestions(prev => prev.filter(q => !(q.id === currentQ.id && q.itemCategory === currentQ.itemCategory)));
-          }
-        } else {
-          setWrongQuestions(prev => {
-            if (!prev.find(q => q.id === currentQ.id && q.itemCategory === currentQ.itemCategory)) {
-              return [...prev, currentQ];
-            }
-            return prev;
-          });
-        }
-      };
-
-      const handleSelfGrade = (isCorrect) => {
-        const currentQ = questions[currentIndex];
-        let newScore = score;
-        if (isCorrect) {
-          newScore = score + 1;
-          setScore(newScore);
-          if (quizMode === 'wrong') {
-            setWrongQuestions(prev => prev.filter(q => !(q.id === currentQ.id && q.itemCategory === currentQ.itemCategory)));
-          }
-        } else {
-          setWrongQuestions(prev => {
-            if (!prev.find(q => q.id === currentQ.id && q.itemCategory === currentQ.itemCategory)) {
-              return [...prev, currentQ];
-            }
-            return prev;
-          });
-        }
-        handleNextQuestion(newScore);
-      };
-
-      const handleRevealAnswer = () => {
-        if (!userInput.trim()) { setErrorMsg("请先输入您的翻译答案！"); return; }
-        setErrorMsg(''); setIsAnswerRevealed(true);
-      };
-
-      if (questions.length === 0) return <div className="text-center p-10">载入中...</div>;
-
-      if (view === 'records') {
-        return (
-          <div className="max-w-3xl mx-auto animate-fade-in">
-            <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-6 md:p-8">
-              <div className="flex justify-between items-center mb-6 border-b pb-4">
-                <h2 className="text-2xl font-bold text-indigo-800">📊 错题本与作答记录</h2>
-                <button onClick={() => setView('quiz')} className="bg-slate-100 text-slate-600 px-4 py-2 rounded-lg hover:bg-slate-200 font-medium transition-colors">🔙 返回练习</button>
-              </div>
-              
-              <div className="mb-10">
-                <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-xl font-bold text-slate-800 flex items-center">📝 错题本 <span className="ml-2 text-sm bg-rose-100 text-rose-700 px-2 py-1 rounded-full">{wrongQuestions.length} 题</span></h3>
-                    {wrongQuestions.length > 0 && (
-                      showClearConfirm ? (
-                        <div className="flex gap-2 items-center">
-                          <span className="text-sm text-rose-600 font-bold">确认清空？</span>
-                          <button onClick={() => { setWrongQuestions([]); setShowClearConfirm(false); }} className="text-sm bg-rose-500 text-white px-3 py-1.5 rounded hover:bg-rose-600">是</button>
-                          <button onClick={() => setShowClearConfirm(false)} className="text-sm bg-slate-200 text-slate-700 px-3 py-1.5 rounded hover:bg-slate-300">否</button>
-                        </div>
-                      ) : (
-                        <div className="flex gap-2">
-                          <button onClick={() => setShowClearConfirm(true)} className="text-sm bg-slate-100 text-slate-600 px-3 py-1.5 rounded hover:bg-slate-200 transition-colors">清空</button>
-                          <button onClick={() => startQuiz('wrong')} className="text-sm bg-rose-500 text-white px-4 py-1.5 rounded hover:bg-rose-600 shadow-sm font-bold transition-colors">▶️ 错题特训</button>
-                        </div>
-                      )
-                    )}
-                </div>
-                {wrongQuestions.length === 0 ? (
-                  <div className="text-slate-500 bg-slate-50 p-6 rounded-xl text-center border border-slate-100">太棒了！当前没有错题记录。</div>
-                ) : (
-                  <div className="space-y-4 max-h-[32rem] overflow-y-auto pr-2">
-                    {wrongQuestions.map((wq, i) => (
-                        <div key={i} className="bg-rose-50 p-4 rounded-xl border border-rose-100 relative">
-                          <span className="absolute top-4 right-4 text-xs font-bold bg-rose-200 text-rose-800 px-2 py-1 rounded">
-                            {wq.itemCategory === 'fr2zh' ? '法译中' : '中译法'}
-                          </span>
-                          <p className="font-medium text-slate-800 mb-2 pr-16">{i + 1}. {wq.question}</p>
-                          <p className="text-sm text-emerald-700 font-bold mb-1">正确答案：{wq.answer}</p>
-                        </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <div>
-                <h3 className="text-xl font-bold text-slate-800 mb-4 flex items-center">🕰️ 作答历史</h3>
-                {history.length === 0 ? (
-                  <div className="text-slate-500 bg-slate-50 p-6 rounded-xl text-center border border-slate-100">暂无作答记录。</div>
-                ) : (
-                  <div className="max-h-64 overflow-y-auto border border-slate-100 rounded-xl">
-                    <table className="w-full text-left border-collapse text-sm">
-                      <thead>
-                        <tr className="bg-slate-100 text-slate-600">
-                          <th className="p-3">完成时间</th>
-                          <th className="p-3">测验模式</th>
-                          <th className="p-3">得分</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-100">
-                        {history.map(record => (
-                          <tr key={record.id} className="hover:bg-slate-50 transition-colors">
-                            <td className="p-3 text-slate-600">{record.date}</td>
-                            <td className="p-3"><span className={`px-2 py-1 rounded font-medium text-xs ${record.mode === '错题特训' ? 'bg-rose-100 text-rose-700' : 'bg-indigo-100 text-indigo-700'}`}>{record.mode}</span></td>
-                            <td className="p-3 font-bold text-indigo-600">{record.score} / {record.total}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                )}
-              </div>
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-5 mb-8">
+            <div id="term-bank" class="flex flex-wrap gap-3">
+                <!-- Terms will be generated here by JavaScript -->
             </div>
-          </div>
-        );
-      }
-
-      const currentQuestion = questions[currentIndex];
-
-      return (
-        <div className="max-w-3xl mx-auto animate-fade-in">
-          {/* 设置区 */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-6">
-            <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
-              <div className="flex bg-slate-100 p-1 rounded-lg">
-                <button className={`px-4 py-2 rounded-md font-medium transition-colors ${category === 'fr2zh' ? 'bg-white shadow text-indigo-600' : 'text-slate-500'}`} onClick={() => startQuiz('all', wrongQuestions, 'fr2zh')}>法译中</button>
-                <button className={`px-4 py-2 rounded-md font-medium transition-colors ${category === 'zh2fr' ? 'bg-white shadow text-indigo-600' : 'text-slate-500'}`} onClick={() => startQuiz('all', wrongQuestions, 'zh2fr')}>中译法</button>
-              </div>
-              <div className="flex bg-slate-100 p-1 rounded-lg">
-                <button className={`px-4 py-2 rounded-md font-medium transition-colors ${mode === 'mcq' ? 'bg-white shadow text-emerald-600' : 'text-slate-500'}`} onClick={() => handleModeChange('mcq')}>选择题模式</button>
-                <button className={`px-4 py-2 rounded-md font-medium transition-colors ${mode === 'typing' ? 'bg-white shadow text-emerald-600' : 'text-slate-500'}`} onClick={() => handleModeChange('typing')}>填空对比模式</button>
-              </div>
-            </div>
-          </div>
-
-          {!isFinished && (
-            <div className="flex justify-end mb-4">
-              <button onClick={() => setView('records')} className="bg-white border border-slate-200 text-slate-700 px-4 py-2 rounded-xl font-medium hover:bg-slate-50 shadow-sm transition-colors flex items-center">
-                📊 错题本与记录
-                {wrongQuestions.length > 0 && <span className="ml-2 bg-rose-500 text-white text-xs px-2 py-0.5 rounded-full">{wrongQuestions.length}</span>}
-              </button>
-            </div>
-          )}
-
-          {isFinished ? (
-            <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 text-center">
-              <div className="text-5xl mb-4">🏆</div>
-              <h2 className="text-2xl font-bold mb-2">翻译测验完成！</h2>
-              <p className="text-lg text-slate-600 mb-6">得分：<span className="text-indigo-600 font-bold text-3xl">{score}</span> / {questions.length}</p>
-              <div className="flex gap-4 justify-center">
-                <button onClick={() => startQuiz('all')} className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 shadow-md font-medium transition-colors">再练一次 (全部)</button>
-                <button onClick={() => setView('records')} className="bg-white border border-slate-200 text-slate-700 px-6 py-3 rounded-lg hover:bg-slate-50 shadow-sm font-medium transition-colors">查看错题记录</button>
-              </div>
-            </div>
-          ) : (
-            <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-6 md:p-8">
-              <div className="flex justify-between items-center mb-6 text-sm font-medium text-slate-500">
-                <div className="flex items-center gap-3">
-                  <span className={`px-3 py-1 rounded-full text-xs ${quizMode === 'wrong' ? 'bg-rose-100 text-rose-700' : 'bg-indigo-100 text-indigo-800'}`}>
-                    {quizMode === 'wrong' ? '错题特训' : '全部题库'}
-                  </span>
-                  <span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full">当前类别：{currentQuestion.itemCategory === 'fr2zh' ? '法译中' : '中译法'}</span>
-                </div>
-                <span>进度：{currentIndex + 1} / {questions.length} &nbsp;|&nbsp; 得分：{score}</span>
-              </div>
-              <div className="w-full bg-slate-100 rounded-full h-2 mb-8">
-                <div className="bg-indigo-500 h-2 rounded-full transition-all duration-300" style={{ width: `${((currentIndex + 1) / questions.length) * 100}%` }}></div>
-              </div>
-              <div className="mb-8"><h2 className="text-xl md:text-2xl font-bold text-slate-800 leading-relaxed">{currentQuestion.question}</h2></div>
-              
-              {mode === 'mcq' && (
-                <div className="space-y-3">
-                  {currentQuestion.shuffledOptions.map((option, index) => {
-                    let buttonClass = "w-full text-left p-4 rounded-xl border-2 transition-all duration-200 ";
-                    if (!isAnswerRevealed) {
-                      buttonClass += "border-slate-200 hover:border-indigo-400 hover:bg-indigo-50 text-slate-700";
-                    } else {
-                      if (option === currentQuestion.answer) buttonClass += "border-emerald-500 bg-emerald-50 text-emerald-800 font-medium";
-                      else if (option === selectedOption) buttonClass += "border-rose-500 bg-rose-50 text-rose-800";
-                      else buttonClass += "border-slate-200 bg-slate-50 text-slate-400 opacity-60";
-                    }
-                    return (
-                      <button key={index} onClick={() => handleOptionClick(option)} disabled={isAnswerRevealed} className={buttonClass}>
-                        <div className="flex items-center"><span className="w-8 h-8 flex items-center justify-center bg-white rounded-full border shadow-sm mr-3 text-sm font-bold text-slate-500">{String.fromCharCode(65 + index)}</span><span className="text-lg">{option}</span></div>
-                      </button>
-                    );
-                  })}
-                  {isAnswerRevealed && (
-                    <div className="mt-8 flex justify-end animate-fade-in"><button onClick={() => handleNextQuestion(score)} className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 shadow-sm">下一题 ➔</button></div>
-                  )}
-                </div>
-              )}
-
-              {mode === 'typing' && (
-                <div>
-                  {!isAnswerRevealed ? (
-                    <div className="space-y-4 animate-fade-in">
-                      <textarea value={userInput} onChange={(e)=>{setUserInput(e.target.value); setErrorMsg('');}} placeholder="请在此输入您的翻译..." className={`w-full h-32 p-4 border-2 rounded-xl focus:ring-0 resize-none text-lg text-slate-700 ${errorMsg ? 'border-rose-400' : 'border-slate-200 focus:border-indigo-500'}`} />
-                      {errorMsg && <p className="text-rose-500 text-sm font-medium">{errorMsg}</p>}
-                      <button onClick={handleRevealAnswer} className="w-full bg-indigo-600 text-white px-6 py-4 rounded-xl font-bold hover:bg-indigo-700 shadow-sm text-lg">提交并对比答案</button>
-                    </div>
-                  ) : (
-                    <div className="space-y-6 animate-fade-in">
-                      <div className="bg-slate-50 p-6 rounded-xl border border-slate-200">
-                        <p className="text-sm text-slate-500 mb-1 font-medium">您的翻译：</p>
-                        <p className="text-lg text-slate-800 mb-4 pb-4 border-b border-slate-200">{userInput}</p>
-                        <p className="text-sm text-emerald-600 mb-1 font-medium">标准答案：</p>
-                        <p className="text-xl font-bold text-emerald-700">{currentQuestion.answer}</p>
-                      </div>
-                      <div className="text-center">
-                        <p className="text-slate-600 font-medium mb-4">请为自己评分：您翻译得正确吗？</p>
-                        <div className="flex gap-4 justify-center">
-                          <button onClick={() => { handleSelfGrade(false); }} className="flex-1 max-w-[160px] bg-white border-2 border-rose-200 text-rose-600 hover:bg-rose-50 px-4 py-3 rounded-xl font-bold">❌ 需要练习</button>
-                          <button onClick={() => { handleSelfGrade(true); }} className="flex-1 max-w-[160px] bg-emerald-500 text-white hover:bg-emerald-600 px-4 py-3 rounded-xl font-bold shadow-sm">✅ 完全正确</button>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
         </div>
-      );
-    }
 
-    // --- 模块 2：语法题库 ---
-    function GrammarQuiz() {
-      const [questions, setQuestions] = useState([]);
-      const [currentIndex, setCurrentIndex] = useState(0);
-      const [score, setScore] = useState(0);
-      const [isAnswerRevealed, setIsAnswerRevealed] = useState(false);
-      const [selectedOption, setSelectedOption] = useState(null);
-      const [isFinished, setIsFinished] = useState(false);
-
-      const [view, setView] = useState('quiz');
-      const [quizMode, setQuizMode] = useState('all');
-      const [history, setHistory] = useState([]);
-      const [wrongQuestions, setWrongQuestions] = useState([]);
-      const [showClearConfirm, setShowClearConfirm] = useState(false);
-
-      useEffect(() => {
-        const savedHistory = JSON.parse(localStorage.getItem('grammarHistory')) || [];
-        const savedWrong = JSON.parse(localStorage.getItem('grammarWrong')) || [];
-        setHistory(savedHistory);
-        setWrongQuestions(savedWrong);
-        startQuiz('all', savedWrong);
-      }, []);
-
-      useEffect(() => {
-        localStorage.setItem('grammarHistory', JSON.stringify(history));
-      }, [history]);
-
-      useEffect(() => {
-        localStorage.setItem('grammarWrong', JSON.stringify(wrongQuestions));
-      }, [wrongQuestions]);
-
-      const startQuiz = (mode, currentWrong = wrongQuestions) => {
-        setQuizMode(mode);
-        setScore(0);
-        setCurrentIndex(0);
-        setIsAnswerRevealed(false);
-        setSelectedOption(null);
-        setIsFinished(false);
-        setView('quiz');
-
-        let pool = mode === 'all' ? grammarQuestionsData : currentWrong;
-        if (mode === 'wrong' && pool.length === 0) {
-          pool = grammarQuestionsData;
-          setQuizMode('all');
-        }
-
-        const processedQuestions = shuffleArray(pool).map(q => ({
-          ...q, shuffledOptions: shuffleArray(q.options)
-        }));
-        setQuestions(processedQuestions);
-      };
-
-      const handleNextQuestion = () => {
-        if (currentIndex < questions.length - 1) {
-          setCurrentIndex(currentIndex + 1); setIsAnswerRevealed(false); setSelectedOption(null);
-        } else {
-          setIsFinished(true);
-          const newRecord = {
-            id: Date.now(),
-            date: new Date().toLocaleString(),
-            score: score,
-            total: questions.length,
-            mode: quizMode === 'all' ? '全部题库' : '错题特训'
-          };
-          setHistory(prev => [newRecord, ...prev]);
-        }
-      };
-
-      const handleOptionClick = (option) => {
-        if (isAnswerRevealed) return;
-        setSelectedOption(option);
-        setIsAnswerRevealed(true);
-        
-        const currentQ = questions[currentIndex];
-        const isCorrect = option === currentQ.answer;
-
-        if (isCorrect) {
-          setScore(score + 1);
-          if (quizMode === 'wrong') {
-            setWrongQuestions(prev => prev.filter(q => q.id !== currentQ.id));
-          }
-        } else {
-          setWrongQuestions(prev => {
-            if (!prev.find(q => q.id === currentQ.id)) {
-                const originalQ = grammarQuestionsData.find(q => q.id === currentQ.id);
-                return [...prev, originalQ];
-            }
-            return prev;
-          });
-        }
-      };
-
-      if (questions.length === 0) return <div className="text-center p-10">载入中...</div>;
-
-      if (view === 'records') {
-        return (
-          <div className="max-w-3xl mx-auto animate-fade-in">
-            <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-6 md:p-8">
-              <div className="flex justify-between items-center mb-6 border-b pb-4">
-                <h2 className="text-2xl font-bold text-indigo-800">📊 错题本与作答记录</h2>
-                <button onClick={() => setView('quiz')} className="bg-slate-100 text-slate-600 px-4 py-2 rounded-lg hover:bg-slate-200 font-medium transition-colors">🔙 返回题库</button>
-              </div>
-              
-              <div className="mb-10">
-                <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-xl font-bold text-slate-800 flex items-center">📝 错题本 <span className="ml-2 text-sm bg-rose-100 text-rose-700 px-2 py-1 rounded-full">{wrongQuestions.length} 题</span></h3>
-                    {wrongQuestions.length > 0 && (
-                      showClearConfirm ? (
-                        <div className="flex gap-2 items-center">
-                          <span className="text-sm text-rose-600 font-bold">确认清空？</span>
-                          <button onClick={() => { setWrongQuestions([]); setShowClearConfirm(false); }} className="text-sm bg-rose-500 text-white px-3 py-1.5 rounded hover:bg-rose-600">是</button>
-                          <button onClick={() => setShowClearConfirm(false)} className="text-sm bg-slate-200 text-slate-700 px-3 py-1.5 rounded hover:bg-slate-300">否</button>
-                        </div>
-                      ) : (
-                        <div className="flex gap-2">
-                          <button onClick={() => setShowClearConfirm(true)} className="text-sm bg-slate-100 text-slate-600 px-3 py-1.5 rounded hover:bg-slate-200 transition-colors">清空</button>
-                          <button onClick={() => startQuiz('wrong')} className="text-sm bg-rose-500 text-white px-4 py-1.5 rounded hover:bg-rose-600 shadow-sm font-bold transition-colors">▶️ 错题特训</button>
-                        </div>
-                      )
-                    )}
-                </div>
-                {wrongQuestions.length === 0 ? (
-                  <div className="text-slate-500 bg-slate-50 p-6 rounded-xl text-center border border-slate-100">太棒了！当前没有错题记录。</div>
-                ) : (
-                  <div className="space-y-4 max-h-[32rem] overflow-y-auto pr-2">
-                    {wrongQuestions.map((wq, i) => (
-                        <div key={i} className="bg-rose-50 p-4 rounded-xl border border-rose-100 relative">
-                          <span className="absolute top-4 right-4 text-xs font-bold bg-rose-200 text-rose-800 px-2 py-1 rounded">{wq.category}</span>
-                          <p className="font-medium text-slate-800 mb-2 pr-16">{i + 1}. {wq.question}</p>
-                          <p className="text-sm text-emerald-700 font-bold mb-1">正确答案：{wq.answer}</p>
-                          <p className="text-sm text-slate-600">💡 解析：{wq.explanation}</p>
-                        </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <div>
-                <h3 className="text-xl font-bold text-slate-800 mb-4 flex items-center">🕰️ 作答历史</h3>
-                {history.length === 0 ? (
-                  <div className="text-slate-500 bg-slate-50 p-6 rounded-xl text-center border border-slate-100">暂无作答记录。</div>
-                ) : (
-                  <div className="max-h-64 overflow-y-auto border border-slate-100 rounded-xl">
-                    <table className="w-full text-left border-collapse text-sm">
-                      <thead>
-                        <tr className="bg-slate-100 text-slate-600">
-                          <th className="p-3">完成时间</th>
-                          <th className="p-3">测验模式</th>
-                          <th className="p-3">得分</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-100">
-                        {history.map(record => (
-                          <tr key={record.id} className="hover:bg-slate-50 transition-colors">
-                            <td className="p-3 text-slate-600">{record.date}</td>
-                            <td className="p-3"><span className={`px-2 py-1 rounded font-medium text-xs ${record.mode === '错题特训' ? 'bg-rose-100 text-rose-700' : 'bg-blue-100 text-blue-700'}`}>{record.mode}</span></td>
-                            <td className="p-3 font-bold text-indigo-600">{record.score} / {record.total}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        );
-      }
-
-      const currentQuestion = questions[currentIndex];
-
-      return (
-        <div className="max-w-3xl mx-auto animate-fade-in">
-          {!isFinished && (
-            <div className="flex justify-end mb-4">
-              <button onClick={() => setView('records')} className="bg-white border border-slate-200 text-slate-700 px-4 py-2 rounded-xl font-medium hover:bg-slate-50 shadow-sm transition-colors flex items-center">
-                📊 错题本与记录
-                {wrongQuestions.length > 0 && <span className="ml-2 bg-rose-500 text-white text-xs px-2 py-0.5 rounded-full">{wrongQuestions.length}</span>}
-              </button>
-            </div>
-          )}
-
-          {isFinished ? (
-             <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 text-center">
-              <div className="text-5xl mb-4">🎖️</div>
-              <h2 className="text-2xl font-bold mb-2">语法测验完成！</h2>
-              <p className="text-lg text-slate-600 mb-6">得分：<span className="text-blue-600 font-bold text-3xl">{score}</span> / {questions.length}</p>
-              <div className="flex gap-4 justify-center">
-                <button onClick={() => startQuiz('all')} className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 shadow-md font-medium transition-colors">再练一次 (全部)</button>
-                <button onClick={() => setView('records')} className="bg-white border border-slate-200 text-slate-700 px-6 py-3 rounded-lg hover:bg-slate-50 shadow-sm font-medium transition-colors">查看错题分析</button>
-              </div>
-            </div>
-          ) : (
-            <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-6 md:p-8">
-              <div className="flex justify-between items-center mb-6 text-sm font-medium text-slate-500">
-                <div className="flex items-center gap-3">
-                  <span className={`px-3 py-1 rounded-full text-xs ${quizMode === 'wrong' ? 'bg-rose-100 text-rose-700' : 'bg-blue-100 text-blue-800'}`}>
-                    {quizMode === 'wrong' ? '错题特训' : '全部题库'}
-                  </span>
-                  <span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full">考点：{currentQuestion.category}</span>
-                </div>
-                <span>进度：{currentIndex + 1} / {questions.length} &nbsp;|&nbsp; 得分：{score}</span>
-              </div>
-              <div className="w-full bg-slate-100 rounded-full h-2 mb-8">
-                <div className="bg-blue-500 h-2 rounded-full transition-all duration-300" style={{ width: `${((currentIndex + 1) / questions.length) * 100}%` }}></div>
-              </div>
-              <div className="mb-8"><h2 className="text-xl md:text-2xl font-bold text-slate-800 leading-relaxed">{currentQuestion.question}</h2></div>
-              
-              <div className="space-y-3">
-                {currentQuestion.shuffledOptions.map((option, index) => {
-                  let buttonClass = "w-full text-left p-4 rounded-xl border-2 transition-all duration-200 ";
-                  if (!isAnswerRevealed) {
-                    buttonClass += "border-slate-200 hover:border-blue-400 hover:bg-blue-50 text-slate-700";
-                  } else {
-                    if (option === currentQuestion.answer) buttonClass += "border-emerald-500 bg-emerald-50 text-emerald-800 font-medium";
-                    else if (option === selectedOption) buttonClass += "border-rose-500 bg-rose-50 text-rose-800";
-                    else buttonClass += "border-slate-200 bg-slate-50 text-slate-400 opacity-60";
-                  }
-                  return (
-                    <button key={index} onClick={() => handleOptionClick(option)} disabled={isAnswerRevealed} className={buttonClass}>
-                      <div className="flex items-center"><span className="w-8 h-8 flex items-center justify-center bg-white rounded-full border shadow-sm mr-3 text-sm font-bold text-slate-500">{String.fromCharCode(65 + index)}</span><span className="text-lg">{option}</span></div>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {isAnswerRevealed && (
-                <div className="mt-6 p-5 bg-blue-50 border border-blue-200 rounded-xl animate-fade-in">
-                  <h3 className="text-blue-800 font-bold mb-2 flex items-center"><span className="mr-2">💡</span> 知识点解析</h3>
-                  <p className="text-blue-900 leading-relaxed">{currentQuestion.explanation}</p>
-                  <div className="mt-6 flex justify-end">
-                    <button onClick={handleNextQuestion} className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 shadow-sm transition-colors">下一题 ➔</button>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
+        <div id="questions-container" class="space-y-6">
+            <!-- Questions will be generated here by JavaScript -->
         </div>
-      );
-    }
 
-    // --- 模块 3：子组件 变位填空练习 ---
-    const conjugationExercises = [
-      { id: 1, q: "Il ______ (savoir) faire la cuisine.", a: "sait" },
-      { id: 2, q: "Nous ______ (partir) à l'arrêt de bus.", a: "partons" },
-      { id: 3, q: "On ______ (faire) des achats dans le centre commercial.", a: "fait" },
-      { id: 4, q: "Elle ______ (lire) un journal le samedi.", a: "lit" },
-      { id: 5, q: "Je ______ (devoir) rester chez Cécile.", a: "dois" },
-      { id: 6, q: "Hier, je ______ (rester) dans la rue.", a: "suis resté" },
-      { id: 7, q: "Il ______ (lire) ce livre hier soir.", a: "a lu" },
-      { id: 8, q: "Elles ______ (arriver) en ville pour faire des courses.", a: "sont arrivées" },
-      { id: 9, q: "Je ______ bien ce jeune homme. (savoir/connaître)", a: "connais" },
-      { id: 10, q: "Elle ______ faire la cuisine. (savoir/connaître)", a: "sait" }
-    ];
-
-    function ConjugationPractice() {
-      const [inputs, setInputs] = useState(Array(10).fill(''));
-      const [results, setResults] = useState(null);
-
-      const checkAnswers = () => {
-        const res = inputs.map((input, idx) => {
-          const correctAns = conjugationExercises[idx].a.toLowerCase().trim();
-          if (idx === 5 && (input.toLowerCase().trim() === 'suis resté' || input.toLowerCase().trim() === 'suis restée')) return true;
-          return input.toLowerCase().trim() === correctAns;
-        });
-        setResults(res);
-      };
-
-      return (
-        <div className="mt-12 border-t pt-8 border-slate-200">
-          <h3 className="text-2xl font-bold text-indigo-800 mb-6 flex items-center">✍️ 动词变位填空实战</h3>
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 space-y-6">
-            {conjugationExercises.map((ex, index) => {
-              const parts = ex.q.split('______');
-              return (
-                <div key={ex.id} className="flex flex-col md:flex-row md:items-center gap-3 text-lg text-slate-700 border-b border-slate-100 pb-4 last:border-0">
-                  <div className="flex-1 flex flex-wrap items-center gap-2">
-                    <span>{parts[0]}</span>
-                    <input 
-                      type="text" 
-                      className={`w-32 px-3 py-1 border-b-2 bg-slate-50 focus:outline-none text-center font-medium
-                        ${results ? (results[index] ? 'border-emerald-500 text-emerald-700' : 'border-rose-500 text-rose-700') : 'border-slate-300 focus:border-indigo-500'}`}
-                      value={inputs[index]}
-                      onChange={(e) => {
-                        const newInputs = [...inputs];
-                        newInputs[index] = e.target.value;
-                        setInputs(newInputs);
-                        setResults(null);
-                      }}
-                      placeholder="变位"
-                    />
-                    <span>{parts[1]}</span>
-                  </div>
-                  {results && !results[index] && (
-                    <div className="text-sm font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-md">正确: {ex.a}</div>
-                  )}
-                  {results && results[index] && (
-                    <div className="text-sm text-emerald-500">✅</div>
-                  )}
-                </div>
-              );
-            })}
-            <div className="pt-4 flex justify-end">
-              <button onClick={checkAnswers} className="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 shadow-sm">提交检查</button>
+        <div class="mt-10 flex flex-col sm:flex-row items-center justify-between border-t pt-6 gap-4">
+            <div id="score-display" class="text-xl font-bold text-gray-800 hidden">
+                Score: <span id="score-value" class="text-indigo-600">0</span> / 13
             </div>
-          </div>
-        </div>
-      );
-    }
-
-    // --- 模块 3：子组件 命令式与代词连用互动练习 ---
-    function ImperativePronounPractice() {
-      const exercises = [
-        { id: 1, q: "Est-ce que je peux écrire ", highlight: "à mes parents", qEnd: " ?", a: "Écris-leur !" },
-        { id: 2, q: "Est-ce que je dois prendre ", highlight: "une photo", qEnd: " ?", a: "Prenez-la ! / Prends-la !" },
-        { id: 3, q: "Est-ce que je peux rester ", highlight: "dans la maison", qEnd: " ?", a: "Restes-y ! / Restez-y !" },
-        { id: 4, q: "Est-ce que nous pouvons parler ", highlight: "de ce sujet", qEnd: " ?", a: "Parlons-en !" }
-      ];
-      const [revealed, setRevealed] = useState({});
-
-      const toggleReveal = (id) => {
-        setRevealed(prev => ({ ...prev, [id]: !prev[id] }));
-      };
-
-      return (
-        <div className="space-y-4">
-          {exercises.map(ex => (
-            <div key={ex.id} className="bg-white border-2 border-indigo-100 rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm hover:shadow transition-shadow">
-              <div className="text-slate-800 font-medium">
-                {ex.q} <span className="text-rose-600 font-bold underline decoration-rose-200 decoration-2 underline-offset-4">{ex.highlight}</span>{ex.qEnd}
-              </div>
-              <div className="flex items-center gap-3">
-                <button 
-                  onClick={() => toggleReveal(ex.id)} 
-                  className={`min-w-[90px] px-3 py-1.5 text-sm font-bold rounded-lg transition-colors 
-                    ${revealed[ex.id] ? 'bg-slate-200 text-slate-600 hover:bg-slate-300' : 'bg-indigo-600 text-white hover:bg-indigo-700'}`}
-                >
-                  {revealed[ex.id] ? '隐藏答案' : '显示答案'}
+            <div class="flex gap-4 w-full sm:w-auto">
+                <button id="reset-btn" class="flex-1 sm:flex-none px-6 py-2.5 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors">
+                    Reset
                 </button>
-                {revealed[ex.id] && (
-                  <span className="text-emerald-700 font-black text-lg animate-fade-in">{ex.a}</span>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-      );
-    }
-
-    // --- 模块 3：知识库 ---
-    function KnowledgeBase() {
-      const [activeSection, setActiveSection] = useState('verbs'); 
-      
-      const sections = [
-        { id: 'prepositions', title: '介词 (Prépositions)', icon: '📍' },
-        { id: 'articles', title: '冠词 (Articles)', icon: '📖' },
-        { id: 'pronouns', title: '代词 (Pronoms)', icon: '👤' },
-        { id: 'verbs', title: '动词与语式 (Verbes)', icon: '⚡' },
-        { id: 'structure', title: '句子结构 (Structure)', icon: '🏗️' },
-        { id: 'conjugation', title: '动词变位大全 (Conjugaison)', icon: '🔄' }
-      ];
-
-      const conjugationData = [
-        { infinitive: 'être', meaning: '是', pp: 'été', aux: 'avoir', present: [['je', 'suis', 'nous', 'sommes'], ['tu', 'es', 'vous', 'êtes'], ['il/elle', 'est', 'ils/elles', 'sont']] },
-        { infinitive: 'avoir', meaning: '有', pp: 'eu', aux: 'avoir', present: [['j\'', 'ai', 'nous', 'avons'], ['tu', 'as', 'vous', 'avez'], ['il/elle', 'a', 'ils/elles', 'ont']] },
-        { infinitive: 'aller', meaning: '去', pp: 'allé', aux: 'être', present: [['je', 'vais', 'nous', 'allons'], ['tu', 'vas', 'vous', 'allez'], ['il/elle', 'va', 'ils/elles', 'vont']] },
-        { infinitive: 'venir', meaning: '来', pp: 'venu', aux: 'être', present: [['je', 'viens', 'nous', 'venons'], ['tu', 'viens', 'vous', 'venez'], ['il/elle', 'vient', 'ils/elles', 'viennent']] },
-        { infinitive: 'prendre', meaning: '拿/吃', pp: 'pris', aux: 'avoir', present: [['je', 'prends', 'nous', 'prenons'], ['tu', 'prends', 'vous', 'prenez'], ['il/elle', 'prend', 'ils/elles', 'prennent']] },
-        { infinitive: 'lire', meaning: '读', pp: 'lu', aux: 'avoir', present: [['je', 'lis', 'nous', 'lisons'], ['tu', 'lis', 'vous', 'lisez'], ['il/elle', 'lit', 'ils/elles', 'lisent']] },
-        { infinitive: 'faire', meaning: '做/从事', pp: 'fait', aux: 'avoir', present: [['je', 'fais', 'nous', 'faisons'], ['tu', 'fais', 'vous', 'faites'], ['il/elle', 'fait', 'ils/elles', 'font']] },
-        { infinitive: 'dire', meaning: '说', pp: 'dit', aux: 'avoir', present: [['je', 'dis', 'nous', 'disons'], ['tu', 'dis', 'vous', 'dites'], ['il/elle', 'dit', 'ils/elles', 'disent']] },
-        { infinitive: 'voir', meaning: '看见', pp: 'vu', aux: 'avoir', present: [['je', 'vois', 'nous', 'voyons'], ['tu', 'vois', 'vous', 'voyez'], ['il/elle', 'voit', 'ils/elles', 'voient']] },
-        { infinitive: 'savoir', meaning: '知道/会', pp: 'su', aux: 'avoir', present: [['je', 'sais', 'nous', 'savons'], ['tu', 'sais', 'vous', 'savez'], ['il/elle', 'sait', 'ils/elles', 'savent']] },
-        { infinitive: 'connaître', meaning: '认识', pp: 'connu', aux: 'avoir', present: [['je', 'connais', 'nous', 'connaissons'], ['tu', 'connais', 'vous', 'connaissez'], ['il/elle', 'connaît', 'ils/elles', 'connaissent']] },
-        { infinitive: 'partir', meaning: '出发/离开', pp: 'parti', aux: 'être', present: [['je', 'pars', 'nous', 'partons'], ['tu', 'pars', 'vous', 'partez'], ['il/elle', 'part', 'ils/elles', 'partent']] },
-        { infinitive: 'rester', meaning: '停留', pp: 'resté', aux: 'être', present: [['je', 'reste', 'nous', 'restons'], ['tu', 'restes', 'vous', 'restez'], ['il/elle', 'reste', 'ils/elles', 'restent']] },
-        { infinitive: 'arriver', meaning: '到达', pp: 'arrivé', aux: 'être', present: [['j\'', 'arrive', 'nous', 'arrivons'], ['tu', 'arrives', 'vous', 'arrivez'], ['il/elle', 'arrive', 'ils/elles', 'arrivent']] },
-        { infinitive: 'rentrer', meaning: '返回/回家', pp: 'rentré', aux: 'être', present: [['je', 'rentre', 'nous', 'rentrons'], ['tu', 'rentres', 'vous', 'rentrez'], ['il/elle', 'rentre', 'ils/elles', 'rentrent']] },
-        { infinitive: 'devoir', meaning: '必须/应该', pp: 'dû', aux: 'avoir', present: [['je', 'dois', 'nous', 'devons'], ['tu', 'dois', 'vous', 'devez'], ['il/elle', 'doit', 'ils/elles', 'doivent']] }
-      ];
-
-      return (
-        <div className="flex flex-col md:flex-row gap-6 animate-fade-in max-w-6xl mx-auto">
-          {/* 侧边导航 */}
-          <div className="md:w-1/4">
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sticky top-6">
-              <h2 className="text-lg font-bold text-slate-800 mb-4 px-2 border-b pb-2">语法目录</h2>
-              <ul className="space-y-1">
-                {sections.map(sec => (
-                  <li key={sec.id}>
-                    <button 
-                      onClick={() => setActiveSection(sec.id)}
-                      className={`w-full text-left px-4 py-3 rounded-xl transition-colors flex items-center font-medium
-                        ${activeSection === sec.id ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-slate-600 hover:bg-slate-50'}`}
-                    >
-                      <span className="mr-3 text-xl">{sec.icon}</span> {sec.title}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          {/* 内容区 */}
-          <div className="md:w-3/4">
-            {activeSection === 'prepositions' && (
-              <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 space-y-8">
-                <h2 className="text-2xl font-bold text-slate-800 flex items-center"><span className="text-3xl mr-3">📍</span>介词核心考点梳理</h2>
-                
-                <div className="space-y-4">
-                  <h3 className="text-lg font-bold text-indigo-700 border-l-4 border-indigo-500 pl-3">位置与方向</h3>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                      <p className="font-bold text-slate-800 text-lg mb-1">au pied de <span className="text-sm font-normal text-slate-500">在...脚下</span></p>
-                      <p className="text-slate-600 text-sm mb-2">描述位于高大事物的底部。</p>
-                      <p className="text-indigo-600 text-sm">例: Notre université est au pied de la montagne.</p>
-                    </div>
-                    <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                      <p className="font-bold text-slate-800 text-lg mb-1">au sommet de <span className="text-sm font-normal text-slate-500">在...顶端</span></p>
-                      <p className="text-slate-600 text-sm mb-2">描述位于山峰、高楼等最高点。</p>
-                      <p className="text-indigo-600 text-sm">例: Au sommet de la montagne, on voit tout.</p>
-                    </div>
-                    <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                      <p className="font-bold text-slate-800 text-lg mb-1">vers <span className="text-sm font-normal text-slate-500">朝向...</span></p>
-                      <p className="text-slate-600 text-sm mb-2">表示移动的方向。</p>
-                      <p className="text-indigo-600 text-sm">例: Ils se dirigent vers le resto-U.</p>
-                    </div>
-                    <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                      <p className="font-bold text-slate-800 text-lg mb-1">sur <span className="text-sm font-normal text-slate-500">在...上 / 朝向</span></p>
-                      <p className="text-slate-600 text-sm mb-2">常考“朝向”用法，用于窗户、房间等。</p>
-                      <p className="text-indigo-600 text-sm">例: Notre maison donne sur la mer.</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <h3 className="text-lg font-bold text-indigo-700 border-l-4 border-indigo-500 pl-3">时间、目的与处所</h3>
-                  <div className="grid md:grid-cols-3 gap-4">
-                    <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                      <p className="font-bold text-slate-800 text-lg mb-1">après <span className="text-sm font-normal text-slate-500">在...后</span></p>
-                      <p className="text-indigo-600 text-sm">Après le travail, il rentre.</p>
-                    </div>
-                    <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                      <p className="font-bold text-slate-800 text-lg mb-1">pour <span className="text-sm font-normal text-slate-500">为了 / 前往</span></p>
-                      <p className="text-indigo-600 text-sm">Nous partons pour Beijing.</p>
-                    </div>
-                    <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                      <p className="font-bold text-slate-800 text-lg mb-1">chez <span className="text-sm font-normal text-slate-500">在某人家/处</span></p>
-                      <p className="text-indigo-600 text-sm">Acheter chez le bouquiniste.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activeSection === 'articles' && (
-              <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 space-y-8">
-                <h2 className="text-2xl font-bold text-slate-800 flex items-center"><span className="text-3xl mr-3">📖</span>冠词省略与部分冠词</h2>
-                
-                <div className="bg-yellow-50 border border-yellow-200 p-5 rounded-xl">
-                  <h3 className="font-bold text-yellow-800 mb-2">⚠️ 核心规则：冠词的省略 (de &gt; d')</h3>
-                  <p className="text-yellow-900 mb-3">当遇到以下情况时，名词前的冠词需要省略，直接用 <strong>de</strong> 连接：</p>
-                  <ul className="list-disc pl-5 space-y-2 text-yellow-800">
-                    <li><strong>绝对否定句中：</strong> Il n’a pas <span className="text-red-500 font-bold">de</span> temps.</li>
-                    <li><strong>基数词后带有量词：</strong> Marie mange deux bols <span className="text-red-500 font-bold">de</span> riz.</li>
-                    <li><strong>数量副词后 (beaucoup, pas mal...)：</strong> Il y a beaucoup <span className="text-red-500 font-bold">de</span> boutiques.</li>
-                  </ul>
-                </div>
-
-                <div className="space-y-4">
-                  <h3 className="text-lg font-bold text-indigo-700 border-l-4 border-indigo-500 pl-3">部分冠词速查表 (表示无法计数的“量”)</h3>
-                  <table className="w-full text-left border-collapse">
-                    <thead>
-                      <tr className="bg-slate-100 text-slate-700">
-                        <th className="p-3 border border-slate-200 rounded-tl-lg">形式</th>
-                        <th className="p-3 border border-slate-200">用法</th>
-                        <th className="p-3 border border-slate-200 rounded-tr-lg">例句</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td className="p-3 border border-slate-200 font-bold text-indigo-600">du</td>
-                        <td className="p-3 border border-slate-200">阳性不可数名词前</td>
-                        <td className="p-3 border border-slate-200">mange du beurre</td>
-                      </tr>
-                      <tr>
-                        <td className="p-3 border border-slate-200 font-bold text-indigo-600">de la</td>
-                        <td className="p-3 border border-slate-200">阴性不可数名词前</td>
-                        <td className="p-3 border border-slate-200">boit de la bière</td>
-                      </tr>
-                      <tr>
-                        <td className="p-3 border border-slate-200 font-bold text-indigo-600">de l'</td>
-                        <td className="p-3 border border-slate-200">元音或哑音h开头的单数名词</td>
-                        <td className="p-3 border border-slate-200">mange de l'huile</td>
-                      </tr>
-                      <tr>
-                        <td className="p-3 border border-slate-200 font-bold text-indigo-600">des</td>
-                        <td className="p-3 border border-slate-200">复数不可数名词前</td>
-                        <td className="p-3 border border-slate-200">achète des fruits</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            )}
-
-            {activeSection === 'pronouns' && (
-              <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 space-y-8">
-                <h2 className="text-2xl font-bold text-slate-800 flex items-center"><span className="text-3xl mr-3">👤</span>宾语代词与副代词</h2>
-
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-blue-50 border border-blue-100 p-5 rounded-xl">
-                    <h3 className="font-bold text-blue-800 mb-3 border-b border-blue-200 pb-2">直接宾语人称代词 (COD)</h3>
-                    <p className="text-sm text-blue-700 mb-4">代替直接宾语（无介词）。<br/><strong className="text-red-500">复合时态前置时，过去分词需性数配合！</strong></p>
-                    <ul className="space-y-2 text-sm text-blue-900">
-                      <li>Je ➔ <strong>me (m')</strong></li>
-                      <li>Tu ➔ <strong>te (t')</strong></li>
-                      <li>Il/Elle ➔ <strong>le/la (l')</strong> <em>(Je le vois)</em></li>
-                      <li>Nous ➔ <strong>nous</strong></li>
-                      <li>Vous ➔ <strong>vous</strong></li>
-                      <li>Ils/Elles ➔ <strong>les</strong> <em>(Je les ai lus)</em></li>
-                    </ul>
-                  </div>
-
-                  <div className="bg-emerald-50 border border-emerald-100 p-5 rounded-xl">
-                    <h3 className="font-bold text-emerald-800 mb-3 border-b border-emerald-200 pb-2">间接宾语人称代词 (COI)</h3>
-                    <p className="text-sm text-emerald-700 mb-4">代替间接宾语（通常由 à 引导的人）。<br/><strong className="text-emerald-600">过去分词永远不与 COI 配合。</strong></p>
-                    <ul className="space-y-2 text-sm text-emerald-900">
-                      <li>Je ➔ <strong>me (m')</strong></li>
-                      <li>Tu ➔ <strong>te (t')</strong></li>
-                      <li>Il/Elle ➔ <strong>lui</strong> <em>(Il lui parle)</em></li>
-                      <li>Nous ➔ <strong>nous</strong></li>
-                      <li>Vous ➔ <strong>vous</strong></li>
-                      <li>Ils/Elles ➔ <strong>leur</strong> <em>(Il leur donne)</em></li>
-                    </ul>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <h3 className="text-lg font-bold text-indigo-700 border-l-4 border-indigo-500 pl-3">自反代词 (Pronoms réfléchis)</h3>
-                  <div className="bg-yellow-50 p-5 rounded-xl border border-yellow-200">
-                    <p className="text-sm text-yellow-900 mb-3">当句子的主语同时也是动作的承受者时，我们使用自反代词，即主语和宾语是同一个人或事物。包含自反代词的动词被称为**代词式动词 (verbes pronominaux)**。</p>
-                    <div className="grid md:grid-cols-2 gap-4 mb-3">
-                      <div>
-                        <p className="font-bold text-yellow-800 mb-1">形式：</p>
-                        <ul className="space-y-1 text-sm text-yellow-800">
-                          <li>Je ➔ <strong>me (m')</strong></li>
-                          <li>Tu ➔ <strong>te (t')</strong></li>
-                          <li>Il/Elle/On ➔ <strong>se (s')</strong></li>
-                          <li>Nous ➔ <strong>nous</strong></li>
-                          <li>Vous ➔ <strong>vous</strong></li>
-                          <li>Ils/Elles ➔ <strong>se (s')</strong></li>
-                        </ul>
-                      </div>
-                      <div>
-                        <p className="font-bold text-yellow-800 mb-1">例句：</p>
-                        <p className="text-sm text-yellow-800">Je <strong>me</strong> lave. (我洗我自己 / 我洗澡)</p>
-                        <p className="text-sm text-yellow-800">Tu <strong>t'</strong>appelles comment ? (你叫什么名字？)</p>
-                        <p className="text-sm text-yellow-800">Ils <strong>se</strong> dirigent vers la bibliothèque. (他们朝图书馆走去)</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <h3 className="text-lg font-bold text-indigo-700 border-l-4 border-indigo-500 pl-3">副代词 en 与 y</h3>
-                  <div className="bg-slate-50 p-5 rounded-xl border border-slate-200">
-                    <div className="mb-4">
-                      <p className="font-bold text-slate-800">📌 副代词 en</p>
-                      <p className="text-sm text-slate-600 mb-1">代替 <strong>de + 名词</strong> (表示数量、种类或来源)。</p>
-                      <p className="text-sm text-indigo-600">例: Voulez-vous des fleurs? - Oui, je peux <strong>en</strong> offrir.</p>
-                      <p className="text-sm text-indigo-600">例: Il n'y <strong>en</strong> a pas beaucoup.</p>
-                    </div>
-                    <div className="border-t border-slate-200 pt-4">
-                      <p className="font-bold text-slate-800">📌 副代词 y</p>
-                      <p className="text-sm text-slate-600 mb-1">代替 <strong>à/dans/sur/sous + 地点名词</strong>。</p>
-                      <p className="text-sm text-indigo-600">例: Tu vas à la bibliothèque? - Oui, j'<strong>y</strong> vais.</p>
-                      <p className="text-sm text-indigo-600">固定结构: Il n'<strong>y</strong> a que cinq magasins.</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <h3 className="text-lg font-bold text-indigo-700 border-l-4 border-indigo-500 pl-3">代词式动词 (se + verbe)</h3>
-                  <div className="bg-rose-50 border border-rose-100 p-5 rounded-xl text-rose-900">
-                    <p className="font-bold mb-2">⚠️ 核心规则：</p>
-                    <p className="text-sm">在复合过去时中，代词式动词的助动词<strong>永远是 être</strong>！且过去分词必须与主语进行性数配合（除绝对不配合的特例之外）。</p>
-                    <p className="text-sm mt-2 text-rose-700">例：Elle <strong>s'est lavée</strong>. / Nous <strong>nous sommes rencontrés</strong> hier.</p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activeSection === 'verbs' && (
-              <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 space-y-8 animate-fade-in">
-                <h2 className="text-2xl font-bold text-slate-800 flex items-center"><span className="text-3xl mr-3">⚡</span>核心动词语式与时态</h2>
-
-                <div className="space-y-4">
-                  <h3 className="text-lg font-bold text-indigo-700 border-l-4 border-indigo-500 pl-3">命令式 (Impératif)</h3>
-                  <div className="bg-slate-50 p-5 rounded-xl border border-slate-200 text-slate-700 text-sm space-y-3">
-                    <p className="text-base font-medium">👉 <strong>规则1：</strong> 由直陈式现在时去掉主语构成（只有 tu, nous, vous 三个人称）。</p>
-                    <p className="text-base font-medium">👉 <strong>规则2：</strong> 第一组动词(-er结尾)的 tu 形式必须去掉词尾的 s。 <span className="text-indigo-600 bg-white px-2 py-0.5 rounded shadow-sm border">Parle! (非 Parles!)</span></p>
-                    <p className="text-base font-medium">👉 <strong>规则3 (肯定式)：</strong> 代词置于动词后，用连字符连接。 <span className="text-indigo-600 bg-white px-2 py-0.5 rounded shadow-sm border">Donne-lui cette lettre.</span></p>
-                    <p className="text-base font-medium">👉 <strong>规则4 (否定式)：</strong> 代词恢复置于动词前。 <span className="text-indigo-600 bg-white px-2 py-0.5 rounded shadow-sm border">Ne le fais pas.</span></p>
-                    
-                    {/* 特殊拼写规则区块 */}
-                    <div className="mt-6 p-4 bg-rose-50 border border-rose-200 rounded-lg shadow-sm">
-                      <p className="font-bold text-rose-800 text-base mb-2">⚠️ 特殊拼写规则（命令式与 y / en 连用）：</p>
-                      <p className="text-rose-700 leading-relaxed text-sm md:text-base">
-                        为了发音方便，第一组动词（-er结尾）的 tu 形式在遇到副代词 <strong>y</strong> 或 <strong>en</strong> 时，
-                        <strong className="text-rose-900 underline decoration-rose-300">必须保留词尾的 "s"</strong>，并用连字符连接！
-                      </p>
-                      <p className="text-rose-600 mt-2 font-medium bg-white/60 p-2 rounded inline-block border border-rose-100">
-                        例：Vas-y ! (去吧) / Manges-en ! (吃点吧) / Restes-y ! (待在那儿)
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* 互动练习区块 */}
-                <div className="space-y-4 pt-4 border-t border-slate-100">
-                  <h3 className="text-lg font-bold text-indigo-700 border-l-4 border-indigo-500 pl-3">📝 实战：用命令式和代词回答句子</h3>
-                  <p className="text-sm text-slate-500 mb-3">点击按钮查看如何使用命令式与代词（注意特殊拼写规则）。</p>
-                  <ImperativePronounPractice />
-                </div>
-
-                <div className="space-y-4 pt-4 border-t border-slate-100">
-                  <h3 className="text-lg font-bold text-indigo-700 border-l-4 border-indigo-500 pl-3">复合过去时 (Passé composé)</h3>
-                  <p className="text-slate-600 text-sm">强调动作的结果或完成性。核心在于<strong>助动词的选择</strong>。</p>
-                  
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="bg-emerald-50 border border-emerald-200 p-4 rounded-xl">
-                      <p className="font-bold text-emerald-800 mb-2">助动词 être</p>
-                      <ul className="list-disc pl-5 text-sm text-emerald-900 space-y-1">
-                        <li>用于位移动词 (aller, venir, partir, arriver...)</li>
-                        <li>用于状态变化动词 (naître, mourir...)</li>
-                        <li>用于所有代词式动词</li>
-                        <li className="font-bold text-rose-500">过去分词必须与主语配合！</li>
-                      </ul>
-                      <p className="text-xs text-emerald-700 mt-2">例: Elles <strong>sont parties</strong>.</p>
-                    </div>
-                    <div className="bg-blue-50 border border-blue-200 p-4 rounded-xl">
-                      <p className="font-bold text-blue-800 mb-2">助动词 avoir</p>
-                      <ul className="list-disc pl-5 text-sm text-blue-900 space-y-1">
-                        <li>用于绝大部分及物和不及物动词</li>
-                        <li>过去分词一般不变</li>
-                        <li className="font-bold text-rose-500">仅当直接宾语前置时需配合！</li>
-                      </ul>
-                      <p className="text-xs text-blue-700 mt-2">例: Nous <strong>avons visité</strong> le musée.</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <h3 className="text-lg font-bold text-indigo-700 border-l-4 border-indigo-500 pl-3">高频动词搭配</h3>
-                  <ul className="bg-white border border-slate-200 rounded-xl divide-y text-sm">
-                    <li className="p-3 flex justify-between"><span className="font-bold">demander à qn de faire</span> <span className="text-slate-500">请求某人做某事</span></li>
-                    <li className="p-3 flex justify-between"><span className="font-bold">savoir faire qch</span> <span className="text-slate-500">懂得/会做某事</span></li>
-                    <li className="p-3 flex justify-between"><span className="font-bold">avoir envie de faire</span> <span className="text-slate-500">想要做某事</span></li>
-                    <li className="p-3 flex justify-between"><span className="font-bold">venir de faire qch</span> <span className="text-slate-500">刚刚做完某事</span></li>
-                    <li className="p-3 flex justify-between"><span className="font-bold">penser à qn/qch</span> <span className="text-slate-500">想念/思考...</span></li>
-                  </ul>
-                </div>
-              </div>
-            )}
-
-            {activeSection === 'structure' && (
-              <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 space-y-8">
-                <h2 className="text-2xl font-bold text-slate-800 flex items-center"><span className="text-3xl mr-3">🏗️</span>核心句子结构</h2>
-
-                <div className="space-y-4">
-                  <h3 className="text-lg font-bold text-indigo-700 border-l-4 border-indigo-500 pl-3">强调句：C'est ... qui / que</h3>
-                  <div className="bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-4">
-                    <div>
-                      <p className="font-bold text-slate-800 mb-1">1. 强调主语：用 <span className="text-indigo-600">qui</span> 引导</p>
-                      <p className="text-sm text-slate-600">注意：强调复数主语时，C'est 变为 Ce sont。从句动词需与前面的主语配合。</p>
-                      <p className="text-sm font-medium mt-1 bg-white inline-block p-2 rounded shadow-sm">
-                        <span className="text-indigo-600">Ce sont</span> Juliette et moi <span className="text-indigo-600">qui</span> sommes en retard.
-                      </p>
-                    </div>
-                    <div className="border-t border-slate-200 pt-4">
-                      <p className="font-bold text-slate-800 mb-1">2. 强调宾语/状语：用 <span className="text-indigo-600">que</span> 引导</p>
-                      <p className="text-sm font-medium mt-1 bg-white inline-block p-2 rounded shadow-sm mb-2 block">
-                        <span className="text-slate-400">强调地点：</span><span className="text-indigo-600">C'est</span> dans un supermarché <span className="text-indigo-600">que</span> Charlotte a fait des achats.
-                      </p>
-                      <p className="text-sm font-medium bg-white inline-block p-2 rounded shadow-sm block">
-                        <span className="text-slate-400">强调时间：</span><span className="text-indigo-600">C'est</span> hier <span className="text-indigo-600">que</span> je l'ai vu.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <h3 className="text-lg font-bold text-indigo-700 border-l-4 border-indigo-500 pl-3">无人称句型 (Il)</h3>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="bg-blue-50 p-4 rounded-xl border border-blue-100">
-                      <p className="font-bold text-blue-800 mb-2">il y a (存在)</p>
-                      <p className="text-sm text-blue-900 mb-2">表示“有”。</p>
-                      <ul className="text-sm text-blue-700 space-y-1">
-                        <li>肯定：Il y a un bus.</li>
-                        <li>否定：Il n'y a pas de bus.</li>
-                        <li>疑问：Y a-t-il un problème?</li>
-                      </ul>
-                    </div>
-                    <div className="bg-emerald-50 p-4 rounded-xl border border-emerald-100">
-                      <p className="font-bold text-emerald-800 mb-2">il faut (需求)</p>
-                      <p className="text-sm text-emerald-900 mb-2">表示“需要/必须”。</p>
-                      <ul className="text-sm text-emerald-700 space-y-1">
-                        <li>+ 名词：Il me faut 2 kilos.</li>
-                        <li>+ 不定式：Il faut aller...</li>
-                        <li>+ que从句：Il faut que tu...</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activeSection === 'conjugation' && (
-              <div className="space-y-8">
-                <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
-                  <h2 className="text-2xl font-bold text-slate-800 flex items-center mb-6"><span className="text-3xl mr-3">🔄</span>必背动词变位字典</h2>
-                  
-                  <div className="grid md:grid-cols-2 gap-6">
-                    {conjugationData.map((verb, index) => (
-                      <div key={index} className="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow">
-                        <div className="bg-indigo-50 px-4 py-3 border-b border-slate-200 flex justify-between items-center">
-                          <h4 className="font-bold text-indigo-800 text-lg m-0">{verb.infinitive} <span className="text-sm font-normal text-indigo-600 ml-1">({verb.meaning})</span></h4>
-                        </div>
-                        <div className="p-0">
-                          <table className="w-full text-sm text-left border-collapse">
-                            <tbody className="divide-y divide-slate-100">
-                              {verb.present.map((row, rIdx) => (
-                                <tr key={rIdx} className="hover:bg-slate-50/50">
-                                  <td className="py-2 pl-4 pr-2 font-medium text-slate-500 w-[20%] bg-slate-50/50">{row[0]}</td>
-                                  <td className="py-2 px-2 text-indigo-700 font-bold w-[30%]">{row[1]}</td>
-                                  <td className="py-2 px-2 font-medium text-slate-500 w-[20%] bg-slate-50/50 border-l border-slate-100">{row[2]}</td>
-                                  <td className="py-2 pr-4 pl-2 text-indigo-700 font-bold w-[30%]">{row[3]}</td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                        <div className="bg-slate-50 px-4 py-2 border-t border-slate-200 text-xs text-slate-500 flex justify-between">
-                          <span><span className="font-medium text-slate-600">P.P:</span> {verb.pp}</span>
-                          <span><span className="font-medium text-slate-600">助动词:</span> <span className={verb.aux === 'être' ? 'text-rose-500 font-bold' : 'text-slate-600 font-medium'}>{verb.aux}</span></span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* 变位填空练习组件 */}
-                  <ConjugationPractice />
-                  
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      );
-    }
-
-    // --- 模块 4：子组件 - 期中考试卷 ---
-    function ExamMidterm() {
-      const [activePart, setActivePart] = useState('part1');
-
-      const [p1Answers, setP1Answers] = useState({});
-      const [p1Score, setP1Score] = useState(null);
-
-      const [p2Answers, setP2Answers] = useState({ A: {}, B: {}, C: {}, D_a: {}, D_b: {} });
-      const [p2Classify, setP2Classify] = useState({ Profession: [], Aliment: [], Famille: [], Temps: [] });
-      const [p2Unclassified, setP2Unclassified] = useState(examData.part2_classify.words);
-      const [selectedWord, setSelectedWord] = useState(null);
-      const [p2Score, setP2Score] = useState(null);
-
-      const [p34Revealed, setP34Revealed] = useState(false);
-      const [p34Scores, setP34Scores] = useState({ p3A: 0, p3B: 0, p4A: 0, p4B: 0 });
-
-      const handleP1Select = (qId, optionIndex) => {
-        if (p1Score !== null) return;
-        setP1Answers({ ...p1Answers, [qId]: optionIndex });
-      };
-
-      const submitP1 = () => {
-        let score = 0;
-        examData.part1_mcq.forEach(q => {
-          if (p1Answers[q.id] !== undefined && q.options[p1Answers[q.id]] === q.answer) {
-            score += 1;
-          }
-        });
-        setP1Score(score);
-      };
-
-      const handleP2Input = (section, qId, value) => {
-        if (p2Score !== null) return;
-        setP2Answers({ ...p2Answers, [section]: { ...p2Answers[section], [qId]: value } });
-      };
-
-      const handleWordClick = (word) => {
-        if (p2Score !== null) return;
-        if (selectedWord === word) setSelectedWord(null);
-        else setSelectedWord(word);
-      };
-
-      const assignWordToCategory = (category) => {
-        if (!selectedWord || p2Score !== null) return;
-        
-        setP2Unclassified(p2Unclassified.filter(w => w !== selectedWord));
-        const newClassify = { ...p2Classify };
-        Object.keys(newClassify).forEach(k => {
-          newClassify[k] = newClassify[k].filter(w => w !== selectedWord);
-        });
-
-        newClassify[category].push(selectedWord);
-        setP2Classify(newClassify);
-        setSelectedWord(null);
-      };
-
-      const unassignWord = (word, category) => {
-        if (p2Score !== null) return;
-        const newClassify = { ...p2Classify };
-        newClassify[category] = newClassify[category].filter(w => w !== word);
-        setP2Classify(newClassify);
-        setP2Unclassified([...p2Unclassified, word]);
-      };
-
-      const submitP2 = () => {
-        let score = 0;
-        ['A', 'B', 'C', 'D_a', 'D_b'].forEach(sec => {
-          examData.part2_fill[sec].forEach(q => {
-            const userAns = (p2Answers[sec][q.id] || '').trim().toLowerCase();
-            const correctAns = q.a.toLowerCase();
-            if (userAns === correctAns) {
-              score += (sec === 'A' || sec === 'D_a' || sec === 'D_b') ? 1 : 0.5;
-            }
-          });
-        });
-        Object.keys(examData.part2_classify.answers).forEach(cat => {
-          p2Classify[cat].forEach(word => {
-            if (examData.part2_classify.answers[cat].includes(word)) {
-              score += 0.5;
-            }
-          });
-        });
-        setP2Score(score);
-      };
-
-      const renderOptions = (q, selectedIdx, showResult) => {
-        return (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-3">
-            {q.options.map((opt, idx) => {
-              const isSelected = selectedIdx === idx;
-              const isCorrect = opt === q.answer;
-              let btnClass = "border rounded-lg px-3 py-2 text-sm text-left transition-colors ";
-              
-              if (!showResult) {
-                btnClass += isSelected ? "bg-indigo-100 border-indigo-400 text-indigo-800 font-bold" : "bg-white border-slate-200 hover:bg-slate-50";
-              } else {
-                if (isCorrect) btnClass += "bg-emerald-100 border-emerald-500 text-emerald-800 font-bold";
-                else if (isSelected && !isCorrect) btnClass += "bg-rose-100 border-rose-500 text-rose-800 line-through";
-                else btnClass += "bg-slate-50 border-slate-200 text-slate-400 opacity-50";
-              }
-
-              return (
-                <button key={idx} disabled={showResult} onClick={() => handleP1Select(q.id, idx)} className={btnClass}>
-                  {String.fromCharCode(65 + idx)}. {opt}
+                <button id="submit-btn" class="flex-1 sm:flex-none px-6 py-2.5 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 shadow-md transition-colors">
+                    Submit Answers
                 </button>
-              );
-            })}
-          </div>
-        );
-      };
-
-      return (
-        <div className="max-w-5xl mx-auto animate-fade-in">
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 mb-6 sticky top-4 z-10">
-            <h2 className="font-bold text-slate-800 mb-3 text-center">期中考试卷导航</h2>
-            <div className="flex flex-wrap gap-2 justify-center">
-              {[
-                { id: 'part1', title: 'I. 单项选择 (25分)' },
-                { id: 'part2', title: 'II. 填空与变位 (35分)' },
-                { id: 'part3', title: 'III. 句子变换 (20分)' },
-                { id: 'part4', title: 'IV. 翻译句子 (20分)' }
-              ].map(tab => (
-                <button 
-                  key={tab.id} onClick={() => setActivePart(tab.id)}
-                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${activePart === tab.id ? 'bg-indigo-600 text-white shadow-md' : 'bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-600'}`}
-                >
-                  {tab.title}
-                </button>
-              ))}
             </div>
-          </div>
-
-          {/* Part 1 */}
-          {activePart === 'part1' && (
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 animate-fade-in">
-              <div className="flex justify-between items-center mb-6 border-b pb-4">
-                <h3 className="text-xl font-bold text-indigo-800">I、单项选择题 (25 * 1 = 25分)</h3>
-                {p1Score !== null && <div className="text-2xl font-black text-emerald-600 bg-emerald-50 px-4 py-1 rounded-lg">得分: {p1Score} / 25</div>}
-              </div>
-              <div className="space-y-6">
-                {examData.part1_mcq.map((q, index) => (
-                  <div key={q.id} className="p-4 bg-slate-50 rounded-xl border border-slate-100">
-                    <p className="font-medium text-slate-800 text-lg">{index + 1}. {q.q}</p>
-                    {renderOptions(q, p1Answers[q.id], p1Score !== null)}
-                  </div>
-                ))}
-              </div>
-              {p1Score === null && (
-                <div className="mt-8 flex justify-center">
-                  <button onClick={submitP1} className="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 shadow-md">提交第一部分</button>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Part 2 */}
-          {activePart === 'part2' && (
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 animate-fade-in space-y-8">
-              <div className="flex justify-between items-center border-b pb-4">
-                <h3 className="text-xl font-bold text-indigo-800">II、填空与变位 (总计 35分)</h3>
-                {p2Score !== null && <div className="text-2xl font-black text-emerald-600 bg-emerald-50 px-4 py-1 rounded-lg">得分: {p2Score} / 35</div>}
-              </div>
-
-              {[
-                { sec: 'A', title: 'A. 用适当的冠词填空 (5 * 1 = 5分)', desc: '如不需要请填 "/"' },
-                { sec: 'B', title: 'B. 用适当的介词补全下列句子 (10 * 0.5 = 5分)', desc: '备选：avec, à, entre, chez, sur, au, de, à, dans, en' },
-                { sec: 'C', title: 'C. 用最适当的重读人称代词或主有形容词填空 (10 * 0.5 = 5分)' },
-                { sec: 'D_a', title: 'D-a. 用括号内动词的直陈式现在时填空 (5 * 1 = 5分)' },
-                { sec: 'D_b', title: 'D-b. 选择合适的动词变位填空，不得重复使用 (5 * 1 = 5分)', desc: '备选词：pleuvoir, commencer, reprendre, payer, boire' },
-              ].map(section => (
-                <div key={section.sec} className="bg-slate-50 p-5 rounded-xl border border-slate-200">
-                  <h4 className="font-bold text-slate-800 mb-1">{section.title}</h4>
-                  {section.desc && <p className="text-sm text-indigo-600 mb-4">{section.desc}</p>}
-                  <div className="space-y-4">
-                    {examData.part2_fill[section.sec].map((q, idx) => {
-                      const parts = q.q.split('__');
-                      const partsD = q.q.split('________');
-                      const finalParts = parts.length > 1 ? parts : partsD;
-                      const userAns = p2Answers[section.sec][q.id] || '';
-                      const isCorrect = userAns.trim().toLowerCase() === q.a.toLowerCase();
-
-                      return (
-                        <div key={q.id} className="flex flex-wrap items-center gap-2 text-slate-700">
-                          <span className="w-5 text-slate-400">{idx + 1}.</span>
-                          <span>{finalParts[0]}</span>
-                          <input 
-                            type="text" disabled={p2Score !== null}
-                            value={userAns} onChange={e => handleP2Input(section.sec, q.id, e.target.value)}
-                            className={`w-24 px-2 py-1 border-b-2 bg-white focus:outline-none text-center font-medium
-                              ${p2Score !== null ? (isCorrect ? 'border-emerald-500 text-emerald-700' : 'border-rose-500 text-rose-700') : 'border-slate-300 focus:border-indigo-500'}`}
-                          />
-                          <span>{finalParts[1]}</span>
-                          {p2Score !== null && !isCorrect && <span className="ml-2 text-sm font-bold text-emerald-600 bg-emerald-100 px-2 rounded">正确: {q.a}</span>}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
-
-              <div className="bg-slate-50 p-5 rounded-xl border border-slate-200">
-                <h4 className="font-bold text-slate-800 mb-4">E. 将以下词语分类 (20 * 0.5 = 10分)</h4>
-                
-                <div className="mb-6 p-4 bg-white border-2 border-dashed border-indigo-200 rounded-xl">
-                  <p className="text-sm text-slate-500 mb-2">待分类词语 (点击选中后，再点击下方类别框放入)：</p>
-                  <div className="flex flex-wrap gap-2">
-                    {p2Unclassified.map(word => (
-                      <button 
-                        key={word} onClick={() => handleWordClick(word)} disabled={p2Score !== null}
-                        className={`px-3 py-1 rounded-lg text-sm font-medium border transition-all ${selectedWord === word ? 'bg-indigo-600 text-white border-indigo-600 shadow-md transform -translate-y-1' : 'bg-white text-slate-700 border-slate-300 hover:border-indigo-400'}`}
-                      >
-                        {word}
-                      </button>
-                    ))}
-                    {p2Unclassified.length === 0 && <span className="text-sm text-emerald-600 font-bold">已全部分类！</span>}
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {['Profession', 'Aliment', 'Famille', 'Temps'].map(cat => (
-                    <div 
-                      key={cat} onClick={() => assignWordToCategory(cat)}
-                      className={`min-h-[150px] p-3 rounded-xl border-2 transition-colors cursor-pointer flex flex-col
-                        ${selectedWord ? 'border-indigo-400 bg-indigo-50/50 hover:bg-indigo-100' : 'border-slate-200 bg-white'}`}
-                    >
-                      <h5 className="font-bold text-center text-indigo-800 border-b pb-2 mb-2">{cat}</h5>
-                      <div className="flex flex-wrap gap-2 flex-grow content-start">
-                        {p2Classify[cat].map(word => {
-                          const isCorrect = examData.part2_classify.answers[cat].includes(word);
-                          return (
-                            <button 
-                              key={word} onClick={(e) => { e.stopPropagation(); unassignWord(word, cat); }} disabled={p2Score !== null}
-                              className={`px-2 py-1 rounded text-xs font-medium text-white shadow-sm flex items-center gap-1
-                                ${p2Score === null ? 'bg-indigo-500 hover:bg-rose-500' : (isCorrect ? 'bg-emerald-500' : 'bg-rose-500')}`}
-                            >
-                              {word} {p2Score === null && <span>×</span>}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {p2Score === null && (
-                <div className="mt-8 flex justify-center">
-                  <button onClick={submitP2} className="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 shadow-md">提交第二部分</button>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Part 3 & 4 (主观题合集) */}
-          {(activePart === 'part3' || activePart === 'part4') && (
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 animate-fade-in">
-              <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6 rounded-r-lg">
-                <p className="text-yellow-800 text-sm">💡 主观题评分说明：请在输入框写下您的答案。完成后点击下方「查看参考答案并评分」，对照标准答案为自己打分。</p>
-              </div>
-
-              {activePart === 'part3' && (
-                <div className="space-y-8">
-                  <h3 className="text-xl font-bold text-indigo-800 border-b pb-2">III、句子变换 (20分)</h3>
-                  
-                  <div className="space-y-6">
-                    <h4 className="font-bold text-slate-700">A. 请用 y 或 en 改写下列句子 (5 * 2 = 10分)</h4>
-                    {examData.part3_transform.A.map((q, idx) => (
-                      <div key={idx} className="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                        <p className="font-medium text-slate-800 mb-2">{idx + 1}. {q.q}</p>
-                        <textarea className="w-full h-16 p-2 text-sm border border-slate-300 rounded focus:border-indigo-500 focus:ring-0 resize-none mb-2" placeholder="输入您的改写..."></textarea>
-                        {p34Revealed && (
-                          <div className="bg-emerald-50 p-3 rounded-lg border border-emerald-100 text-sm">
-                            <span className="font-bold text-emerald-800">参考答案：</span><br/>
-                            {q.a_oui && <span className="text-emerald-700 block">肯定: {q.a_oui}</span>}
-                            {q.a_non && <span className="text-emerald-700 block">否定: {q.a_non}</span>}
-                            {q.a && <span className="text-emerald-700 block">{q.a}</span>}
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="space-y-6">
-                    <h4 className="font-bold text-slate-700">B. 将下列句子改为否定句 (5 * 2 = 10分)</h4>
-                    {examData.part3_transform.B.map((q, idx) => (
-                      <div key={idx} className="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                        <p className="font-medium text-slate-800 mb-2">{idx + 1}. {q.q}</p>
-                        <input type="text" className="w-full p-2 text-sm border border-slate-300 rounded focus:border-indigo-500 mb-2" placeholder="输入否定句..." />
-                        {p34Revealed && (
-                          <div className="bg-emerald-50 p-2 rounded-lg border border-emerald-100 text-sm text-emerald-700 font-medium">参考答案：{q.a}</div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {activePart === 'part4' && (
-                <div className="space-y-8">
-                  <h3 className="text-xl font-bold text-indigo-800 border-b pb-2">IV、翻译句子 (20分)</h3>
-                  
-                  <div className="space-y-6">
-                    <h4 className="font-bold text-slate-700">A. 把下列句子译成法语 (5 * 2 = 10分)</h4>
-                    {examData.part4_translation.A.map((q, idx) => (
-                      <div key={idx} className="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                        <p className="font-medium text-slate-800 mb-2">{idx + 1}. {q.q}</p>
-                        <input type="text" className="w-full p-2 text-sm border border-slate-300 rounded focus:border-indigo-500 mb-2" placeholder="Traduction en français..." />
-                        {p34Revealed && (
-                          <div className="bg-emerald-50 p-2 rounded-lg border border-emerald-100 text-sm text-emerald-700 font-medium">参考答案：{q.a}</div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="space-y-6">
-                    <h4 className="font-bold text-slate-700">B. 把下列句子译成中文 (5 * 2 = 10分)</h4>
-                    {examData.part4_translation.B.map((q, idx) => (
-                      <div key={idx} className="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                        <p className="font-medium text-slate-800 mb-2">{idx + 1}. {q.q}</p>
-                        <input type="text" className="w-full p-2 text-sm border border-slate-300 rounded focus:border-indigo-500 mb-2" placeholder="中文翻译..." />
-                        {p34Revealed && (
-                          <div className="bg-emerald-50 p-2 rounded-lg border border-emerald-100 text-sm text-emerald-700 font-medium">参考答案：{q.a}</div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {!p34Revealed ? (
-                 <div className="mt-8 flex justify-center border-t pt-6">
-                  <button onClick={() => setP34Revealed(true)} className="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 shadow-md">完成作答，查看参考答案</button>
-                </div>
-              ) : (
-                <div className="mt-8 border-t pt-6 text-center">
-                  <h4 className="font-bold text-slate-800 mb-4 text-lg">自我评分板</h4>
-                  <div className="flex flex-wrap justify-center gap-4 mb-4">
-                    {activePart === 'part3' && (
-                      <>
-                        <label className="flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-lg border">
-                          III-A 得分: <input type="number" max="10" min="0" className="w-16 border rounded p-1 text-center" onChange={e => setP34Scores({...p34Scores, p3A: Number(e.target.value)})} /> / 10
-                        </label>
-                        <label className="flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-lg border">
-                          III-B 得分: <input type="number" max="10" min="0" className="w-16 border rounded p-1 text-center" onChange={e => setP34Scores({...p34Scores, p3B: Number(e.target.value)})} /> / 10
-                        </label>
-                      </>
-                    )}
-                    {activePart === 'part4' && (
-                      <>
-                        <label className="flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-lg border">
-                          IV-A 得分: <input type="number" max="10" min="0" className="w-16 border rounded p-1 text-center" onChange={e => setP34Scores({...p34Scores, p4A: Number(e.target.value)})} /> / 10
-                        </label>
-                        <label className="flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-lg border">
-                          IV-B 得分: <input type="number" max="10" min="0" className="w-16 border rounded p-1 text-center" onChange={e => setP34Scores({...p34Scores, p4B: Number(e.target.value)})} /> / 10
-                        </label>
-                      </>
-                    )}
-                  </div>
-                  <div className="text-xl font-black text-indigo-700 bg-indigo-50 inline-block px-6 py-2 rounded-xl">
-                    本页总计得分: {activePart === 'part3' ? p34Scores.p3A + p34Scores.p3B : p34Scores.p4A + p34Scores.p4B} / 20
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
         </div>
-      );
-    }
+    </div>
 
-    // --- 模块 4：子组件 - 核心语法综合测试卷 ---
-    function ExamCoreGrammar() {
-      const [activePart, setActivePart] = useState('part1');
+    <script>
+        const terms = [
+            { id: 1, text: "Software engineering" },
+            { id: 2, text: "Requirement Engineering" },
+            { id: 3, text: "User requirements" },
+            { id: 4, text: "System requirements" },
+            { id: 5, text: "Functional requirements" },
+            { id: 6, text: "Non-functional requirements" },
+            { id: 7, text: "Use cases" },
+            { id: 8, text: "Class diagrams" },
+            { id: 9, text: "Architectural design" },
+            { id: 10, text: "Architecture patterns" },
+            { id: 11, text: "Scrum" },
+            { id: 12, text: "Design pattern" },
+            { id: 13, text: "Scenarios" }
+        ];
 
-      const [p1Answers, setP1Answers] = useState({});
-      const [p1Score, setP1Score] = useState(null);
+        const questions = [
+            { id: 1, prefix: "", suffix: " is centered round a set of sprints which are fixed time periods when a system increment is developed.", answerId: 11 },
+            { id: 2, prefix: "", suffix: " define what should be implemented so may be part of a contract between client and contractor.", answerId: 4 },
+            { id: 3, prefix: "", suffix: " describe the architecture, explain when it may be used and describe its advantages and disadvantages.", answerId: 10 },
+            { id: 4, prefix: "", suffix: " is concerned with understanding how a software system should be organized and designing the overall structure.", answerId: 9 },
+            { id: 5, prefix: "", suffix: " is the process of establishing the services that a customer requires from a system.", answerId: 2 },
+            { id: 6, prefix: "", suffix: " constrain the system being developed and the development process being used.", answerId: 6 },
+            { id: 7, prefix: "Software design and implementation is the stage in the ", suffix: " process at which an executable software system is developed.", answerId: 1 },
+            { id: 8, prefix: "", suffix: " are statements in natural language plus diagrams of the services the system provides and its operational constraints. Written for customers.", answerId: 3 },
+            { id: 9, prefix: "", suffix: " are statements of services the system should provide, how the system should react to particular inputs and how the system should behave in particular situations.", answerId: 5 },
+            { id: 10, prefix: "Each ", suffix: " represents a discrete task that involves external interaction with a system.", answerId: 7 },
+            { id: 11, prefix: "", suffix: " are used when developing an object-oriented system model to show the classes in a system and the associations between these classes.", answerId: 8 },
+            { id: 12, prefix: "A ", suffix: " is a way of reusing abstract knowledge about a problem and its solution.", answerId: 12 },
+            { id: 13, prefix: "", suffix: " and user stories are real-life examples of how a system can be used.", answerId: 13 }
+        ];
 
-      const [p2Answers, setP2Answers] = useState({ A: {}, B: {}, C: {} });
-      const [p2Score, setP2Score] = useState(null);
+        let draggedElement = null;
 
-      const [p34Revealed, setP34Revealed] = useState(false);
-      const [p34Scores, setP34Scores] = useState({ p3A: 0, p3B: 0, p4A: 0, p4B: 0 });
+        function initApp() {
+            renderTermsBank();
+            renderQuestions();
+            setupEventListeners();
+        }
 
-      const handleP1Select = (qId, optionIndex) => {
-        if (p1Score !== null) return;
-        setP1Answers({ ...p1Answers, [qId]: optionIndex });
-      };
-
-      const submitP1 = () => {
-        let score = 0;
-        exam2Data.part1_mcq.forEach(q => {
-          if (p1Answers[q.id] !== undefined && q.options[p1Answers[q.id]] === q.answer) {
-            score += 1;
-          }
-        });
-        setP1Score(score);
-      };
-
-      const handleP2Input = (section, qId, value) => {
-        if (p2Score !== null) return;
-        setP2Answers({ ...p2Answers, [section]: { ...p2Answers[section], [qId]: value } });
-      };
-
-      const submitP2 = () => {
-        let score = 0;
-        ['A', 'B', 'C'].forEach(sec => {
-          exam2Data.part2_fill[sec].forEach(q => {
-            const userAns = (p2Answers[sec][q.id] || '').trim().toLowerCase();
-            const correctAns = q.a.toLowerCase();
-            if (userAns === correctAns || userAns === correctAns + '!') {
-              score += 1;
-            }
-          });
-        });
-        setP2Score(score);
-      };
-
-      const renderOptions = (q, selectedIdx, showResult) => {
-        return (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-3">
-            {q.options.map((opt, idx) => {
-              const isSelected = selectedIdx === idx;
-              const isCorrect = opt === q.answer;
-              let btnClass = "border rounded-lg px-3 py-2 text-sm text-left transition-colors ";
-              
-              if (!showResult) {
-                btnClass += isSelected ? "bg-indigo-100 border-indigo-400 text-indigo-800 font-bold" : "bg-white border-slate-200 hover:bg-slate-50";
-              } else {
-                if (isCorrect) btnClass += "bg-emerald-100 border-emerald-500 text-emerald-800 font-bold";
-                else if (isSelected && !isCorrect) btnClass += "bg-rose-100 border-rose-500 text-rose-800 line-through";
-                else btnClass += "bg-slate-50 border-slate-200 text-slate-400 opacity-50";
-              }
-
-              return (
-                <button key={idx} disabled={showResult} onClick={() => handleP1Select(q.id, idx)} className={btnClass}>
-                  {String.fromCharCode(65 + idx)}. {opt}
-                </button>
-              );
-            })}
-          </div>
-        );
-      };
-
-      return (
-        <div className="animate-fade-in">
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 mb-6 sticky top-4 z-10">
-            <h2 className="font-bold text-slate-800 mb-3 text-center">核心语法综合卷导航</h2>
-            <div className="flex flex-wrap gap-2 justify-center">
-              {[
-                { id: 'part1', title: 'I. 单项选择 (25分)' },
-                { id: 'part2', title: 'II. 填空与动词变位 (10分)' },
-                { id: 'part3', title: 'III. 句子变换 (10分)' },
-                { id: 'part4', title: 'IV. 翻译句子 (25分)' }
-              ].map(tab => (
-                <button 
-                  key={tab.id} onClick={() => setActivePart(tab.id)}
-                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${activePart === tab.id ? 'bg-indigo-600 text-white shadow-md' : 'bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-600'}`}
-                >
-                  {tab.title}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Part 1 */}
-          {activePart === 'part1' && (
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 animate-fade-in">
-              <div className="flex justify-between items-center mb-6 border-b pb-4">
-                <h3 className="text-xl font-bold text-indigo-800">I、单项选择题 (25 * 1 = 25分)</h3>
-                {p1Score !== null && <div className="text-2xl font-black text-emerald-600 bg-emerald-50 px-4 py-1 rounded-lg">得分: {p1Score} / 25</div>}
-              </div>
-              <div className="space-y-6">
-                {exam2Data.part1_mcq.map((q, index) => (
-                  <div key={q.id} className="p-4 bg-slate-50 rounded-xl border border-slate-100">
-                    <p className="font-medium text-slate-800 text-lg">{index + 1}. {q.q}</p>
-                    {renderOptions(q, p1Answers[q.id], p1Score !== null)}
-                  </div>
-                ))}
-              </div>
-              {p1Score === null && (
-                <div className="mt-8 flex justify-center">
-                  <button onClick={submitP1} className="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 shadow-md">提交第一部分</button>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Part 2 */}
-          {activePart === 'part2' && (
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 animate-fade-in space-y-8">
-              <div className="flex justify-between items-center border-b pb-4">
-                <h3 className="text-xl font-bold text-indigo-800">II、填空与动词变位 (总计 10分)</h3>
-                {p2Score !== null && <div className="text-2xl font-black text-emerald-600 bg-emerald-50 px-4 py-1 rounded-lg">得分: {p2Score} / 10</div>}
-              </div>
-
-              {[
-                { sec: 'A', title: 'A. 词汇辨析：使用savoir或connaître的直陈式现在时填空 (2 * 1 = 2分)' },
-                { sec: 'B', title: 'B. 动词变位：将括号内的动词变为直陈式现在时 (5 * 1 = 5分)' },
-                { sec: 'C', title: 'C. 动词变位：将下列句子变为复合过去时 (3 * 1 = 3分)' }
-              ].map(section => (
-                <div key={section.sec} className="bg-slate-50 p-5 rounded-xl border border-slate-200">
-                  <h4 className="font-bold text-slate-800 mb-4">{section.title}</h4>
-                  <div className="space-y-4">
-                    {exam2Data.part2_fill[section.sec].map((q, idx) => {
-                      const parts = q.q.split('________');
-                      const userAns = p2Answers[section.sec][q.id] || '';
-                      const isCorrect = userAns.trim().toLowerCase() === q.a.toLowerCase() || userAns.trim().toLowerCase() === q.a.toLowerCase() + '!';
-
-                      return (
-                        <div key={q.id} className="flex flex-wrap items-center gap-2 text-slate-700">
-                          <span className="w-5 text-slate-400">{idx + 1}.</span>
-                          <span>{parts[0]}</span>
-                          <input 
-                            type="text" disabled={p2Score !== null}
-                            value={userAns} onChange={e => handleP2Input(section.sec, q.id, e.target.value)}
-                            className={`w-32 px-2 py-1 border-b-2 bg-white focus:outline-none text-center font-medium
-                              ${p2Score !== null ? (isCorrect ? 'border-emerald-500 text-emerald-700' : 'border-rose-500 text-rose-700') : 'border-slate-300 focus:border-indigo-500'}`}
-                          />
-                          <span>{parts[1]}</span>
-                          {p2Score !== null && !isCorrect && <span className="ml-2 text-sm font-bold text-emerald-600 bg-emerald-100 px-2 rounded">正确: {q.a}</span>}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
-
-              {p2Score === null && (
-                <div className="mt-8 flex justify-center">
-                  <button onClick={submitP2} className="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 shadow-md">提交第二部分</button>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Part 3 & 4 (主观题合集) */}
-          {(activePart === 'part3' || activePart === 'part4') && (
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 animate-fade-in">
-              <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6 rounded-r-lg">
-                <p className="text-yellow-800 text-sm">💡 主观题评分说明：请在输入框写下您的答案。完成后点击下方「查看参考答案并评分」，对照标准答案为自己打分。</p>
-              </div>
-
-              {activePart === 'part3' && (
-                <div className="space-y-8">
-                  <h3 className="text-xl font-bold text-indigo-800 border-b pb-2">III、句子变换 (10分)</h3>
-                  
-                  <div className="space-y-6">
-                    <h4 className="font-bold text-slate-700">A. 强调句转换（请使用 C'est... qui / C'est... que / Ce sont... qui 结构重写句子）</h4>
-                    {exam2Data.part3_transform.A.map((q, idx) => (
-                      <div key={idx} className="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                        <p className="font-medium text-slate-800 mb-2">{idx + 1}. {q.q}</p>
-                        <textarea className="w-full h-16 p-2 text-sm border border-slate-300 rounded focus:border-indigo-500 focus:ring-0 resize-none mb-2" placeholder="输入您的改写..."></textarea>
-                        {p34Revealed && (
-                          <div className="bg-emerald-50 p-3 rounded-lg border border-emerald-100 text-sm text-emerald-700 font-medium">参考答案：{q.a}</div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="space-y-6">
-                    <h4 className="font-bold text-slate-700">B. 命令式转换</h4>
-                    {exam2Data.part3_transform.B.map((q, idx) => (
-                      <div key={idx} className="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                        <p className="font-medium text-slate-800 mb-2">{idx + 1}. {q.q}</p>
-                        <input type="text" className="w-full p-2 text-sm border border-slate-300 rounded focus:border-indigo-500 mb-2" placeholder="输入命令式..." />
-                        {p34Revealed && (
-                          <div className="bg-emerald-50 p-2 rounded-lg border border-emerald-100 text-sm text-emerald-700 font-medium">参考答案：{q.a}</div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {activePart === 'part4' && (
-                <div className="space-y-8">
-                  <h3 className="text-xl font-bold text-indigo-800 border-b pb-2">IV、翻译句子 (25分)</h3>
-                  
-                  <div className="space-y-6">
-                    <h4 className="font-bold text-slate-700">A. 法译汉 (把下列句子译成中文)</h4>
-                    {exam2Data.part4_translation.A.map((q, idx) => (
-                      <div key={idx} className="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                        <p className="font-medium text-slate-800 mb-2">{idx + 1}. {q.q}</p>
-                        <input type="text" className="w-full p-2 text-sm border border-slate-300 rounded focus:border-indigo-500 mb-2" placeholder="中文翻译..." />
-                        {p34Revealed && (
-                          <div className="bg-emerald-50 p-2 rounded-lg border border-emerald-100 text-sm text-emerald-700 font-medium">参考答案：{q.a}</div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="space-y-6">
-                    <h4 className="font-bold text-slate-700">B. 汉译法 (把下列句子译成法语)</h4>
-                    {exam2Data.part4_translation.B.map((q, idx) => (
-                      <div key={idx} className="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                        <p className="font-medium text-slate-800 mb-2">{idx + 1}. {q.q}</p>
-                        <input type="text" className="w-full p-2 text-sm border border-slate-300 rounded focus:border-indigo-500 mb-2" placeholder="Traduction en français..." />
-                        {p34Revealed && (
-                          <div className="bg-emerald-50 p-2 rounded-lg border border-emerald-100 text-sm text-emerald-700 font-medium">参考答案：{q.a}</div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {!p34Revealed ? (
-                 <div className="mt-8 flex justify-center border-t pt-6">
-                  <button onClick={() => setP34Revealed(true)} className="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 shadow-md">完成作答，查看参考答案</button>
-                </div>
-              ) : (
-                <div className="mt-8 border-t pt-6 text-center">
-                  <h4 className="font-bold text-slate-800 mb-4 text-lg">自我评分板</h4>
-                  <div className="flex flex-wrap justify-center gap-4 mb-4">
-                    {activePart === 'part3' && (
-                      <>
-                        <label className="flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-lg border">
-                          III-A 得分: <input type="number" max="10" min="0" className="w-16 border rounded p-1 text-center" onChange={e => setP34Scores({...p34Scores, p3A: Number(e.target.value)})} />
-                        </label>
-                        <label className="flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-lg border">
-                          III-B 得分: <input type="number" max="10" min="0" className="w-16 border rounded p-1 text-center" onChange={e => setP34Scores({...p34Scores, p3B: Number(e.target.value)})} />
-                        </label>
-                      </>
-                    )}
-                    {activePart === 'part4' && (
-                      <>
-                        <label className="flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-lg border">
-                          IV-A 得分: <input type="number" max="10" min="0" className="w-16 border rounded p-1 text-center" onChange={e => setP34Scores({...p34Scores, p4A: Number(e.target.value)})} />
-                        </label>
-                        <label className="flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-lg border">
-                          IV-B 得分: <input type="number" max="10" min="0" className="w-16 border rounded p-1 text-center" onChange={e => setP34Scores({...p34Scores, p4B: Number(e.target.value)})} />
-                        </label>
-                      </>
-                    )}
-                  </div>
-                  <div className="text-xl font-black text-indigo-700 bg-indigo-50 inline-block px-6 py-2 rounded-xl">
-                    本页总计得分: {activePart === 'part3' ? p34Scores.p3A + p34Scores.p3B : p34Scores.p4A + p34Scores.p4B}
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-        </div>
-      );
-    }
-
-    // --- 模块 5：全卷检测页面 (整合入口) ---
-    function FullExam() {
-      const [activePaper, setActivePaper] = useState('midterm');
-
-      return (
-        <div className="max-w-5xl mx-auto animate-fade-in">
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 mb-6 flex justify-center gap-4">
-            <button 
-              onClick={() => setActivePaper('midterm')}
-              className={`px-6 py-2 rounded-xl font-bold transition-all ${activePaper === 'midterm' ? 'bg-rose-600 text-white shadow-md' : 'bg-slate-100 text-slate-500 hover:bg-rose-50 hover:text-rose-600'}`}
-            >
-              📝 试卷一：期中考综合卷
-            </button>
-            <button 
-              onClick={() => setActivePaper('core')}
-              className={`px-6 py-2 rounded-xl font-bold transition-all ${activePaper === 'core' ? 'bg-indigo-600 text-white shadow-md' : 'bg-slate-100 text-slate-500 hover:bg-indigo-50 hover:text-indigo-600'}`}
-            >
-              📘 试卷二：核心语法综合测试
-            </button>
-          </div>
-
-          {activePaper === 'midterm' ? <ExamMidterm /> : <ExamCoreGrammar />}
-        </div>
-      );
-    }
-
-    // --- 根组件 App ---
-    function App() {
-      // 回到默认的翻译训练界面，方便检查新功能
-      const [activeModule, setActiveModule] = useState('translation'); 
-
-      return (
-        <div className="min-h-screen bg-slate-50 text-slate-800 font-sans p-4 md:p-8">
-          
-          {/* 顶部导航 */}
-          <div className="max-w-6xl mx-auto mb-8">
-            <h1 className="text-3xl md:text-4xl font-black text-center text-indigo-800 tracking-tight mb-8 drop-shadow-sm">
-              法语翻译与语法综合系统
-            </h1>
+        function renderTermsBank() {
+            const bank = document.getElementById('term-bank');
+            bank.innerHTML = '';
             
-            <div className="flex justify-center flex-wrap gap-2">
-              <div className="inline-flex bg-white rounded-2xl shadow-sm p-1.5 border border-slate-200 overflow-x-auto">
-                <button 
-                  onClick={() => setActiveModule('translation')}
-                  className={`whitespace-nowrap px-4 py-3 rounded-xl font-bold text-sm md:text-base transition-all ${activeModule === 'translation' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-50 hover:text-indigo-600'}`}
-                >
-                  🌍 翻译训练
-                </button>
-                <button 
-                  onClick={() => setActiveModule('review')}
-                  className={`whitespace-nowrap px-4 py-3 rounded-xl font-bold text-sm md:text-base transition-all ${activeModule === 'review' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-50 hover:text-indigo-600'}`}
-                >
-                  📖 翻译速记
-                </button>
-                <button 
-                  onClick={() => setActiveModule('grammar')}
-                  className={`whitespace-nowrap px-4 py-3 rounded-xl font-bold text-sm md:text-base transition-all ${activeModule === 'grammar' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-50 hover:text-indigo-600'}`}
-                >
-                  📝 语法题库
-                </button>
-                <button 
-                  onClick={() => setActiveModule('knowledge')}
-                  className={`whitespace-nowrap px-4 py-3 rounded-xl font-bold text-sm md:text-base transition-all ${activeModule === 'knowledge' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-50 hover:text-indigo-600'}`}
-                >
-                  📚 知识库大全
-                </button>
-                <button 
-                  onClick={() => setActiveModule('fullexam')}
-                  className={`whitespace-nowrap px-4 py-3 rounded-xl font-bold text-sm md:text-base transition-all ${activeModule === 'fullexam' ? 'bg-rose-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-50 hover:text-rose-600'}`}
-                >
-                  ⏱️ 全卷检测
-                </button>
-              </div>
-            </div>
-          </div>
+            // Randomize terms for display
+            const shuffledTerms = [...terms].sort(() => Math.random() - 0.5);
 
-          {/* 模块路由展示 */}
-          {activeModule === 'translation' && <TranslationQuiz />}
-          {activeModule === 'review' && <TranslationReview />}
-          {activeModule === 'grammar' && <GrammarQuiz />}
-          {activeModule === 'knowledge' && <KnowledgeBase />}
-          {activeModule === 'fullexam' && <FullExam />}
+            shuffledTerms.forEach(term => {
+                const termEl = createTermElement(term);
+                bank.appendChild(termEl);
+            });
+        }
 
-        </div>
-      );
-    }
+        function createTermElement(term) {
+            const el = document.createElement('div');
+            el.className = 'draggable-item bg-white border border-gray-300 text-gray-800 px-3 py-1.5 rounded shadow-sm text-sm font-medium hover:bg-gray-50';
+            el.draggable = true;
+            el.dataset.id = term.id;
+            // Add numbering visual as in the original image
+            el.innerHTML = `<span class="text-gray-400 mr-1">①</span> ${term.text}`.replace('①', `&#${10111 + term.id};`);
+            
+            el.addEventListener('dragstart', handleDragStart);
+            el.addEventListener('dragend', handleDragEnd);
+            el.addEventListener('click', handleTermClick);
+            
+            return el;
+        }
 
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<App />);
-  </script>
+        function renderQuestions() {
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
+
+            questions.forEach((q, index) => {
+                const qDiv = document.createElement('div');
+                qDiv.className = 'text-base text-gray-800 question-text flex items-baseline flex-wrap';
+                
+                const numSpan = document.createElement('span');
+                numSpan.className = 'font-bold mr-2 text-gray-900 w-8 inline-block';
+                numSpan.textContent = `1.${index + 1}.`;
+
+                const prefixSpan = document.createElement('span');
+                prefixSpan.textContent = q.prefix;
+
+                const dropZone = document.createElement('div');
+                dropZone.className = 'drop-zone';
+                dropZone.dataset.questionId = q.id;
+                
+                const suffixSpan = document.createElement('span');
+                suffixSpan.textContent = q.suffix;
+
+                qDiv.appendChild(numSpan);
+                if (q.prefix) qDiv.appendChild(prefixSpan);
+                qDiv.appendChild(dropZone);
+                if (q.suffix) qDiv.appendChild(suffixSpan);
+
+                // Add Drag & Drop events for dropzone
+                dropZone.addEventListener('dragover', handleDragOver);
+                dropZone.addEventListener('dragleave', handleDragLeave);
+                dropZone.addEventListener('drop', handleDrop);
+
+                container.appendChild(qDiv);
+            });
+        }
+
+        function handleDragStart(e) {
+            draggedElement = this;
+            e.dataTransfer.effectAllowed = 'move';
+            // Slight delay to allow visually moving it before hiding original
+            setTimeout(() => {
+                if(draggedElement.parentElement.id !== 'term-bank') {
+                     // If we are dragging FROM a dropzone, we don't hide it completely, just let it drag
+                } else {
+                    this.style.opacity = '0.5';
+                }
+            }, 0);
+        }
+
+        function handleDragEnd(e) {
+            this.style.opacity = '1';
+            draggedElement = null;
+            document.querySelectorAll('.drop-zone').forEach(z => z.classList.remove('drag-over'));
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault(); 
+            e.dataTransfer.dropEffect = 'move';
+            this.classList.add('drag-over');
+            return false;
+        }
+
+        function handleDragLeave(e) {
+            this.classList.remove('drag-over');
+        }
+
+        function handleDrop(e) {
+            e.stopPropagation();
+            this.classList.remove('drag-over');
+            
+            // Remove previous styling if any
+            this.classList.remove('correct-answer', 'wrong-answer');
+
+            if (draggedElement) {
+                // If there's already an item in this dropzone, send it back to bank
+                const existingItem = this.querySelector('.draggable-item');
+                if (existingItem) {
+                    document.getElementById('term-bank').appendChild(existingItem);
+                }
+                // Append the dragged item to the dropzone
+                this.appendChild(draggedElement);
+            }
+            return false;
+        }
+
+        // Clicking a term inside a drop zone returns it to the bank
+        function handleTermClick(e) {
+            if (this.parentElement.classList.contains('drop-zone')) {
+                // Remove grading classes from parent
+                this.parentElement.classList.remove('correct-answer', 'wrong-answer');
+                document.getElementById('term-bank').appendChild(this);
+            }
+        }
+
+        function setupEventListeners() {
+            document.getElementById('submit-btn').addEventListener('click', checkAnswers);
+            document.getElementById('reset-btn').addEventListener('click', resetQuiz);
+        }
+
+        function checkAnswers() {
+            let score = 0;
+            
+            questions.forEach(q => {
+                const dropZone = document.querySelector(`.drop-zone[data-question-id="${q.id}"]`);
+                const placedItem = dropZone.querySelector('.draggable-item');
+                
+                // Clear old classes
+                dropZone.classList.remove('correct-answer', 'wrong-answer');
+                dropZone.style.backgroundColor = '';
+                dropZone.style.borderColor = '';
+
+                if (placedItem) {
+                    const selectedTermId = parseInt(placedItem.dataset.id);
+                    if (selectedTermId === q.answerId) {
+                        dropZone.classList.add('correct-answer');
+                        score++;
+                    } else {
+                        dropZone.classList.add('wrong-answer');
+                    }
+                } else {
+                    dropZone.classList.add('wrong-answer');
+                }
+            });
+
+            const scoreDisplay = document.getElementById('score-display');
+            const scoreValue = document.getElementById('score-value');
+            scoreValue.textContent = score;
+            scoreDisplay.classList.remove('hidden');
+
+            // Feedback Message
+            let message = "Keep trying!";
+            if(score === 13) message = "Perfect Score! Excellent job.";
+            else if(score > 9) message = "Great job! Almost there.";
+            
+            // Note: Replaced alert with dynamic DOM update
+            let feedbackEl = document.getElementById('feedback-message');
+            if(!feedbackEl) {
+                feedbackEl = document.createElement('div');
+                feedbackEl.id = 'feedback-message';
+                feedbackEl.className = 'mt-4 text-center font-bold p-3 rounded-lg';
+                document.getElementById('score-display').parentElement.appendChild(feedbackEl);
+            }
+            
+            feedbackEl.textContent = message;
+            if(score === 13) {
+                feedbackEl.classList.add('bg-green-100', 'text-green-800');
+                feedbackEl.classList.remove('bg-yellow-100', 'text-yellow-800', 'bg-red-100', 'text-red-800');
+            } else if (score > 6) {
+                feedbackEl.classList.add('bg-yellow-100', 'text-yellow-800');
+                feedbackEl.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+            } else {
+                feedbackEl.classList.add('bg-red-100', 'text-red-800');
+                feedbackEl.classList.remove('bg-green-100', 'text-green-800', 'bg-yellow-100', 'text-yellow-800');
+            }
+        }
+
+        function resetQuiz() {
+            document.getElementById('score-display').classList.add('hidden');
+            const feedbackEl = document.getElementById('feedback-message');
+            if(feedbackEl) feedbackEl.remove();
+            
+            // Move all items back to bank
+            document.querySelectorAll('.drop-zone .draggable-item').forEach(item => {
+                document.getElementById('term-bank').appendChild(item);
+            });
+            
+            // Reset dropzone styles
+            document.querySelectorAll('.drop-zone').forEach(zone => {
+                zone.classList.remove('correct-answer', 'wrong-answer');
+            });
+            
+            // Re-shuffle bank
+            renderTermsBank();
+        }
+
+        // Initialize on load
+        window.onload = initApp;
+    </script>
 </body>
 </html>
