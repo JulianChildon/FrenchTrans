@@ -67,17 +67,39 @@
 
         /* Result styling */
         .correct-answer {
-            border-color: #10b981;
-            background-color: #d1fae5;
-            color: #047857;
-            border-style: solid;
+            border-color: #10b981 !important;
+            background-color: #d1fae5 !important;
+            color: #047857 !important;
+            border-style: solid !important;
         }
         
         .wrong-answer {
-            border-color: #ef4444;
-            background-color: #fee2e2;
-            color: #b91c1c;
-            border-style: solid;
+            border-color: #ef4444 !important;
+            background-color: #fee2e2 !important;
+            color: #b91c1c !important;
+            border-style: solid !important;
+        }
+
+        /* Update draggable item colors when placed in a graded drop zone */
+        .drop-zone.correct-answer .draggable-item {
+            background-color: #d1fae5 !important;
+            border-color: #10b981 !important;
+            color: #047857 !important;
+        }
+
+        .drop-zone.wrong-answer .draggable-item {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important;
+            color: #b91c1c !important;
+            animation: shake 0.4s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-6px); }
+            40% { transform: translateX(6px); }
+            60% { transform: translateX(-6px); }
+            80% { transform: translateX(6px); }
         }
 
         .question-text {
